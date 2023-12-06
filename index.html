@@ -12,3 +12,49 @@
         <script src="js/bootstrap.min.js"></script>
       </body>
     </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NinjaBase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+  <!-- Include the navbar from the "assets" folder -->
+  <div include-html="assets/navbar.html"></div>
+
+  <div class="container">
+    <!-- Your page content goes here -->
+    <h1>Hello, world!</h1>
+  </div>
+
+  <!-- Include the footer from the "assets" folder -->
+  <div include-html="assets/footer.html"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script>
+    // Function to include HTML files
+    function includeHTML() {
+      var z, i, elmnt, file, xhttp;
+      z = document.getElementsByTagName("*");
+      for (i = 0; i < z.length; i++) {
+        elmnt = z[i];
+        file = elmnt.getAttribute("include-html");
+        if (file) {
+          xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              elmnt.innerHTML = this.responseText;
+            }
+          };
+          xhttp.open("GET", file, true);
+          xhttp.send();
+        }
+      }
+    }
+    // Call the includeHTML function
+    includeHTML();
+  </script>
+</body>
+</html>
