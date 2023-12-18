@@ -8,6 +8,8 @@
 
 3.Run this command : wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/setup.sh
 
+Then , run the command : bash setup.sh
+
 4.Click Enter when it asks for the Keyboard Layout.
 
 5.Reconnect to your Debian Server.
