@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Set the keyboard layout to US (change if needed)
-export DEBIAN_FRONTEND=noninteractive
-sudo debconf-set-selections <<< 'keyboard-configuration keyboard-configuration/layout select USA'
-sudo dpkg-reconfigure keyboard-configuration
-
 # Update package lists
 sudo apt update
 
