@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Set the keyboard layout to US (change if needed)
+export DEBIAN_FRONTEND=noninteractive
+sudo debconf-set-selections <<< 'keyboard-configuration keyboard-configuration/layout select USA'
+sudo dpkg-reconfigure keyboard-configuration
+
 # Update package lists
 sudo apt update
 
@@ -29,7 +34,7 @@ wget https://github.com/cloudkore/matrix/raw/main/dev/assets/microemulator.jar
 mkdir ~/Desktop
 chmod 700 ~/Desktop
 
-# Navigate into the Desktop directory
+# Navigate into the "Desktop" folder
 cd ~/Desktop
 
 # Download the ME.sh script and make it executable
