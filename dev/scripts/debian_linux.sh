@@ -29,6 +29,9 @@ wget https://github.com/cloudkore/matrix/raw/main/dev/assets/microemulator.jar
 mkdir ~/Desktop
 chmod 700 ~/Desktop
 
+# Navigate into the Desktop directory
+cd ~/Desktop
+
 # Download the ME.sh script and make it executable
 wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/ME.sh
 chmod u+x ME.sh
