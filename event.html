@@ -66,34 +66,48 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
-        function submitName() {
-            var name = document.getElementById('name').value;
+        // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
+const API_ENDPOINT = 'https://ni26f9wy37.execute-api.ap-south-1.amazonaws.com';
 
-            // Display the submitted name
-            var submittedNamesContainer = document.getElementById('submitted-names');
+function submitName() {
+    var name = document.getElementById('name').value;
+
+    // Send a request to the API Gateway endpoint
+    fetch(API_ENDPOINT + '/submit-name', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display the submitted name
+        var submittedNamesContainer = document.getElementById('submitted-names');
+        submittedNamesContainer.innerHTML += '<p>' + name + '</p>';
+    })
+    .catch(error => console.error('Error submitting name:', error));
+}
+
+// Retrieve and display submitted names from the API Gateway endpoint on page load
+async function displaySubmittedNames() {
+    try {
+        const response = await fetch(API_ENDPOINT + '/submit-name');
+        const data = await response.json();
+
+        const submittedNamesContainer = document.getElementById('submitted-names');
+
+        data.forEach(name => {
             submittedNamesContainer.innerHTML += '<p>' + name + '</p>';
+        });
+    } catch (error) {
+        console.error('Error fetching submitted names:', error);
+    }
+}
 
-            // Store the submitted name in localStorage
-            var submittedNames = JSON.parse(localStorage.getItem('submittedNames')) || [];
-            submittedNames.push(name);
-            localStorage.setItem('submittedNames', JSON.stringify(submittedNames));
-        }
+// Call the function to display submitted names on page load
+displaySubmittedNames();
 
-        // Retrieve and display submitted names from GitHub issues on page load
-        async function displaySubmittedNames() {
-            const response = await fetch('https://api.github.com/repos/cloudkore/matrix/issues');
-            const issues = await response.json();
-
-            const submittedNamesContainer = document.getElementById('submitted-names');
-
-            issues.forEach(issue => {
-                const name = issue.body.match(/Your Name: (.+)/)[1];
-                submittedNamesContainer.innerHTML += '<p>' + name + '</p>';
-            });
-        }
-
-        // Call the function to display submitted names on page load
-        displaySubmittedNames();
     </script>
 </body>
 </html>
