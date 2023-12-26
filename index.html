@@ -8,6 +8,7 @@
     <!-- Include essentials.js file -->
     <script src="js/essentials.js"></script>
     <script src="js/time.js"></script>
+    <script src="js/activeStatus.js" defer></script>
     <style>
         .black-frame {
             background-color: #000;
@@ -39,10 +40,14 @@
                         <div class="thumbnail">
                             <img src="data/Pictures/nso.webp" alt="Image 1">
                             <div class="caption" style="background-color: #252525; padding: 20px; box-sizing: border-box;">
-                                <h3 style="margin: 0; text-align: center; color: #fff;">Matrix™</h3>
+                                <span style="color: gray;">Matrix™</span>
                                 <div id="datetime"></div>
                                 <p id="network-ping"></p>
-                            </div>
+                                <div style="display: flex; align-items: center;">
+                                    <div id="status-dot" style="width: 20px; height: 20px; border-radius: 50%; margin-left: 5px; background-color: green; box-shadow: 0 0 0 5px white;"></div>
+                                    <div id="status-text"></div>
+                                </div>
+                                  </div>
                         </div>
                         
                     </div>
