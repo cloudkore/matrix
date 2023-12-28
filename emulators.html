@@ -16,7 +16,19 @@
             border-radius: 10px;
         }
 
-        
+        .icon {
+    width: 20px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
+    margin-right: 5px; /* Optional: Add margin to separate the icon from text */
+  }
+
+  .content-link {
+    cursor: pointer;
+    color: #007bff; /* Bootstrap link color */
+    text-decoration: underline;
+  }
+
+
     </style>
 </head>
 <body>
@@ -28,64 +40,51 @@
            <center><span class="label label-danger">Emulators</span></center>
         </br>
             <p style="display: inline;">Download J2ME Emulators below! Some emulators may need Java environment installed.</p></div>
-
             <center><span class="label label-danger">Platforms</span></center>
-
-
-            <div class="tabbable"> <!-- Only required for left/right tabs -->
-                <ul class="nav nav-tabs">
-                  <li class="active"><a href="#tab1" data-toggle="tab">ANDROID</a></li>
-                  <li><a href="#tab2" data-toggle="tab">DESKTOP</a></li>
-                </ul>
-                <div class="tab-content">
-                  <div class="tab-pane active" id="tab1">
-
-                    <center>
-                    <div class="thumbnail" style="border: 4px solid #000; padding: 10px; background-color: #f0f0f0; width: 200px;">
-    <img src="data/Pictures/j2meloader.png" alt="Thumbnail Image" style="width: 100%; max-height: 150px;">
-    <div class="caption">
-        <span class="label label-danger">J2ME Loader</span> 
-        <p style="margin: 0; color: #333;">v1.7.9</p>
-        <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/J2MELoader.apk" class="btn btn-primary">Download</a>
-    </div>
-</div>
-
-<div class="thumbnail" style="border: 4px solid #000; padding: 10px; background-color: #f0f0f0; width: 200px;">
-    <img src="data/Pictures/coffeevm.webp" alt="Thumbnail Image" style="width: 100%; max-height: 150px;">
-    <div class="caption">
-        <span class="label label-danger">CoffeeVM</span> 
-        <p style="margin: 0; color: #333;">v1.4.7</p>
-        <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/CoffeeVM.apk" class="btn btn-primary">Download</a>
-    </div>
-</div> </center>
-
-
-                      
-                  </div>
-                  <div class="tab-pane" id="tab2">
-
-<center>
-                    <div class="thumbnail" style="border: 4px solid #000; padding: 10px; background-color: #f0f0f0; width: 200px;">
-                        <img src="data/Pictures/microemulator.png" alt="Thumbnail Image" style="width: 100%; max-height: 150px;">
-                        <div class="caption">
-                            <span class="label label-danger">Microemulator</span> 
-                            <p style="margin: 0; color: #333;">v2.0.4</p>
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/microemulator.jar" class="btn btn-primary">Download</a>
-                        </div>
-                    </div>
-                    
-                    <div class="thumbnail" style="border: 4px solid #000; padding: 10px; background-color: #f0f0f0; width: 200px;">
-                        <img src="data/Pictures/kemulator.png" alt="Thumbnail Image" style="width: 100%; max-height: 150px;">
-                        <div class="caption">
-                            <span class="label label-danger">KEmulator Lite</span> 
-                            <p style="margin: 0; color: #333;">v0.9.8</p>
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/KEmulatorLite.exe" class="btn btn-primary">Download</a>
-                        </div>
-                    </center>
-                    
-
                 </div>
-              </div>
+
+
+                <div class="container">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Android</th>
+                          <th>Desktop</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <img src="data/Pictures/coffeevm.webp" alt="Android Icon" class="icon">
+                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/CoffeeVM.apk" class="content-link" target="_blank">CoffeeVM</a>
+                            <br>
+                            v1.4.7|3.56 MB <!-- Replace with the actual file size -->
+                          </td>
+                          <td>
+                            <img src="data/Pictures/microemulator.png" alt="Desktop Icon" class="icon">
+                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/microemulator.jar" class="content-link" target="_blank">Microemulator</a>
+                            <br>
+                            v2.0.4|629 KB <!-- Replace with the actual file size -->
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <img src="data/Pictures/j2meloader.png" alt="Android Icon" class="icon">
+                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/J2MELoader.apk" class="content-link" target="_blank">J2ME Loader</a>
+                            <br>
+                            v1.7.9|8.28 MB <!-- Replace with the actual file size -->
+                          </td>
+                          <td>
+                            <img src="data/Pictures/kemulator.png" alt="Desktop Icon" class="icon">
+                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/KEmulatorLite.exe" class="content-link" target="_blank">KEmulator</a>
+                            <br>
+                            v0.9.8|2.51 MB <!-- Replace with the actual file size -->
+                          </td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                      </tbody>
+                    </table>
+                  </div>
                   
     <!-- Placeholder for the footer -->
     <div id="footer-placeholder"></div>
