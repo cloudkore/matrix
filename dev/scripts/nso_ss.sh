@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Set the path for saving the screenshot locally           local_screenshot_path="$HOME/Pictures/screenshots"
-                                                           # Create the directory if it doesn't exist
+# Set the path for saving the screenshot locally
+local_screenshot_path="$HOME/Pictures/screenshots"
+                                                           
+# Create the directory if it doesn't exist
 mkdir -p "${local_screenshot_path}"
 
-# Set the Mega folder path                                 mega_folder="/screenshots"
+# Set the Mega folder path
+mega_folder="/screenshots"
 
 # Take a screenshot using scrot
 timestamp=$(date +"%Y%m%d_%H%M%S")
