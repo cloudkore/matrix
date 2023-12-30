@@ -9,6 +9,9 @@ sudo apt upgrade -y
 # Install XFCE, Terminal, Firefox ESR, and Default JRE
 sudo apt install -y xfce4 xfce4-terminal firefox-esr default-jre
 
+# Install dependencies
+sudo apt --fix-broken install -y
+
 # Create a "packages" directory and navigate into it
 mkdir ~/packages
 cd ~/packages
