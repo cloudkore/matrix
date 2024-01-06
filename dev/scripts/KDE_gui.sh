@@ -10,7 +10,7 @@ sudo apt upgrade -y
 sudo apt install -y kde-plasma-desktop --no-install-recommends firefox-esr default-jre
 
 # Install Display Manager:
-sudo apt install sddm
+sudo apt install -y sddm
 
 # Configure Display Manager:
 sudo dpkg-reconfigure sddm
