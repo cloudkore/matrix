@@ -7,7 +7,10 @@ sudo apt update
 sudo apt upgrade -y
 
 # Install XFCE, Terminal, Firefox ESR, and Default JRE
-sudo apt install -y kde-plasma-desktop --no-install-recommends firefox-esr default-jre
+sudo apt install -y kde-plasma-desktop firefox-esr default-jre
+
+# Install Broken Dependencies (If any)
+sudo apt --fix-broken install -y
 
 # Install Display Manager:
 sudo apt install -y sddm
