@@ -13,7 +13,7 @@ OR
 # KDE_GUI
 wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/KDE_gui.sh
 
-Then , run the command : bash setup.sh
+Then , run the command : bash setup.sh or bash KDE_gui.sh
 
 4.Click Enter when it asks for the Keyboard Layout.
 
