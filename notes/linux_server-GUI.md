@@ -4,7 +4,14 @@
 
 2.Connect to your Debian Server via SSH from the Command Prompt.
 
-3.Run this command : wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/setup.sh
+3.Run this command : 
+# Debian_GUI
+wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/setup.sh
+
+OR
+
+# KDE_GUI
+wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/KDE_gui.sh
 
 Then , run the command : bash setup.sh
 
