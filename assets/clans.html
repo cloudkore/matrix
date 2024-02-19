@@ -1,0 +1,18 @@
+<div style="background-color: #f8f9fa; border: 2px solid #007bff; border-radius: 20px; overflow: hidden; width: fit-content; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+  <div class="card bg-light">
+    <div class="bg-gradient p-3" style="border-radius: 20px 20px 0 0;"></div>
+    <div class="card-body" style="background-color: #343a40;">
+      <h2 class="card-title text-center mb-0" style="font-size: 2rem; background-color: #000; color: #fff; padding: 10px; border-radius: 20px;">Clans</h2>
+      <p class="card-text mt-2" style="font-size: 1rem; color: #fff;">Scroll through the list of archived clans that have existed since their inception</p>
+      
+<a href="#" id="accessButton" class="btn btn-primary btn-block mt-3 position-relative" onclick="handleButtonClick(event)">
+  <span class="spinner-border spinner-border-sm position-absolute top-50 start-50 translate-middle" role="status" aria-hidden="true" style="display: none;"></span>
+  <span class="loading-text">Access</span>
+</a>
+
+<div id="clansList" style="max-height: 200px; overflow-y: auto; display: none; background-color: black;">
+  <!-- Add some dummy content to demonstrate the list is clickable -->
+  <div style="padding: 10px; color: white;">Clan 1</div>
+  <div style="padding: 10px; color: white;">Clan 2</div>
+  <div style="padding: 10px; color: white;">Clan 3</div>
+</div>

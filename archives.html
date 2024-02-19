@@ -5,11 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Include essentials.js file -->
     <script src="js/essentials.js"></script>
     <style>
-        
-    </style>
 
+        .black-frame {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .icon {
+    width: 20px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
+    margin-right: 5px; /* Optional: Add margin to separate the icon from text */
+  }
+
+  .content-link {
+    cursor: pointer;
+    color: #007bff; /* Bootstrap link color */
+    text-decoration: underline;
+  }
+
+
+    </style>
 </head>
 <body>
     <!-- Placeholder for the navbar -->
@@ -17,19 +37,12 @@
 
 </br>
 
-    <!-- Cards -->
+<!-- Cards -->
     <center>
-    
-    <div style="background-color: #f8f9fa; border: 2px solid #007bff; border-radius: 20px; overflow: hidden; width: fit-content; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
-  <div class="card bg-light">
-    <div class="bg-gradient p-3" style="border-radius: 20px 20px 0 0;"></div>
-    <div class="card-body" style="background-color: #343a40;">
-      <h2 class="card-title text-center mb-0" style="font-size: 2rem; background-color: #000; color: #fff; padding: 10px; border-radius: 20px;">Clans</h2>
-      <p class="card-text mt-2" style="font-size: 1rem; color: #fff;">Some quick example text to show off the card's content. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <a href="#" class="btn btn-primary btn-block mt-3">Access</a>
-    </div>
-  </div>
-</div>
+      
+   <div id="clansContent"></div>
+<script src="js/xclans.js"></script>
+<script src="js/clans.js"></script>
 
 </center>
 <!-- Cards -->
