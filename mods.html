@@ -9,12 +9,19 @@
     <script src="js/essentials.js"></script>
     <script src="js/fileList.js"></script>
 
+    <style>
+        /* Style for search bar */
+        #searchBar {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <!-- Placeholder for the navbar -->
     <div id="navbar-placeholder"></div>
 
-    </br>
+    <!-- Search Bar -->
+    <input type="text" id="searchBar" placeholder="Search files...">
 
     <ul id="fileList"></ul>
 
@@ -23,5 +30,22 @@
 
     <!-- Include Bootstrap JS if needed -->
     <script src="js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript for search functionality
+        $(document).ready(function(){
+            $('#searchBar').on('input', function() {
+                var searchText = $(this).val().toLowerCase();
+                $('#fileList li').each(function() {
+                    var fileName = $(this).text().toLowerCase();
+                    if(fileName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
