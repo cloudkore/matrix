@@ -9,6 +9,9 @@ sudo apt upgrade -y
 # Install LXQt Desktop, Default JRE and Firefox
 sudo apt install -y lxqt-core default-jre firefox-esr
 
+# Reconfigure CA Certificates
+sudo dpkg-reconfigure ca-certificates-java
+
 # Create a "packages" directory and navigate into it
 mkdir ~/packages
 cd ~/packages
