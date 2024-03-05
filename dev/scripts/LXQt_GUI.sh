@@ -14,8 +14,8 @@ mkdir ~/packages
 cd ~/packages
 
 # Download Chrome Remote Desktop and install it
-wget https://deb.rug.nl/ppa/mirror/dl.google.com/linux/chrome-remote-desktop/deb/pool/main/c/chrome-remote-desktop/chrome-remote-desktop_122.0.6261.0_amd64.deb
-sudo dpkg -i chrome-remote-desktop_122.0.6261.0_amd64.deb
+wget https://deb.rug.nl/ppa/mirror/dl.google.com/linux/chrome-remote-desktop/deb/pool/main/c/chrome-remote-desktop/chrome-remote-desktop_114.0.5735.35_amd64.deb
+sudo dpkg -i chrome-remote-desktop_114.0.5735.35_amd64.deb
 sudo apt --fix-broken install -y
 
 # Create an "EMU" directory and navigate into it
