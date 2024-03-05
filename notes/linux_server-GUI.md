@@ -4,7 +4,7 @@
 
 2.Connect to your Debian Server via SSH from the Command Prompt.
 
-3.Run this command : 
+3.Run this command : (Pick and Run any One GUI command)
 # Debian_GUI
 wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/setup.sh
 
@@ -14,7 +14,7 @@ wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/KDE_gui.sh
 # LXQt_GUI
 wget https://raw.githubusercontent.com/cloudkore/matrix/main/dev/scripts/LXQt_GUI.sh
 
-Then , run the command : bash setup.sh or bash KDE_gui.sh
+Then , run the command : bash setup.sh or bash guiscriptname.sh
 
 4.Click Enter when it asks for the Keyboard Layout.
 
