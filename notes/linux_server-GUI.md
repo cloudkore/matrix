@@ -8,10 +8,11 @@
 # Debian_GUI
 wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/setup.sh
 
-OR
-
 # KDE_GUI
 wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/KDE_gui.sh
+
+# LXQt_GUI
+wget https://raw.githubusercontent.com/cloudkore/matrix/main/dev/scripts/LXQt_GUI.sh
 
 Then , run the command : bash setup.sh or bash KDE_gui.sh
 
