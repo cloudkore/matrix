@@ -23,7 +23,7 @@ mkdir ~/EMU
 cd ~/EMU
 
 # Download Microemulator JAR file
-wget https://github.com/cloudkore/matrix/raw/main/dev/assets/AngelChipEmulator.jar
+wget https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/AngelChipEmulator.jar
 
 # Create a "Desktop" folder and set its permissions
 mkdir ~/Desktop
