@@ -7,7 +7,7 @@ sudo apt update -y
 sudo apt upgrade -y
 
 # Install LXQt Desktop, Default JRE and Firefox
-sudo apt install -y lxqt-core default-jre firefox-esr
+sudo apt install -y lxde-core default-jre firefox-esr
 
 # Reconfigure CA Certificates
 sudo dpkg-reconfigure ca-certificates-java
