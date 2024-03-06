@@ -36,7 +36,7 @@ chmod 700 ~/Desktop
 cd ~/Desktop
 
 # Download the ME.sh script and make it executable
-wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/M.sh
+wget https://github.com/cloudkore/matrix/raw/main/dev/scripts/AC.sh
 chmod u+x ME.sh
 
 echo "Installation completed. Rebooting the server..."
