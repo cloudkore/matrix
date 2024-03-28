@@ -6,122 +6,77 @@
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="js/essentials.js"></script>
-    <script src="js/fileList.js"></script>
 
     <style>
-        /* Style for search bar */
-        #searchBar {
-            margin-bottom: 20px;
-        }
-
-        /* Style for black container */
-        #fileContainer {
-            background-color: black;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        /* Style for download button */
-        .download-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
+        .black-frame {
+            border: 1px solid black;
+            padding: 10px;
             border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
+            background-color: black;
         }
 
-        .download-btn.loading {
-            background-color: green !important; /* Change button color to green when loading */
+        .black-frame input[type="text"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            width: 200px; /* Adjust width as needed */
         }
 
-        .download-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Style to align download buttons to the right */
-        #fileList li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #fileList li .download-btn {
-            margin-left: 10px;
+        .black-frame input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff; /* Change border color on focus */
         }
     </style>
+
 </head>
 <body>
     <!-- Placeholder for the navbar -->
     <div id="navbar-placeholder"></div>
 
-    <!-- Black container for the file list -->
-    <div id="fileContainer">
-        <!-- Search Bar -->
-        <input type="text" id="searchBar" placeholder="Search files...">
+    <span class="label label-success" style="display: block; width: 100%; text-align: center;">MODs Repository</span>
 
-        <ul id="fileList">
-            <!-- File list items will be added dynamically here -->
-        </ul>
+    <!-- Black frame container for search input field -->
+    <div class="container">
+        <div class="black-frame">
+            <!-- Search input field -->
+            <label for="searchInput" style="color: white;">Search:</label>
+            <input type="text" id="searchInput">
+        </div>
     </div>
 
-    <!-- Placeholder for the footer -->
-    <div id="footer-placeholder"></div>
+    <ul id="fileList" style="list-style: none; padding: 0;">
+        <!-- File list will be populated here by JavaScript -->
+    </ul>
 
-    <!-- Include Bootstrap JS if needed -->
-    <script src="js/bootstrap.min.js"></script>
-
+    <!-- Include the JavaScript file -->
+    <script src="js/fileList.js"></script>
     <script>
-        $(document).ready(function(){
-            $('#searchBar').on('input', function() {
-                var searchText = $(this).val().toLowerCase();
-                $('#fileList li').each(function() {
-                    var fileName = $(this).text().toLowerCase();
-                    if(fileName.includes(searchText)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
+        // Define the searchFiles function here
+        function searchFiles() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase(); // Trim whitespace and convert to lowercase
+            const fileList = document.getElementById('fileList');
+            const fileItems = fileList.getElementsByTagName('li');
+
+            Array.from(fileItems).forEach(item => {
+                const fileName = item.textContent.toLowerCase(); // Convert to lowercase
+                if (fileName.includes(searchTerm)) {
+                    item.style.display = 'block'; // Show the item
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
             });
+        }
 
-            function fetchFiles() {
-                const repoOwner = 'cloudkore'; // Replace with the owner of the repository
-                const repoName = 'matrix'; // Replace with the name of the repository
-                const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/MODs`;
-
-                fetch(apiUrl)
-                    .then(response => response.json())
-                    .then(data => {
-                        const fileListElement = $('#fileList');
-                        fileListElement.empty();
-
-                        data.forEach(file => {
-                            const downloadBtn = $('<button>').addClass('download-btn').text('Download');
-                            downloadBtn.click(function() {
-                                $(this).addClass('loading').text('Loading:'); // Add loading class and change button text to "Loading"
-                                downloadFile(file.download_url, file.name, $(this)); // Pass the button element to downloadFile function
-                            });
-
-                            const listItem = $('<li>').text(file.name).append(downloadBtn);
-                            fileListElement.append(listItem);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching repository files:', error));
-            }
-
-            fetchFiles();
-
-            function downloadFile(url, fileName, buttonElement) {
-                console.log('Downloading ' + fileName);
-                // Simulate loading delay (2 seconds)
-                setTimeout(function() {
-                    window.open(url, '_blank');
-                    buttonElement.removeClass('loading').text('Download'); // Remove loading class and revert button text back to "Download"
-                }, 2000);
-            }
-        });
+        // Automatically trigger search when user types in the search input field
+        document.getElementById('searchInput').addEventListener('input', searchFiles);
     </script>
+
+<!-- Placeholder for the footer -->
+<div id="footer-placeholder"></div>
+
+<!-- Include Bootstrap JS if needed -->
+<script src="js/bootstrap.min.js"></script>
+
 </body>
 </html>
