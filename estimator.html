@@ -99,6 +99,7 @@
                     <button onclick="calculateTimeToNextLevel()">Calculate</button>
                     </br>
                     <div id="levelResult"></div>
+                    <div id="countdownTimer"></div>
                 </div>
             </div>
         </div>
@@ -124,7 +125,8 @@
                          "Kins per month: " + totalKinsPerMonth + "<br>" +
                          "Kins per year: " + totalKinsPerYear;
             document.getElementById('yenResult').innerHTML = result;
-        }function calculateTimeToNextLevel() {
+        }
+       function calculateTimeToNextLevel() {
     var currentLevel = parseInt(document.getElementById('currentLevel').value);
     var currentExperience = parseFloat(document.getElementById('currentExperience').value);
     var experiencePerHourPercent = parseFloat(document.getElementById('experiencePerHour').value);
@@ -144,19 +146,42 @@
     // Calculate time required to reach next level in hours
     var timeToNextLevelHours = remainingExperience / experiencePerHour;
 
-    // Convert hours to days, hours, minutes, and seconds
-    var days = Math.floor(timeToNextLevelHours / 24);
-    var remainingHours = Math.floor(timeToNextLevelHours % 24);
-    var remainingMinutes = Math.floor((timeToNextLevelHours * 60) % 60);
-    var remainingSeconds = Math.floor((timeToNextLevelHours * 3600) % 60);
+    // Convert hours to milliseconds
+    var timeToNextLevelMilliseconds = timeToNextLevelHours * 3600 * 1000;
 
-    // Calculate the level you'll reach
-    var nextLevel = currentLevel + 1;
+    // Calculate the end time for the countdown timer
+    var endTime = Date.now() + timeToNextLevelMilliseconds;
 
-    // Display result
-    document.getElementById('levelResult').innerText = "Time to Reach Level " + nextLevel + ": " + days + " days, " + remainingHours + " hours, " + remainingMinutes + " minutes, " + remainingSeconds + " seconds";
+    // Start the countdown timer
+    updateCountdown(endTime);
 }
 
+function updateCountdown(endTime) {
+    var countdownTimer = document.getElementById('countdownTimer');
+
+    // Update the countdown timer every second
+    var countdownInterval = setInterval(function() {
+        var currentTime = Date.now();
+        var timeRemaining = endTime - currentTime;
+
+        // Check if the countdown is finished
+        if (timeRemaining <= 0) {
+            clearInterval(countdownInterval);
+            countdownTimer.innerText = "Time's up!";
+            return;
+        }
+
+        // Calculate days, hours, minutes, and seconds
+        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        // Display the countdown timer
+        countdownTimer.innerText = "Next Level: " + days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+    }, 1000);
+}
+       
     </script>
 </body>
 </html>
