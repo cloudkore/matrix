@@ -3,22 +3,156 @@
 <head>
     <title>NinjaBase</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to your custom CSS file -->
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- Include essentials.js file -->
     <script src="js/essentials.js"></script>
+
+    <style>
+        /* Add your custom styles here */
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #252525;
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: #252525;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 
 </head>
 <body>
     <!-- Placeholder for the navbar -->
     <div id="navbar-placeholder"></div>
 
- Coming Soon
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#yenEstimator" data-toggle="tab">Kins Estimator</a></li>
+            <li><a href="#levelEstimator" data-toggle="tab">Level Estimator</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="yenEstimator">
+                <div class="container">
+                    <h2>Kins Estimator</h2>
+                    <div class="form-group">
+                        <label for="kinsPerHour">Number of Kins per hour:</label>
+                        <input type="number" id="kinsPerHour" placeholder="Enter number of Kins per hour">
+                    </div>
+                    <div class="form-group">
+                        <label for="span">Span (number of days):</label>
+                        <input type="number" id="span" placeholder="Enter span in days">
+                    </div>
+                    <button onclick="calculateYen()">Calculate</button>
+                    </br>
+                    <div id="yenResult"></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="levelEstimator">
+                <div class="container">
+                    <h2>Level Estimator</h2>
+                    <div class="form-group">
+                        <label for="currentLevel">Current Level:</label>
+                        <input type="number" id="currentLevel" placeholder="Enter current level">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentExperience">Current Experience (%):</label>
+                        <input type="number" id="currentExperience" placeholder="Enter current experience (%)">
+                    </div>
+                    <div class="form-group">
+                        <label for="experiencePerHour">Experience per Hour (%):</label>
+                        <input type="number" id="experiencePerHour" placeholder="Enter experience per hour (%)">
+                    </div>
+                    <button onclick="calculateTimeToNextLevel()">Calculate</button>
+                    </br>
+                    <div id="levelResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Placeholder for the footer -->
     <div id="footer-placeholder"></div>
 
     <!-- Include Bootstrap JS if needed -->
     <script src="js/bootstrap.min.js"></script>
+
+    <script>
+        function calculateYen() {
+            var kinsPerHour = parseFloat(document.getElementById('kinsPerHour').value);
+            var span = parseFloat(document.getElementById('span').value);
+            var totalYen = kinsPerHour * 24 * span;
+            var totalKinsPerWeek = kinsPerHour * 24 * 7;
+            var totalKinsPerMonth = kinsPerHour * 24 * 30; // Assuming 30 days in a month
+            var totalKinsPerYear = kinsPerHour * 24 * 365; // Assuming 365 days in a year
+            var result = "Estimated Total Yên: " + totalYen + "<br>" +
+                         "Kins per hour: " + kinsPerHour + "<br>" +
+                         "Kins per week: " + totalKinsPerWeek + "<br>" +
+                         "Kins per month: " + totalKinsPerMonth + "<br>" +
+                         "Kins per year: " + totalKinsPerYear;
+            document.getElementById('yenResult').innerHTML = result;
+        }
+function calculateTimeToNextLevel() {
+    var currentLevel = parseInt(document.getElementById('currentLevel').value);
+    var currentExperience = parseFloat(document.getElementById('currentExperience').value);
+    var experiencePerHourPercent = parseFloat(document.getElementById('experiencePerHour').value);
+
+    // Calculate experience required for next level
+    var experienceRequiredForNextLevel = (currentLevel + 1) * 1000;
+
+    // Calculate current experience in absolute value
+    var absoluteExperience = currentExperience / 100 * experienceRequiredForNextLevel;
+
+    // Calculate remaining experience needed for next level
+    var remainingExperience = experienceRequiredForNextLevel - absoluteExperience;
+
+    // Calculate actual experience gained per hour
+    var experiencePerHour = experiencePerHourPercent / 100 * experienceRequiredForNextLevel;
+
+    // Calculate time required to reach next level in hours
+    var timeToNextLevelHours = remainingExperience / experiencePerHour;
+
+    // Convert hours to days, hours, and seconds
+    var days = Math.floor(timeToNextLevelHours / 24);
+    var remainingHours = Math.floor(timeToNextLevelHours % 24);
+    var remainingSeconds = Math.floor((timeToNextLevelHours * 3600) % 60);
+
+    // Display result
+    document.getElementById('levelResult').innerText = "Time to Reach Next Level: " + days + " days, " + remainingHours + " hours, " + remainingSeconds + " seconds";
+}
+    </script>
 </body>
 </html>
