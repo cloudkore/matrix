@@ -124,8 +124,7 @@
                          "Kins per month: " + totalKinsPerMonth + "<br>" +
                          "Kins per year: " + totalKinsPerYear;
             document.getElementById('yenResult').innerHTML = result;
-        }
-function calculateTimeToNextLevel() {
+        }function calculateTimeToNextLevel() {
     var currentLevel = parseInt(document.getElementById('currentLevel').value);
     var currentExperience = parseFloat(document.getElementById('currentExperience').value);
     var experiencePerHourPercent = parseFloat(document.getElementById('experiencePerHour').value);
@@ -145,14 +144,19 @@ function calculateTimeToNextLevel() {
     // Calculate time required to reach next level in hours
     var timeToNextLevelHours = remainingExperience / experiencePerHour;
 
-    // Convert hours to days, hours, and seconds
+    // Convert hours to days, hours, minutes, and seconds
     var days = Math.floor(timeToNextLevelHours / 24);
     var remainingHours = Math.floor(timeToNextLevelHours % 24);
+    var remainingMinutes = Math.floor((timeToNextLevelHours * 60) % 60);
     var remainingSeconds = Math.floor((timeToNextLevelHours * 3600) % 60);
 
+    // Calculate the level you'll reach
+    var nextLevel = currentLevel + 1;
+
     // Display result
-    document.getElementById('levelResult').innerText = "Time to Reach Next Level: " + days + " days, " + remainingHours + " hours, " + remainingSeconds + " seconds";
+    document.getElementById('levelResult').innerText = "Time to Reach Level " + nextLevel + ": " + days + " days, " + remainingHours + " hours, " + remainingMinutes + " minutes, " + remainingSeconds + " seconds";
 }
+
     </script>
 </body>
 </html>
