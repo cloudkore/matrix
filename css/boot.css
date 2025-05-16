@@ -5,6 +5,7 @@
 
 #bootScreen.fade-out {
   opacity: 0;
+  transition: opacity 0.8s ease;
   pointer-events: none;
 }
 
@@ -59,4 +60,5 @@
   color: #f0f0f0;
   letter-spacing: 1px;
   text-align: center;
+  transition: color 0.2s linear;
 }
