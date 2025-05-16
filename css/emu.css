@@ -1,0 +1,81 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+  padding-bottom: 60px;
+}
+
+#footer-placeholder {
+  height: 40px;
+}
+
+.black-frame {
+  background-color: #000;
+  color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.emulator-card {
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emulator-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+.emulator-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.emulator-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.emulator-title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.emulator-version {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.btn-download {
+  display: inline-block;
+  background-color: #00ffcc;
+  color: #000;
+  padding: 5px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-download:hover {
+  background-color: #00e6b8;
+  color: #000;
+}
+
+.braille-spinner {
+  font-family: monospace;
+  font-size: 20px;
+  color: black;
+  display: inline-block;
+  white-space: pre;
+  margin-left: 10px;
+}

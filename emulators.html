@@ -1,124 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NinjaBase</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Include essentials.js file -->
-    <script src="js/sound.js"></script>
-    <script src="js/essentials.js"></script>
-    <style>
-
-        .black-frame {
-            background-color: #000;
-            color: #fff;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .icon {
-    width: 20px; /* Adjust the width as needed */
-    height: 20px; /* Adjust the height as needed */
-    margin-right: 5px; /* Optional: Add margin to separate the icon from text */
-  }
-
-  .content-link {
-    cursor: pointer;
-    color: #007bff; /* Bootstrap link color */
-    text-decoration: underline;
-  }
-
-
-    </style>
+  <title>NinjaBase - Emulators</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+  <link href="css/emu.css" rel="stylesheet" media="screen">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/essentials.js"></script>
 </head>
 <body>
-    <!-- Placeholder for the navbar -->
-    <div id="navbar-placeholder"></div>
+  <div id="navbar-placeholder"></div>
 
-    <div class="container">
-        <div class="black-frame">
-           <center><span class="label label-danger">Emulators</span></center>
-        </br>
-            <p style="display: inline;">Download J2ME Emulators below! Some emulators may need Java environment installed.</p></div>
-            <center><span class="label label-danger">Platforms</span></center>
-                </div>
+  <div class="container">
+    <div class="text-center black-frame mb-4">
+      <h3><span class="label label-danger">Emulators</span></h3>
+      <p>Download J2ME Emulators below! Some emulators may need Java installed.</p>
+    </div>
 
+    <div class="row" id="emulator-list">
+      <!-- Cards will be inserted here dynamically OR statically, shown below -->
+      
+      <div class="row" id="emulator-list">
 
-                <div class="container">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th><center><span class="label label-warning">Android</span></center></th>
-                          <th><center><span class="label label-warning">Desktop</span></center></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <img src="data/Pictures/coffeevm.webp" alt="Android Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/CoffeeVM.apk" class="content-link" target="_blank">CoffeeVM</a>
-                            <br>
-                            <center>v1.4.7|3.56 MB</center><!-- Replace with the actual file size -->
-                          </td>
-                          <td>
-                            <img src="data/Pictures/microemulator.png" alt="Desktop Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/microemulator.jar" class="content-link" target="_blank">Microemulator</a>
-                            <br>
-                            <center>v2.0.4|629 KB</center><!-- Replace with the actual file size -->
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <img src="data/Pictures/j2meloader.png" alt="Android Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/J2MELoader.apk" class="content-link" target="_blank">J2ME Loader</a>
-                            <br>
-                            <center>v1.7.9|8.28 MB</center> <!-- Replace with the actual file size -->
-                          </td>
-                          <td>
-                            <img src="data/Pictures/kemulator.png" alt="Desktop Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/KEmulatorLite.exe" class="content-link" target="_blank">KEmulator</a>
-                            <br>
-                            <center>v0.9.8|2.51 MB</center> <!-- Replace with the actual file size -->
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <img src="data/Pictures/phoneme.png" alt="Android Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/PhoneME.apk" class="content-link" target="_blank">PhoneME</a>
-                            <br>
-                            <center>v1.0.0|3.7 MB</center> <!-- Replace with the actual file size -->
-                          </td>
-                          <td>
-                            <img src="data/Pictures/angelchip.png" alt="Desktop Icon" class="icon">
-                            <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/AngelChipEmulator.jar" class="content-link" target="_blank">AngelChip</a>
-                            <br>
-                            <center>v1.0.0|479 KB</center> <!-- Replace with the actual file size -->
-                          </td>
-                        </tr>
-                        <td>
-                          <img src="data/Pictures/jlmod.png" alt="Android Icon" class="icon">
-                          <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/JLMod.apk" class="content-link" target="_blank">JLMod</a>
-                          <br>
-                          <center>v0.86|10.2 MB</center> <!-- Replace with the actual file size -->
-                        </td>
-                        <tr>
-                        <td>
-                          <img src="data/Pictures/netmite.png" alt="Android Icon" class="icon">
-                          <a href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/NetMite.apk" class="content-link" target="_blank">NetMite</a>
-                          <br>
-                          <center>v2.0.3.7|809 KB</center> <!-- Replace with the actual file size -->
-                        </td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                      </tbody>
-                    </table>
-                  </div>
-                  
-    <!-- Placeholder for the footer -->
-    <div id="footer-placeholder"></div>
+  <!-- CoffeeVM -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/coffeevm.webp" class="emulator-icon" alt="CoffeeVM">
+        <div>
+          <div class="emulator-title">CoffeeVM</div>
+          <div class="emulator-version">v1.4.7 | 3.56 MB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/CoffeeVM.apk">
+  Download <span class="braille-spinner"></span>
+</button>
+    </div>
+  </div>
 
-    <!-- Include Bootstrap JS if needed -->
-    <script src="js/bootstrap.min.js"></script>
+  <!-- Microemulator -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/microemulator.png" class="emulator-icon" alt="Microemulator">
+        <div>
+          <div class="emulator-title">Microemulator</div>
+          <div class="emulator-version">v2.0.4 | 629 KB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/microemulator.jar">
+  Download <span class="braille-spinner"></span>
+</button>
+    </div>
+  </div>
+
+  <!-- J2ME Loader -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/j2meloader.png" class="emulator-icon" alt="J2ME Loader">
+        <div>
+          <div class="emulator-title">J2ME Loader</div>
+          <div class="emulator-version">v1.7.9 | 8.28 MB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/J2MELoader.apk">
+  Download <span class="braille-spinner"></span>
+</button>
+    </div>
+  </div>
+
+  <!-- KEmulator -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/kemulator.png" class="emulator-icon" alt="KEmulator">
+        <div>
+          <div class="emulator-title">KEmulator</div>
+          <div class="emulator-version">v0.9.8 | 2.51 MB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/KEmulatorLite.exe">
+  Download <span class="braille-spinner"></span>
+</button>
+    </div>
+  </div>
+
+  <!-- PhoneME -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/phoneme.png" class="emulator-icon" alt="PhoneME">
+        <div>
+          <div class="emulator-title">PhoneME</div>
+          <div class="emulator-version">v1.0.0 | 3.7 MB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/PhoneME.apk">
+  Download <span class="braille-spinner"></span>
+</button>
+</div>
+  </div>
+
+  <!-- AngelChip -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/angelchip.png" class="emulator-icon" alt="AngelChip">
+        <div>
+          <div class="emulator-title">AngelChip</div>
+          <div class="emulator-version">v1.0.0 | 479 KB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Desktop/AngelChipEmulator.jar">
+  Download <span class="braille-spinner"></span>
+</button>
+    </div>
+  </div>
+
+  <!-- JLMod -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/jlmod.png" class="emulator-icon" alt="JLMod">
+        <div>
+          <div class="emulator-title">JLMod</div>
+          <div class="emulator-version">v0.86 | 10.2 MB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/JLMod.apk">
+  Download <span class="braille-spinner"></span>
+</button>
+</div>
+  </div>
+
+  <!-- NetMite -->
+  <div class="col-sm-6 mb-4">
+    <div class="emulator-card">
+      <div class="emulator-info">
+        <img src="data/Pictures/netmite.png" class="emulator-icon" alt="NetMite">
+        <div>
+          <div class="emulator-title">NetMite</div>
+          <div class="emulator-version">v2.0.3.7 | 809 KB</div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-download" data-href="https://github.com/cloudkore/matrix/raw/main/data/EMU/Android/NetMite.apk">
+  Download <span class="braille-spinner"></span>
+</button>
+</div>
+  </div>
+
+</div>
+
+      <!-- Repeat above block for each emulator -->
+      
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/bootstrap.min.js"></script>
+  
+  <script>
+const brailleFrames = ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"];
+let brailleIndex = 0;
+
+function showBrailleSpinner(span) {
+  return setInterval(() => {
+    span.textContent = brailleFrames[brailleIndex % brailleFrames.length];
+    brailleIndex++;
+  }, 100);
+}
+
+document.querySelectorAll('.btn-download').forEach(button => {
+  button.addEventListener('click', function () {
+    const spinner = this.querySelector('.braille-spinner');
+    spinner.textContent = '';
+    const interval = showBrailleSpinner(spinner);
+
+    // Wait 1.5s then download
+    setTimeout(() => {
+      clearInterval(interval);
+      spinner.textContent = ''; // Stop spinner
+
+      // Force download
+      const link = document.createElement("a");
+      link.href = this.dataset.href;
+      link.download = "";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 1500);
+  });
+});
+</script>
+  
 </body>
 </html>
