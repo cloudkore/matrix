@@ -1,27 +1,38 @@
+const repoOwner = 'cloudkore';
+const repoName = 'matrix';
+const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/MODs`;
 
-        const repoOwner = 'cloudkore'; // Replace with the owner of the repository
-        const repoName = 'matrix'; // Replace with the name of the repository
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    const fileList = document.getElementById('fileList');
 
-        // GitHub API endpoint for listing files in the repository
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/data/MODs`;
+    data.forEach(file => {
+      const listItem = document.createElement('li');
+      listItem.classList.add('mod-item');
 
-        // Fetch the list of files
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                // Process the list of files
-                const fileListElement = document.getElementById('fileList');
-                data.forEach(file => {
-                    const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.textContent = file.name;
+      link.href = file.download_url;
+      link.download = file.name;
 
-                    // Create a download link for each file
-                    const downloadLink = document.createElement('a');
-                    downloadLink.textContent = file.name;
-                    downloadLink.href = file.download_url;
-                    downloadLink.download = file.name;
+      listItem.appendChild(link);
+      fileList.appendChild(listItem);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching files:', error);
+    document.getElementById('fileList').innerHTML =
+      "<li>Error loading files. Please try again later.</li>";
+  });
 
-                    listItem.appendChild(downloadLink);
-                    fileListElement.appendChild(listItem);
-                });
-            })
-            .catch(error => console.error('Error fetching repository files:', error));
+// Live search
+document.getElementById('searchInput').addEventListener('input', function () {
+  const searchTerm = this.value.toLowerCase();
+  const items = document.querySelectorAll('#fileList li');
+
+  items.forEach(item => {
+    const name = item.textContent.toLowerCase();
+    item.style.display = name.includes(searchTerm) ? 'list-item' : 'none';
+  });
+});

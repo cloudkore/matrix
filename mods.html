@@ -1,89 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NinjaBase</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="js/sound.js"></script>
-    <script src="js/essentials.js"></script>
+  <title>NinjaBase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/essentials.js"></script>
+  <style>
+      body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-    <style>
-        .black-frame {
-            border: 1px solid black;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: black;
-        }
+.container {
+  flex: 1;
+  padding-bottom: 50px; /* Give space for footer */
+}
 
-        .black-frame input[type="text"] {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-            width: 200px; /* Adjust width as needed */
-        }
-
-        .black-frame input[type="text"]:focus {
-            outline: none;
-            border-color: #007bff; /* Change border color on focus */
-        }
-    </style>
-
+#footer-placeholder {
+  height: 40px;
+}
+</style>
 </head>
 <body>
-    <!-- Placeholder for the navbar -->
-    <div id="navbar-placeholder"></div>
+  <!-- Navbar Placeholder -->
+  <div id="navbar-placeholder"></div>
 
-    <span class="label label-success" style="display: block; width: 100%; text-align: center;">MODs Repository</span>
+  <div class="container">
+    <span class="label label-danger" style="display:block; width:100%; text-align:center;">
+      MODs Repository
+    </span>
 
-    <!-- Black frame container for search input field -->
-    <div class="container">
-        <div class="black-frame">
-            <!-- Search input field -->
-            <label for="searchInput" style="color: white;">Search:</label>
-            <input type="text" id="searchInput">
-        </div>
+    <!-- Search -->
+    <div class="well" style="margin-top:15px;">
+      <label for="searchInput">Search:</label>
+      <input type="text" id="searchInput" class="form-control" placeholder="Type to filter MODs">
     </div>
 
-    <div class="alert alert-info" role="alert">
-        <h4 class="alert-heading">Working MODs are published here, All the obsolete MODs will be moved to <a href="https://nsomatrix.xyz/archives" style="color: red;">Archives</a></h4>
-        
-        </div>
+    <!-- Info -->
+    <div class="alert alert-info">
+      <h4 class="alert-heading">
+        Working MODs are published here. Obsolete MODs will be moved to 
+        <a href="https://nsomatrix.xyz/archives" style="color: red;">Archives</a>
+      </h4>
+    </div>
 
+    <!-- MOD File List -->
+    <ul id="fileList"></ul>
+  </div>
 
-    <ul id="fileList" style="list-style: none; padding: 0;">
-        <!-- File list will be populated here by JavaScript -->
-    </ul>
+  <!-- Footer Placeholder -->
+  <div id="footer-placeholder"></div>
 
-    <!-- Include the JavaScript file -->
-    <script src="js/fileList.js"></script>
-    <script>
-        // Define the searchFiles function here
-        function searchFiles() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase(); // Trim whitespace and convert to lowercase
-            const fileList = document.getElementById('fileList');
-            const fileItems = fileList.getElementsByTagName('li');
-
-            Array.from(fileItems).forEach(item => {
-                const fileName = item.textContent.toLowerCase(); // Convert to lowercase
-                if (fileName.includes(searchTerm)) {
-                    item.style.display = 'block'; // Show the item
-                } else {
-                    item.style.display = 'none'; // Hide the item
-                }
-            });
-        }
-
-        // Automatically trigger search when user types in the search input field
-        document.getElementById('searchInput').addEventListener('input', searchFiles);
-    </script>
-
-<!-- Placeholder for the footer -->
-
-
-<!-- Include Bootstrap JS if needed -->
-<script src="js/bootstrap.min.js"></script>
-
+  <!-- Scripts -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/fileList.js"></script>
 </body>
 </html>
