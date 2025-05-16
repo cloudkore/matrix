@@ -1,4 +1,14 @@
 #bootScreen {
+  transition: opacity 0.8s ease;
+  opacity: 1;
+}
+
+#bootScreen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#bootScreen {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +22,7 @@
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: inherit;
   color: #c0c0c0;
 }
 

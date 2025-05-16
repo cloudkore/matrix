@@ -4,35 +4,42 @@ window.addEventListener("DOMContentLoaded", () => {
   const progressText = document.getElementById("progressText");
 
   const messages = [
-    "Connecting to GitHub...",
-    "Decrypting Ninja Secrets...",
-    "Fetching Assets...",
-    "Optimizing Shurikens...",
-    "Loading Matrix...",
-    "Installing Backdoors...",
-    "Compiling Chakra...",
-    "Almost there...",
-    "Finishing touches...",
-    "Launching NinjaBase..."
+    "Connecting to GitHub",
+    "Decrypting resources",
+    "Fetching Assets",
+    "Optimizing Shurikens",
+    "Loading Matrix",
+    "Installing Plugins",
+    "Compiling Chakra",
+    "Almost there",
+    "Finishing touches",
+    "Launching WebApp"
   ];
 
+  const spinnerFrames = ['⣾', '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽'];
+  let spinnerIndex = 0;
   let percent = 0;
 
   const interval = setInterval(() => {
-    percent += Math.floor(Math.random() * 3) + 1; // 1-3% per step
+    percent += Math.floor(Math.random() * 3) + 1;
     if (percent >= 100) percent = 100;
 
     progressBar.style.width = percent + "%";
 
-    // Update text every ~10%
     const msgIndex = Math.floor(percent / (100 / messages.length));
-    progressText.innerText = `[${percent}%] ${messages[msgIndex]}`;
+    const safeIndex = Math.min(msgIndex, messages.length - 1);
+
+    const spinner = spinnerFrames[spinnerIndex];
+    spinnerIndex = (spinnerIndex + 1) % spinnerFrames.length;
+
+    progressText.innerText = `[${percent}%] ${spinner} ${messages[safeIndex]}`;
 
     if (percent >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        bootScreen.style.display = "none";
-      }, 1000);
-    }
+  clearInterval(interval);
+  bootScreen.classList.add("fade-out");
+  setTimeout(() => {
+    bootScreen.style.display = "none";
+  }, 800); // same as CSS transition duration
+}
   }, 80);
 });
