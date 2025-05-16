@@ -1,34 +1,38 @@
 window.addEventListener("DOMContentLoaded", () => {
   const bootScreen = document.getElementById("bootScreen");
-  const logBox = document.getElementById("bootLogs");
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
 
-  const steps = [
-    "Connecting to GitHub server...",
-    "Establishing secure channel...",
-    "Authenticating as Ninja...",
-    "Fetching repository data...",
-    "Cloning matrix core...",
-    "Injecting payload...",
-    "Encrypting responses...",
-    "Loading assets...",
-    "Booting up interface...",
-    "Finalizing system...",
-    "Launch sequence initiated...",
+  const messages = [
+    "Connecting to GitHub...",
+    "Decrypting Ninja Secrets...",
+    "Fetching Assets...",
+    "Optimizing Shurikens...",
+    "Loading Matrix...",
+    "Installing Backdoors...",
+    "Compiling Chakra...",
+    "Almost there...",
+    "Finishing touches...",
+    "Launching NinjaBase..."
   ];
 
-  let i = 0;
-  const interval = setInterval(() => {
-    if (i < steps.length) {
-      logBox.innerHTML += `<div>[${i * 10}%] ${steps[i]}</div>`;
-      logBox.scrollTop = logBox.scrollHeight;
-      i++;
-    } else {
-      logBox.innerHTML += `<div>[100%] System ready.</div>`;
-      clearInterval(interval);
+  let percent = 0;
 
+  const interval = setInterval(() => {
+    percent += Math.floor(Math.random() * 3) + 1; // 1-3% per step
+    if (percent >= 100) percent = 100;
+
+    progressBar.style.width = percent + "%";
+
+    // Update text every ~10%
+    const msgIndex = Math.floor(percent / (100 / messages.length));
+    progressText.innerText = `[${percent}%] ${messages[msgIndex]}`;
+
+    if (percent >= 100) {
+      clearInterval(interval);
       setTimeout(() => {
         bootScreen.style.display = "none";
       }, 1000);
     }
-  }, 300);
+  }, 80);
 });
