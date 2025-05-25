@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NinjaBase Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/essentials.js"></script>
+  <style>
+    .form-section {
+      max-width: 400px;
+      margin: 50px auto;
+      background: #000;
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+  <div class="container">
+    <div class="form-section">
+      <h2>Login</h2>
+      <input type="email" id="email" class="form-control" placeholder="Email">
+      <input type="password" id="password" class="form-control" placeholder="Password">
+      <button id="loginBtn" class="btn btn-primary">Login</button>
+      <button id="signupBtn" class="btn btn-secondary">Sign Up</button>
+    </div>
+
+    <div id="game-section" class="form-section hidden">
+      <h2>Welcome, <span id="username"></span></h2>
+      <p>Current Level: <span id="playerLevel">1</span></p>
+      <button id="levelUpBtn" class="btn btn-success">Level Up</button>
+      <button id="logoutBtn" class="btn btn-danger">Logout</button>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/bootstrap.min.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwEZaP_Oc7MRwfxIXyq0k7sH4LQBEc3YY",
+      authDomain: "matrix-nso.firebaseapp.com",
+      projectId: "matrix-nso",
+      storageBucket: "matrix-nso.firebasestorage.app",
+      messagingSenderId: "32108162722",
+      appId: "1:32108162722:web:7c80d154d4120111c271fb"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const levelUpBtn = document.getElementById("levelUpBtn");
+
+    loginBtn.onclick = () => {
+      const emailField = document.getElementById("email");
+      const passwordField = document.getElementById("password");
+      auth.signInWithEmailAndPassword(emailField.value, passwordField.value)
+        .catch(err => alert(err.message));
+    };
+
+    signupBtn.onclick = () => {
+      const emailField = document.getElementById("email");
+      const passwordField = document.getElementById("password");
+      auth.createUserWithEmailAndPassword(emailField.value, passwordField.value)
+        .then(userCred => {
+          return db.collection("players").doc(userCred.user.uid).set({
+            level: 1
+          });
+        })
+        .catch(err => alert(err.message));
+    };
+
+    logoutBtn.onclick = () => auth.signOut();
+
+    levelUpBtn.onclick = () => {
+      const user = auth.currentUser;
+      const ref = db.collection("players").doc(user.uid);
+      ref.get().then(doc => {
+        let currentLevel = doc.data().level;
+        ref.update({ level: currentLevel + 1 });
+        document.getElementById("playerLevel").textContent = currentLevel + 1;
+      });
+    };
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.querySelector(".form-section").classList.add("hidden");
+        document.getElementById("game-section").classList.remove("hidden");
+        document.getElementById("username").textContent = user.email;
+        db.collection("players").doc(user.uid).get()
+          .then(doc => {
+            document.getElementById("playerLevel").textContent = doc.data().level;
+          });
+      } else {
+        document.querySelector(".form-section").classList.remove("hidden");
+        document.getElementById("game-section").classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
