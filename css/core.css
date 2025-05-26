@@ -1,0 +1,62 @@
+.form-section {
+  max-width: 500px;
+  margin: 60px auto;
+  background: linear-gradient(145deg, black, #202020);
+  padding: 30px;
+  border: 2px solid red;
+  border-radius: 12px;
+  box-shadow: 0 0 12px black, inset 0 0 6px red;
+  color: grey;
+  font-family: inherit;
+  text-shadow: 0 0 1px black;
+  transition: all 0.3s ease-in-out;
+}
+
+input.form-control {
+  background-color: #000;
+  color: white;
+  border: 1px solid red;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow: 0 0 6px red;
+  font-family: inherit;
+  text-shadow: 0 0 1px #00ffaa;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease;
+}
+
+input.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 12px red, inset 0 0 4px red;
+  transform: scale(1.02);
+}
+
+.form-control::placeholder {
+  color: red;
+  opacity: 0.9;
+  text-shadow: 0 0 2px red;
+}
+
+button {
+  background-color: transparent;
+  color: #00ffcc;
+  border: 2px solid #00ffaa;
+  padding: 10px 16px;
+  font-weight: bold;
+  font-family: inherit;
+  text-shadow: 0 0 2px #00ffcc;
+  border-radius: 6px;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 6px red;
+}
+
+button:hover {
+  background-color: grey;
+  box-shadow: 0 0 14px red, inset 0 0 6px red;
+  transform: scale(1.03);
+}
+
+.hidden {
+  display: none;
+}
