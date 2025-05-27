@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NinjaBase Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/essentials.js"></script>
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <!-- Username & Avatar Setup -->
+  <div id="setup-section" style="display:none; padding:20px; max-width:500px; margin:auto;">
+    <h3>Set Username & Choose Avatar</h3>
+    <input id="usernameInput" type="text" class="form-control mb-3" placeholder="Enter username" />
+    <div id="avatar-container" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px;"></div>
+    <button id="saveProfileBtn" class="btn btn-success">Save Profile</button>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="main-dashboard" style="display:none; text-align:center; margin-top: 50px;">
+    <h2>Welcome, <span id="dashboard-username"></span>!</h2>
+    <img id="user-avatar" src="" alt="Avatar" style="width:100px; height:100px; border-radius:50%; margin:10px;" />
+    <p>Your Level: <span id="dashboard-level">1</span></p>
+    <div>
+      <button class="btn btn-primary">Play Game</button>
+      <button class="btn btn-warning">Check Stats</button>
+      <button id="logoutBtn" class="btn btn-danger mt-3">Logout</button>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
