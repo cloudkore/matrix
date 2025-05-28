@@ -1,0 +1,240 @@
+/* Ensure HTML and Body take full height */
+html, body {
+    height: 100%; /* Very important for full-screen elements */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* General Body Styling (similar to dashboard for consistency) */
+body {
+    background-color: #1A1A1A; /* Dark background - will be covered by iframe */
+    color: #e2e8f0; /* Light grey text */
+    font-family: 'inherit', inherit; /* Modern sans-serif font */
+    display: flex; /* Use flexbox for overall layout */
+    flex-direction: column; /* Stack content vertically */
+    min-height: 100vh; /* Ensure body takes full viewport height */
+}
+
+/* Full-screen Pen Effect Iframe */
+#fullScreenPenEffect {
+    position: fixed; /* Fixed to the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 100% of viewport width */
+    height: 100vh; /* 100% of viewport height */
+    z-index: -1; /* Place it behind other content */
+    border: none; /* Remove default iframe border */
+    background-color: #000; /* Fallback background for iframe */
+    pointer-events: none; /* Crucial: Allows clicks/interactions to pass through to elements below */
+}
+
+/* Main content wrapper (now needs a higher z-index and background) */
+#main-content {
+    position: relative; /* Needed for z-index to work correctly relative to body */
+    z-index: 10; /* Ensure content is above the iframe */
+    flex-grow: 1; /* Allow content to grow */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center main content horizontally */
+    padding-bottom: 50px; /* Add padding for footer */
+    background-color: rgba(0, 0, 0, 0.0); /* Keep it fully transparent, let cards and navbar handle their own backgrounds */
+    width: 100%; /* Ensure it covers the width */
+    min-height: 100vh; /* Ensure it covers full height of content */
+}
+
+/* Ensure navbar and footer placeholders have background */
+#navbar-placeholder, #footer-placeholder {
+    background-color: #0F0F0F; /* Or rgba(15, 15, 15, 0.9) if you want slight transparency */
+    width: 100%;
+    z-index: 15; /* Ensure they are above #main-content */
+    position: relative; /* Needed for z-index */
+}
+
+/* Main container for cards */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    gap: 30px; /* Space between card sections */
+    padding: 30px 15px; /* Padding for the container */
+    width: 100%; /* Ensure container takes full width */
+    max-width: 600px; /* Limit overall content width */
+    position: relative; /* Ensure cards are positioned relative to container, not body */
+    z-index: 1; /* Ensure cards are above any potential #main-content background */
+}
+
+/* Base Card Styling - ensure they have a background color! */
+.card {
+    background-color: #0F0F0F; /* Darker than body background, this is crucial! */
+    border-radius: 0.75rem; /* Smooth rounded corners */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    padding: 24px;
+    max-width: 350px; /* Max width for cards */
+    width: 100%; /* Ensure it takes full width up to max-width */
+    text-align: center; /* Center text within cards */
+    position: relative; /* For z-index or absolute children */
+    z-index: 1; /* Ensure cards are above the main-content background */
+    overflow: hidden; /* Important for cards with content that might overflow */
+}
+
+/* Inception Card Specifics */
+.inception-card {
+    position: relative; /* For absolute positioning of badge */
+    padding: 0; /* No padding inside for image to fill */
+    width: 300px; /* Fixed width as per original */
+    height: 200px; /* Fixed height as per original */
+}
+
+.inception-card .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure image covers the area */
+    filter: grayscale(20%) contrast(120%) brightness(90%); /* Keep original effects */
+    border-radius: 0.75rem; /* Match card border-radius */
+}
+
+.inception-card .card-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ef4444; /* Red badge color */
+    color: white;
+    padding: 5px 12px;
+    border-radius: 0.375rem; /* Slightly rounded corners for badge */
+    font-size: 0.85em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Uptime Card Specifics */
+.uptime-card {
+    background-color: #0F0F0F; /* Same as other cards */
+    color: #e2e8f0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* Social Links Card */
+.social-links-card {
+    padding: 15px; /* Adjust padding for icons */
+}
+
+.social-icon-link {
+    display: inline-block; /* Allows spacing between icons if more are added */
+    transition: transform 0.2s ease-in-out;
+}
+
+.social-icon-link:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 0.5rem; /* Slight rounding for icons */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for icon */
+}
+
+/* Action Button Card */
+.action-button-card {
+    padding: 20px;
+}
+
+/* Bootstrap Button Overrides (copy from dashboard.css for consistency) */
+.btn {
+  border-radius: 0.5rem; /* Rounded corners for all buttons */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+  text-shadow: none;
+  padding: 10px 20px;
+  margin: 0; /* Remove default margin as card provides spacing */
+  transition: all 0.2s ease-in-out;
+  display: inline-block; /* Ensure it respects padding/margin */
+}
+
+.btn-primary {
+  background-color: #2563eb; /* Blue */
+  border-color: transparent;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #1d4ed8; /* Darker blue on hover */
+  box-shadow: 0 6px 10px -2px rgba(37, 99, 235, 0.3), 0 3px 5px -1px rgba(37, 99, 235, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        padding: 18px;
+        max-width: 90%; /* Adjust max-width for smaller screens */
+    }
+    .inception-card {
+        width: 90%;
+        height: auto; /* Allow height to adjust */
+        max-width: 300px;
+    }
+    .inception-card .card-image {
+        border-radius: 0.5rem;
+    }
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .btn {
+        padding: 8px 16px;
+    }
+    .container {
+        gap: 20px;
+    }
+}
+
+/* Boot screen styling - ensure it covers everything */
+#bootScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* High z-index to cover everything */
+    color: white;
+    font-family: 'Press Start 2P', inherit; /* Keep the retro font for boot screen */
+    text-align: center;
+}
+
+.boot-gif {
+    width: 150px;
+    height: 150px;
+    image-rendering: pixelated;
+    margin-bottom: 20px;
+}
+
+#progressText {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #00FF00; /* Green text */
+}
+
+.progress-bar-outer {
+    width: 80%;
+    max-width: 300px;
+    height: 20px;
+    background-color: #333;
+    border: 2px solid red; /* Green border */
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background-color: #00FF00; /* Green fill */
+    transition: width 0.5s linear;
+}
