@@ -6,25 +6,22 @@
     <title>Pen Effect</title>
     <style>
         /* CSS for the pen effect within its own iframe */
-        html, body {
-            height: 100%; /* Important for the canvas to fill the iframe */
-            width: 100%; /* Important for the canvas to fill the iframe */
-            margin: 0;
-            padding: 0;
-        }
-
         body {
             background-color: #000; /* Ensure black background */
+            margin: 0;
             overflow: hidden; /* Hide scrollbars if any */
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100vw; /* Make body fill the iframe */
+            height: 100vh; /* Make body fill the iframe */
         }
 
         #drawing_canvas {
             display: block; /* Remove any default inline spacing */
             width: 100%; /* Make canvas fill its parent (body of pen_effect.html) */
             height: 100%; /* Make canvas fill its parent */
+            /* No absolute positioning needed here, as it fills its own document */
         }
     </style>
 </head>
@@ -32,7 +29,7 @@
     <canvas id="drawing_canvas"></canvas>
 
     <script>
-        // JS for the pen effect
+        // JS for the pen effect (same as before, but it will read the iframe's dimensions)
         // canvas settings
         var viewWidth, // Will be set dynamically by canvas element's actual size
             viewHeight, // Will be set dynamically by canvas element's actual size
