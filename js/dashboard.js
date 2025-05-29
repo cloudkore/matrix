@@ -131,7 +131,6 @@ auth.onAuthStateChanged(async user => {
             await playerDocRef.set({
                 username: username,
                 avatar: selectedAvatar,
-                // Removed level: 1
             }, { merge: true });
 
             window.location.reload();
@@ -141,7 +140,6 @@ auth.onAuthStateChanged(async user => {
         // If profile exists, display the main dashboard
         document.getElementById("main-dashboard").style.display = "block";
         document.getElementById("dashboard-username").textContent = data.username;
-        // Removed dashboard-level display
         document.getElementById("user-avatar").src = `avatars/${data.avatar}`;
 
         // --- Dashboard Button Event Listeners ---
@@ -149,51 +147,6 @@ auth.onAuthStateChanged(async user => {
         // Server Button
         document.getElementById("serverBtn").onclick = () => {
             window.open("https://support.teamobi.com/login-game-3.html", "_blank");
-        };
-
-        // Speedtest Button
-        document.getElementById("speedtestBtn").onclick = async () => {
-            const downloadSpeedSpan = document.getElementById("download-speed");
-            const uploadSpeedSpan = document.getElementById("upload-speed");
-            const speedtestResultsDiv = document.getElementById("speedtest-results");
-
-            speedtestResultsDiv.style.display = 'block';
-            downloadSpeedSpan.textContent = "Testing...";
-            uploadSpeedSpan.textContent = "Testing...";
-
-            try {
-                // Download Speed Test
-                const imageUrl = "https://placehold.co/1000x1000/000000/FFFFFF/png?text=test_image"; // A 1MB placeholder image
-                const startTime = new Date().getTime();
-                const response = await fetch(imageUrl + "&cache=" + startTime); // Add cache buster
-                const blob = await response.blob();
-                const endTime = new Date().getTime();
-                const duration = (endTime - startTime) / 1000; // seconds
-                const fileSize = blob.size; // bytes
-                const downloadSpeedMbps = (fileSize * 8 / (1024 * 1024)) / duration; // Mbps
-                downloadSpeedSpan.textContent = `${downloadSpeedMbps.toFixed(2)} Mbps`;
-
-                // Upload Speed Test (upload a dummy 1MB blob)
-                const dummyData = new Blob([new ArrayBuffer(1024 * 1024)], { type: 'application/octet-stream' }); // 1MB dummy blob
-                const uploadStartTime = new Date().getTime();
-                await fetch('https://httpbin.org/post', { // Use httpbin.org for dummy POST request
-                    method: 'POST',
-                    body: dummyData,
-                    headers: { 'Content-Type': 'application/octet-stream' }
-                });
-                const uploadEndTime = new Date().getTime();
-                const uploadDuration = (uploadEndTime - uploadStartTime) / 1000; // seconds
-                const uploadSpeedMbps = (dummyData.size * 8 / (1024 * 1024)) / uploadDuration; // Mbps
-                uploadSpeedSpan.textContent = `${uploadSpeedMbps.toFixed(2)} Mbps`;
-
-                showMessageBox("Speedtest complete!", 'success');
-
-            } catch (error) {
-                console.error("Speedtest failed:", error);
-                downloadSpeedSpan.textContent = "Failed";
-                uploadSpeedSpan.textContent = "Failed";
-                showMessageBox("Speedtest failed. Please try again.", 'error');
-            }
         };
 
         // --- Notes Functionality ---
@@ -269,8 +222,6 @@ auth.onAuthStateChanged(async user => {
         async function loadNotes() {
             // The onSnapshot listener above will handle this automatically
         }
-
-        // Removed Ephemeral Storage Functionality
 
         // --- ID/Password Manager Functionality ---
         const passwordManagerModal = document.getElementById("passwordManagerModal");
@@ -361,9 +312,9 @@ auth.onAuthStateChanged(async user => {
             // Attach delete listeners
             pmEntryList.querySelectorAll('.delete-pm-btn').forEach(button => {
                 button.onclick = async (e) => {
-                    const entryIdToDelete = e.target.dataset.entryId;
+                    const noteIdToDelete = e.target.dataset.noteId;
                     try {
-                        await playerDocRef.collection("passwords").doc(entryIdToDelete).delete();
+                        await playerDocRef.collection("passwords").doc(noteIdToDelete).delete();
                         showMessageBox("Password entry deleted!", 'success');
                     } catch (error) {
                         console.error("Error deleting password entry:", error);
