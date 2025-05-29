@@ -114,11 +114,11 @@ body {
 }
 
 .login .inputBx button#loginBtn {
-    background: linear-gradient(45deg, #ff357a, #fff172);
+    background: linear-gradient(45deg, grey, black);
 }
 
 .login .inputBx button#signupBtn {
-    background: linear-gradient(45deg, #0078ff, #00c6ff);
+    background: linear-gradient(45deg, red, black);
     margin-top: 10px;
 }
 
