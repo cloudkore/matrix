@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: inherit;
+    font-family: "Quicksand", sans-serif;
 }
 
 body {
@@ -13,12 +13,13 @@ body {
     justify-content: flex-start; /* Align content to the start of the flex container */
     align-items: stretch; /* Stretch children to fill width */
     min-height: 100vh; /* Ensure body takes full viewport height */
-    background: #111;
+    background: #111; /* Fallback background, might be covered by iframe */
     width: 100%;
-    /* Removed overflow: hidden; to allow content to scroll if needed */
+    position: relative; /* Establishes a stacking context for its children */
+    z-index: 0; /* Base z-index for the body and its direct children */
 }
 
-/* NEW: Full-screen Pen Effect Iframe */
+/* Full-screen Pen Effect Iframe */
 #fullScreenPenEffect {
     position: fixed; /* Fixed to the viewport */
     top: 0;
@@ -28,9 +29,18 @@ body {
     z-index: -1; /* Place it behind other content */
     border: none; /* Remove default iframe border */
     background-color: #000; /* Fallback background for iframe */
-    pointer-events: none; /* Crucial: Allows clicks/interactions to pass through to elements below */
+    pointer-events: none; /* CRUCIAL: Allows clicks/interactions to pass through to elements below */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide any overflow from within the iframe's bounds */
 }
 
+/* Ensure navbar is always above the background iframe */
+#navbar-placeholder {
+    position: relative; /* Create a stacking context */
+    z-index: 10; /* Place it above the iframe and main content */
+    /* Add specific styling for the navbar area if not handled by essentials.js */
+}
 
 /* Main content wrapper to center the login form */
 #main-content {
@@ -41,21 +51,30 @@ body {
     width: 100%; /* Ensure it takes full width */
     padding: 20px 0; /* Add some vertical padding to ensure space for navbar/footer */
     box-sizing: border-box; /* Include padding in width/height calculations */
+    position: relative; /* Create a stacking context */
+    z-index: 5; /* Place it above the iframe but potentially below navbar/footer */
+    overflow: hidden; /* Hide any content overflow within main-content */
 }
 
+/* Ensure footer is always above the background iframe */
+#footer-placeholder {
+    position: relative; /* Create a stacking context */
+    z-index: 10; /* Place it above the iframe and main content */
+    /* Add specific styling for the footer area if not handled by essentials.js */
+}
+
+/* The .ring and .login styles from before (no changes needed here related to iframe layering) */
 .ring {
-    position: relative; /* Keep relative for the `inset` property of <i> elements */
+    position: relative;
     width: 500px;
     height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Added responsive sizing for the ring */
-    max-width: 90vw; /* Max width 90% of viewport width */
-    max-height: 90vh; /* Max height 90% of viewport height */
-    width: min(500px, 90vw); /* Use min to ensure it doesn't get too big but also scales down */
-    height: min(500px, 90vh); /* Use min to ensure it doesn't get too big but also scales down */
-    /* Removed absolute positioning as it's now centered by #main-content */
+    max-width: 90vw;
+    max-height: 90vh;
+    width: min(500px, 90vw);
+    height: min(500px, 90vh);
 }
 
 .ring i {
@@ -104,17 +123,16 @@ body {
 }
 
 .login {
-    position: absolute; /* Keep absolute within .ring to overlay on top of <i> elements */
+    position: absolute;
     width: 300px;
-    height: 100%; /* This makes it fill the height of the .ring */
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 20px;
-    /* Make login form responsive within the ring */
-    max-width: 80%; /* Max width 80% of the ring's width */
-    padding: 20px; /* Add padding to prevent content from touching edges */
+    max-width: 80%;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -141,7 +159,6 @@ body {
     outline: none;
 }
 
-/* Style for the buttons (Sign in, Sign Up) */
 .login .inputBx button {
     width: 100%;
     padding: 12px 20px;
@@ -150,24 +167,22 @@ body {
     color: #fff;
     box-shadow: none;
     outline: none;
-    border: none; /* Remove default button border */
+    border: none;
     cursor: pointer;
-    transition: background 0.3s ease; /* Smooth transition for hover effects */
+    transition: background 0.3s ease;
 }
 
-/* Specific style for the Sign in button */
 .login .inputBx button#loginBtn {
-    background: linear-gradient(45deg, #ff357a, #fff172); /* Original Codepen gradient */
+    background: linear-gradient(45deg, #ff357a, #fff172);
 }
 
-/* Specific style for the Sign Up button */
 .login .inputBx button#signupBtn {
-    background: linear-gradient(45deg, #0078ff, #00c6ff); /* A new gradient for signup */
-    margin-top: 10px; /* Space between login and signup buttons */
+    background: linear-gradient(45deg, #0078ff, #00c6ff);
+    margin-top: 10px;
 }
 
 .login .inputBx button:hover {
-    opacity: 0.9; /* Slightly dim on hover */
+    opacity: 0.9;
 }
 
 .login .inputBx input::placeholder {
@@ -188,7 +203,6 @@ body {
     text-decoration: none;
 }
 
-/* Braille Spinner Styles (from your core.js) */
 .braille-spinner {
     display: inline-block;
     margin-left: 5px;
@@ -198,5 +212,3 @@ body {
 .d-none {
     display: none !important;
 }
-
-/* Removed explicit styling for #navbar-placeholder and #footer-placeholder */
