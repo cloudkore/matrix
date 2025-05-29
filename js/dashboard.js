@@ -17,7 +17,7 @@ let selectedAvatar = ""; // This will still hold the filename of the avatar chos
 
 auth.onAuthStateChanged(async user => {
     if (!user) {
-        window.location.href = "core.html";
+        window.location.href = "login.html";
         return;
     }
 
@@ -78,7 +78,7 @@ auth.onAuthStateChanged(async user => {
 
     document.getElementById("logoutBtn").onclick = () => {
         auth.signOut().then(() => {
-            window.location.href = "core.html";
+            window.location.href = "login.html";
         });
     };
 });
