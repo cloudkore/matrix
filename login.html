@@ -6,7 +6,9 @@
     <title>NinjaBase Login</title>
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="css/login.css">
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -14,39 +16,33 @@
     <script src="js/essentials.js"></script>
 </head>
 <body>
-    <div id="navbar-placeholder"></div>
     <iframe id="fullScreenPenEffect" src="pen_effect.html" frameborder="0" scrolling="no"></iframe>
 
+    <div id="navbar-placeholder"></div>
+
     <div id="main-content">
-        <div class="ring">
-            <i style="--clr:#00ff0a;"></i>
-            <i style="--clr:#ff0057;"></i>
-            <i style="--clr:#fffd44;"></i>
-            <div class="login">
-                <h2>Login</h2>
-                <div class="inputBx">
-                    <input type="email" id="email" placeholder="Email">
-                </div>
-                <div class="inputBx">
-                    <input type="password" id="password" placeholder="Password">
-                </div>
-                <div class="inputBx">
-                    <button id="loginBtn" type="submit">Sign in</button>
-                </div>
-                <div class="inputBx">
-                    <button id="signupBtn" type="button">Sign Up</button>
-                </div>
-                <div class="links">
-                    <a href="#">Forget Password</a>
-                    <a href="#">Signup</a>
-                </div>
+        <div class="login">
+            <h2>Login</h2>
+            <div class="inputBx">
+                <input type="email" id="email" placeholder="Email">
+            </div>
+            <div class="inputBx">
+                <input type="password" id="password" placeholder="Password">
+            </div>
+            <div class="inputBx">
+                <button id="loginBtn" type="submit">Sign in</button>
+            </div>
+            <div class="inputBx">
+                <button id="signupBtn" type="button">Sign Up</button>
+            </div>
+            <div class="links">
+                <a href="#">Forget Password</a>
+                <a href="#">Signup</a>
             </div>
         </div>
-        </div>
-
-    <div id="footer-placeholder">
-        <p style="color: white; text-align: center; padding: 10px; background-color: rgba(51, 51, 51, 0.5);">This is the Footer Area</p>
     </div>
+
+    <div id="footer-placeholder"></div>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/login.js"></script>

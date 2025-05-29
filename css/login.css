@@ -1,10 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
-
-* {
+{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Quicksand", sans-serif;
+    font-family: inherit;
 }
 
 body {
@@ -46,8 +44,8 @@ body {
 #main-content {
     flex-grow: 1; /* Allows this div to take up all available vertical space */
     display: flex;
-    justify-content: center; /* Center the .ring horizontally */
-    align-items: center; /* Center the .ring vertically */
+    justify-content: center; /* Center the .login form horizontally */
+    align-items: center; /* Center the .login form vertically */
     width: 100%; /* Ensure it takes full width */
     padding: 20px 0; /* Add some vertical padding to ensure space for navbar/footer */
     box-sizing: border-box; /* Include padding in width/height calculations */
@@ -63,82 +61,25 @@ body {
     /* Add specific styling for the footer area if not handled by essentials.js */
 }
 
-/* The .ring and .login styles from before (no changes needed here related to iframe layering) */
-.ring {
-    position: relative;
-    width: 500px;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: min(500px, 90vw);
-    height: min(500px, 90vh);
-}
-
-.ring i {
-    position: absolute;
-    inset: 0;
-    border: 2px solid #fff;
-    transition: 0.5s;
-}
-
-.ring i:nth-child(1) {
-    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
-    animation: animate 6s linear infinite;
-}
-
-.ring i:nth-child(2) {
-    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
-    animation: animate 4s linear infinite;
-}
-
-.ring i:nth-child(3) {
-    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
-    animation: animate2 10s linear infinite;
-}
-
-.ring:hover i {
-    border: 6px solid var(--clr);
-    filter: drop-shadow(0 0 20px var(--clr));
-}
-
-@keyframes animate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes animate2 {
-    0% {
-        transform: rotate(360deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
-
 .login {
-    position: absolute;
-    width: 300px;
-    height: 100%;
+    width: 90%; /* Make login form responsive */
+    max-width: 380px; /* Max width for desktop, consistent with former ring size */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 20px;
-    max-width: 80%;
-    padding: 20px;
+    padding: 40px 20px; /* Increased padding for a better card-like feel */
     box-sizing: border-box;
+    background: rgba(15, 15, 15, 0.8); /* Made semi-transparent (0.8 opacity) */
+    border-radius: 15px; /* Rounded corners for the login form */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
 }
 
 .login h2 {
     font-size: 2em;
     color: #fff;
+    margin-bottom: 10px; /* Add some space below the heading */
 }
 
 .login .inputBx {
@@ -196,6 +137,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    margin-top: 10px; /* Add space above links */
 }
 
 .login .links a {
