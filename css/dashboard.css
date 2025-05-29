@@ -182,3 +182,18 @@ h2, h3 {
     height: 80px;
   }
 }
+
+/* Full-screen Pen Effect Iframe */
+#fullScreenPenEffect {
+    position: fixed; /* Fixed to the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 100% of viewport width */
+    height: 100vh; /* 100% of viewport height */
+    z-index: -1; /* Place it behind other content */
+    border: none; /* Remove default iframe border */
+    background-color: #000; /* Fallback background for iframe */
+    pointer-events: none; /* CRUCIAL: Allows clicks/interactions to pass through to elements below */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide any overflow from within the iframe's bounds */
