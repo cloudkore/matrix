@@ -9,18 +9,21 @@ body {
 #setup-section, #main-dashboard {
   max-width: 500px;
   margin: 50px auto;
-  padding: 24px; /* Slightly more padding */
-  background-color: #0F0F0F; /* Darker than body background */
+  padding: 30px 24px; /* Increased top/bottom padding for more vertical space */
+  background-color: rgba(15, 15, 15, 0.7); /* Semi-transparent dark background */
   border: none; /* Remove explicit border */
   border-radius: 0.75rem; /* Large border-radius for smooth cards */
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  display: flex; /* Ensure flex for column layout */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center items horizontally within the card */
 }
 
 /* Header styling */
 h2, h3 {
   color: #60a5fa; /* Modern blue accent for headers */
   text-align: center;
-  margin-bottom: 24px; /* Increased margin */
+  margin-bottom: 30px; /* Increased margin-bottom for headers for more separation */
 }
 
 /* Input field styling for modern look */
@@ -29,13 +32,14 @@ h2, h3 {
   border: 1px solid #475569; /* Subtle border */
   color: #e2e8f0; /* Light text for input */
   text-align: center;
-  padding: 10px 16px; /* Adjusted padding */
+  padding: 12px 16px; /* Slightly more vertical padding for better touch targets */
   width: 100%;
   border-radius: 0.375rem; /* Rounded corners for input */
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
+  margin-bottom: 20px; /* Ensure good spacing below the input field */
 }
 .form-control::placeholder {
-  color: #94a3b8; /* Lighter placeholder color */
+  color: #94a3b8; /* Lighter placeholder color for better contrast */
 }
 
 /* Avatar Selector Styling */
@@ -43,11 +47,12 @@ h2, h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px; /* Adjusted gap */
-  margin: 32px 0; /* Adjusted vertical margin */
+  gap: 20px; /* Slightly reduced gap for compactness, especially on mobile */
+  margin: 30px 0; /* Adjusted vertical margin for better spacing */
+  width: 100%; /* Ensure it takes full width of its parent */
 }
 
-/* Avatar Wrapper Styling - now transparent with no background or shadow */
+/* Avatar Wrapper Styling */
 .avatar-wrapper {
   width: 100px;
   height: 100px;
@@ -59,13 +64,14 @@ h2, h3 {
   justify-content: center;
   align-items: center;
   transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  box-shadow: none; /* Removed box-shadow */
+  box-shadow: none;
+  flex-shrink: 0; /* Prevent it from shrinking too much on small screens */
 }
 
-/* Selected state for the wrapper - blue background */
+/* Selected state for the wrapper - blue background and border removed */
 .avatar-wrapper.selected {
-  background-color: #60a5fa; /* Blue background for selected avatar */
-  box-shadow: 0 6px 10px -2px rgba(96, 165, 250, 0.3), 0 3px 5px -1px rgba(96, 165, 250, 0.2); /* More prominent shadow */
+  /* background-color: #60a5fa; REMOVED: This was the blue background */
+  box-shadow: none; /* REMOVED: This was the blue outline */
 }
 
 /* Avatar Image Styling (inside the wrapper) */
@@ -82,13 +88,14 @@ h2, h3 {
   background-color: #2b3a4a; /* Darker grey background, same as input/avatar wrapper */
   color: #e2e8f0; /* Light text */
   border: none; /* No border */
-  padding: 12px 18px; /* Larger padding */
+  padding: 10px 15px; /* Adjusted padding for better touch targets */
   cursor: pointer;
-  font-size: 1.6em; /* Slightly larger arrows */
+  font-size: 1.5em; /* Slightly smaller arrows for better fit */
   line-height: 1;
   border-radius: 0.375rem; /* Rounded corners */
   transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.2s ease-in-out;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  flex-shrink: 0; /* Prevent from shrinking */
 }
 .nav-btn:hover {
   background-color: #60a5fa; /* Blue background on hover */
@@ -139,12 +146,33 @@ h2, h3 {
   box-shadow: 0 6px 10px -2px rgba(239, 68, 68, 0.3), 0 3px 5px -1px rgba(239, 68, 68, 0.2);
 }
 
+.btn-secondary { /* Style for Notes, Ephemeral, Password Manager buttons */
+    background-color: #475569; /* Slate grey */
+    border-color: transparent;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #334155; /* Darker slate grey */
+    box-shadow: 0 6px 10px -2px rgba(71, 85, 105, 0.3), 0 3px 5px -1px rgba(71, 85, 105, 0.2);
+}
+
+.btn-info { /* Style for Speedtest button */
+    background-color: #0ea5e9; /* Sky blue */
+    border-color: transparent;
+    color: white;
+}
+.btn-info:hover {
+    background-color: #0284c7; /* Darker sky blue */
+    box-shadow: 0 6px 10px -2px rgba(14, 165, 233, 0.3), 0 3px 5px -1px rgba(14, 165, 233, 0.2);
+}
+
+
 /* Main Dashboard elements */
 #main-dashboard h2, #main-dashboard p {
   color: #60a5fa; /* Blue for main dashboard text */
 }
 
-#user-avatar {
+.user-avatar-display { /* Renamed from #user-avatar for consistency with avatar-display */
   width: 100px;
   height: 100px;
   border-radius: 0.5rem; /* Rounded square for main avatar */
@@ -152,38 +180,182 @@ h2, h3 {
   image-rendering: pixelated; /* Keep for pixel art avatars */
   object-fit: cover; /* Ensures image fills the space, potentially cropping */
   object-position: center; /* Centers the image content */
-  margin: 16px 0; /* Adjusted margin */
+  margin: 16px auto; /* Adjusted margin and centered */
+  display: block; /* Make it a block element to center with margin: auto */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
-  /* Added flex properties for centering its content */
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
+
+.dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to next line on small screens */
+    justify-content: center; /* Center buttons horizontally */
+    margin-top: 20px;
+}
+
+/* Speedtest Results Display */
+.speedtest-results {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.speedtest-results h4 {
+    color: #a78bfa; /* Purple accent */
+    margin-bottom: 10px;
+}
+.speedtest-results p {
+    color: #e2e8f0;
+    font-size: 1.1em;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: rgba(15, 15, 15, 0.9); /* Semi-transparent for modals too */
+    margin: auto;
+    padding: 20px;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    width: 90%; /* Responsive width */
+    max-width: 400px; /* Max width for desktop */
+    position: relative;
+    z-index: 1000;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #60a5fa;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Notes & Password Manager & Ephemeral File List Display */
+.saved-notes-display, .file-list-display {
+    background-color: #1f2937;
+    border-radius: 0.375rem;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: left;
+    max-height: 200px; /* Scrollable if many items */
+    overflow-y: auto;
+    border: 1px solid #475569;
+}
+.saved-notes-display p, .file-list-display div {
+    padding: 8px 0;
+    border-bottom: 1px solid #2b3a4a;
+    color: #e2e8f0;
+    word-wrap: break-word; /* Ensure long text wraps */
+}
+.saved-notes-display p:last-child, .file-list-display div:last-child {
+    border-bottom: none;
+}
+.saved-notes-display p strong, .file-list-display div strong {
+    color: #a78bfa; /* Purple for titles/names */
+}
+.file-list-display button { /* Delete buttons for files/passwords */
+    margin-left: 10px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.file-list-display button:hover {
+    background-color: #dc2626;
+}
+
+/* Custom Message Box */
+.custom-message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    z-index: 10000;
+    text-align: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.1em;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #setup-section, #main-dashboard {
-    margin-top: 30px;
-    padding: 16px;
+    margin-top: 20px; /* Reduced margin for smaller screens */
+    padding: 20px 15px; /* Adjusted padding */
+  }
+  h3 {
+      font-size: 1.5em; /* Smaller heading on mobile */
+      margin-bottom: 20px;
+  }
+  .form-control {
+      padding: 10px 12px;
+      font-size: 1em;
   }
   .avatar-selector {
-    gap: 16px;
+    gap: 10px; /* Even smaller gap on mobile */
+    margin: 20px 0;
   }
   .nav-btn {
-    padding: 10px 16px;
-    font-size: 1.4em;
+    padding: 8px 12px;
+    font-size: 1.2em;
   }
   .avatar-wrapper {
-    width: 80px;
-    height: 80px;
+    width: 70px; /* Slightly smaller avatar on mobile */
+    height: 70px;
   }
-  #user-avatar {
-    width: 80px;
-    height: 80px;
+  #saveProfileBtn {
+      width: 100%; /* Full width button on mobile */
+      margin-top: 15px;
+  }
+  .modal-content {
+      width: 95%; /* Even wider on very small screens */
+      padding: 15px;
+  }
+  .dashboard-buttons .btn {
+      width: calc(50% - 16px); /* Two buttons per row, considering margin */
+      margin: 8px;
   }
 }
 
-/* Full-screen Pen Effect Iframe */
 #fullScreenPenEffect {
     position: fixed; /* Fixed to the viewport */
     top: 0;
@@ -197,3 +369,4 @@ h2, h3 {
     margin: 0;
     padding: 0;
     overflow: hidden; /* Hide any overflow from within the iframe's bounds */
+}
