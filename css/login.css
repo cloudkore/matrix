@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Stack children (navbar, main-content, footer) vertically */
+    justify-content: flex-start; /* Align content to the start of the flex container */
+    align-items: stretch; /* Stretch children to fill width */
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    background: #111;
+    width: 100%;
+    /* Removed overflow: hidden; to allow content to scroll if needed */
+}
+
+/* NEW: Full-screen Pen Effect Iframe */
+#fullScreenPenEffect {
+    position: fixed; /* Fixed to the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 100% of viewport width */
+    height: 100vh; /* 100% of viewport height */
+    z-index: -1; /* Place it behind other content */
+    border: none; /* Remove default iframe border */
+    background-color: #000; /* Fallback background for iframe */
+    pointer-events: none; /* Crucial: Allows clicks/interactions to pass through to elements below */
+}
+
+
+/* Main content wrapper to center the login form */
+#main-content {
+    flex-grow: 1; /* Allows this div to take up all available vertical space */
+    display: flex;
+    justify-content: center; /* Center the .ring horizontally */
+    align-items: center; /* Center the .ring vertically */
+    width: 100%; /* Ensure it takes full width */
+    padding: 20px 0; /* Add some vertical padding to ensure space for navbar/footer */
+    box-sizing: border-box; /* Include padding in width/height calculations */
+}
+
+.ring {
+    position: relative; /* Keep relative for the `inset` property of <i> elements */
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Added responsive sizing for the ring */
+    max-width: 90vw; /* Max width 90% of viewport width */
+    max-height: 90vh; /* Max height 90% of viewport height */
+    width: min(500px, 90vw); /* Use min to ensure it doesn't get too big but also scales down */
+    height: min(500px, 90vh); /* Use min to ensure it doesn't get too big but also scales down */
+    /* Removed absolute positioning as it's now centered by #main-content */
+}
+
+.ring i {
+    position: absolute;
+    inset: 0;
+    border: 2px solid #fff;
+    transition: 0.5s;
+}
+
+.ring i:nth-child(1) {
+    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+    animation: animate 6s linear infinite;
+}
+
+.ring i:nth-child(2) {
+    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+    animation: animate 4s linear infinite;
+}
+
+.ring i:nth-child(3) {
+    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+    animation: animate2 10s linear infinite;
+}
+
+.ring:hover i {
+    border: 6px solid var(--clr);
+    filter: drop-shadow(0 0 20px var(--clr));
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes animate2 {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.login {
+    position: absolute; /* Keep absolute within .ring to overlay on top of <i> elements */
+    width: 300px;
+    height: 100%; /* This makes it fill the height of the .ring */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    /* Make login form responsive within the ring */
+    max-width: 80%; /* Max width 80% of the ring's width */
+    padding: 20px; /* Add padding to prevent content from touching edges */
+    box-sizing: border-box;
+}
+
+.login h2 {
+    font-size: 2em;
+    color: #fff;
+}
+
+.login .inputBx {
+    position: relative;
+    width: 100%;
+}
+
+.login .inputBx input {
+    position: relative;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 40px;
+    font-size: 1.2em;
+    color: #fff;
+    box-shadow: none;
+    outline: none;
+}
+
+/* Style for the buttons (Sign in, Sign Up) */
+.login .inputBx button {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 40px;
+    font-size: 1.2em;
+    color: #fff;
+    box-shadow: none;
+    outline: none;
+    border: none; /* Remove default button border */
+    cursor: pointer;
+    transition: background 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Specific style for the Sign in button */
+.login .inputBx button#loginBtn {
+    background: linear-gradient(45deg, #ff357a, #fff172); /* Original Codepen gradient */
+}
+
+/* Specific style for the Sign Up button */
+.login .inputBx button#signupBtn {
+    background: linear-gradient(45deg, #0078ff, #00c6ff); /* A new gradient for signup */
+    margin-top: 10px; /* Space between login and signup buttons */
+}
+
+.login .inputBx button:hover {
+    opacity: 0.9; /* Slightly dim on hover */
+}
+
+.login .inputBx input::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.login .links {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.login .links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Braille Spinner Styles (from your core.js) */
+.braille-spinner {
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.d-none {
+    display: none !important;
+}
+
+/* Removed explicit styling for #navbar-placeholder and #footer-placeholder */
