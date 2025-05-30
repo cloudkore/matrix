@@ -1,3 +1,4 @@
+// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCwEZaP_Oc7MRwfxIXyq0k7sH4LQBEc3YY",
     authDomain: "matrix-nso.firebaseapp.com",
@@ -13,34 +14,56 @@ const db = firebase.firestore();
 
 const loginBtn = document.getElementById("loginBtn");
 const signupBtn = document.getElementById("signupBtn");
-const emailInput = document.getElementById("email"); // Get the email input
-const passwordInput = document.getElementById("password"); // Get the password input
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 const forgotPasswordLink = document.querySelector(".login .links a[href='#']");
 
-// Custom message box for alerts (instead of alert())
-function showMessageBox(message) {
-    const messageBox = document.createElement('div');
-    messageBox.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-        z-index: 10000;
-        text-align: center;
-        font-family: 'Quicksand', sans-serif;
-        font-size: 1.1em;
-    `;
-    messageBox.innerText = message;
-    document.body.appendChild(messageBox);
+// --- Utility Functions (for messages and spinners) ---
+function showMessageBox(message, type = 'info', duration = 3000) {
+    let messageBox = document.getElementById('customMessageBox');
+    let messageText = document.getElementById('messageBoxText');
+
+    if (!messageBox) {
+        messageBox = document.createElement('div');
+        messageBox.id = 'customMessageBox';
+        messageBox.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            z-index: 10000;
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1em;
+            display: none; /* Hide by default */
+        `;
+        messageText = document.createElement('p');
+        messageText.id = 'messageBoxText';
+        messageBox.appendChild(messageText);
+        document.body.appendChild(messageBox);
+    }
+
+    messageText.innerText = message;
+    messageBox.style.display = 'block';
+
+    messageBox.style.backgroundColor = '#333';
+    messageBox.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+    if (type === 'error') {
+        messageBox.style.backgroundColor = '#ef4444';
+        messageBox.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.5)';
+    } else if (type === 'success') {
+        messageBox.style.backgroundColor = '#22c55e';
+        messageBox.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+    }
 
     setTimeout(() => {
-        messageBox.remove();
-    }, 3000); // Message disappears after 3 seconds
+        messageBox.style.display = 'none';
+    }, duration);
 }
 
 function startBrailleSpinner(span) {
@@ -58,8 +81,24 @@ function stopBrailleSpinner(span, intervalId) {
     span.textContent = '';
 }
 
-// Function to handle the actual login process (reused for button click and Enter key)
-function handleLogin() {
+// --- Key Derivation Functions (for Master Password) ---
+const PBKDF2_ITERATIONS = 200000;
+const KEY_SIZE = 256 / 32;
+
+function generateSalt() {
+    return CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
+}
+
+async function deriveKey(masterPassword, salt) {
+    return CryptoJS.PBKDF2(masterPassword, CryptoJS.enc.Hex.parse(salt), {
+        keySize: KEY_SIZE,
+        iterations: PBKDF2_ITERATIONS,
+        hasher: CryptoJS.algo.SHA256
+    });
+}
+
+// --- Login Functionality ---
+async function handleLogin() {
     const spinnerSpan = document.createElement("span");
     spinnerSpan.className = "braille-spinner";
     loginBtn.innerHTML = "Logging in ";
@@ -68,43 +107,53 @@ function handleLogin() {
 
     const intervalId = startBrailleSpinner(spinnerSpan);
 
-    const email = emailInput.value; // Use the grabbed emailInput
-    const password = passwordInput.value; // Use the grabbed passwordInput
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
-    auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-            window.location.href = "dashboard.html";
-        })
-        .catch(err => {
-            showMessageBox(err.message);
-        })
-        .finally(() => {
-            stopBrailleSpinner(spinnerSpan, intervalId);
-            loginBtn.innerHTML = "Sign in";
-            loginBtn.disabled = false;
-        });
+    try {
+        const userCred = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCred.user;
+
+        // Fetch user's salt to derive encryption key
+        const playerDoc = await db.collection("players").doc(user.uid).get();
+        const playerData = playerDoc.data();
+
+        if (playerData && playerData.salt && playerData.masterPasswordHash) {
+            const derivedEncryptionKey = await deriveKey(password, playerData.salt);
+            // Store the derived key in sessionStorage (dashboard.js will not rely on it for this version)
+            sessionStorage.setItem('currentEncryptionKey', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
+        } else {
+            console.warn("User data (salt/masterPasswordHash) missing for login. Encryption features might require manual unlock.");
+        }
+
+        window.location.href = "dashboard.html";
+    } catch (err) {
+        showMessageBox(err.message, 'error');
+    } finally {
+        stopBrailleSpinner(spinnerSpan, intervalId);
+        loginBtn.innerHTML = "Sign in";
+        loginBtn.disabled = false;
+    }
 }
 
-// Attach handleLogin to the button click
 loginBtn.onclick = handleLogin;
 
-// Add event listeners for "Enter" key press on input fields
 emailInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        event.preventDefault(); // Prevent default form submission behavior (if any)
-        handleLogin(); // Trigger login
+        event.preventDefault();
+        handleLogin();
     }
 });
 
 passwordInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        event.preventDefault(); // Prevent default form submission behavior (if any)
-        handleLogin(); // Trigger login
+        event.preventDefault();
+        handleLogin();
     }
 });
 
-
-signupBtn.onclick = () => {
+// --- Signup Functionality ---
+signupBtn.onclick = async () => {
     const spinnerSpan = document.createElement("span");
     spinnerSpan.className = "braille-spinner";
     signupBtn.innerHTML = "Signing up ";
@@ -113,33 +162,57 @@ signupBtn.onclick = () => {
 
     const intervalId = startBrailleSpinner(spinnerSpan);
 
-    const email = emailInput.value; // Use the grabbed emailInput
-    const password = passwordInput.value; // Use the grabbed passwordInput
+    const email = emailInput.value;
+    const password = passwordInput.value; // This will be the master password
 
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(userCred => {
-            return db.collection("players").doc(userCred.user.uid).set({ level: 1 });
-        })
-        .then(() => {
-            window.location.href = "dashboard.html";
-        })
-        .catch(err => {
-            showMessageBox(err.message);
-        })
-        .finally(() => {
-            stopBrailleSpinner(spinnerSpan, intervalId);
-            signupBtn.innerHTML = "Sign Up";
-            signupBtn.disabled = false;
+    if (password.length < 8) {
+        showMessageBox("Password must be at least 8 characters long.", "error");
+        stopBrailleSpinner(spinnerSpan, intervalId);
+        signupBtn.innerHTML = "Sign Up";
+        signupBtn.disabled = false;
+        return;
+    }
+
+    try {
+        const userCred = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCred.user;
+
+        const userSalt = generateSalt();
+        const masterPasswordHash = (await deriveKey(password, userSalt)).toString(CryptoJS.enc.Hex);
+
+        await db.collection("players").doc(user.uid).set({
+            level: 1,
+            salt: userSalt,
+            masterPasswordHash: masterPasswordHash
         });
+
+        // Store the derived key in sessionStorage (dashboard.js will not rely on it for this version)
+        const derivedEncryptionKey = await deriveKey(password, userSalt);
+        sessionStorage.setItem('currentEncryptionKey', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
+
+        showMessageBox("Account created successfully! Redirecting to dashboard...", 'success');
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1500);
+
+    } catch (err) {
+        showMessageBox(err.message, 'error');
+        console.error("Signup error:", err);
+    } finally {
+        stopBrailleSpinner(spinnerSpan, intervalId);
+        signupBtn.innerHTML = "Sign Up";
+        signupBtn.disabled = false;
+    }
 };
 
+// --- Forgot Password Functionality ---
 forgotPasswordLink.onclick = (e) => {
     e.preventDefault();
 
     const email = emailInput.value.trim();
 
     if (!email) {
-        showMessageBox("Please enter your email address to reset your password.");
+        showMessageBox("Please enter your email address to reset your password.", 'error');
         return;
     }
 
@@ -147,11 +220,11 @@ forgotPasswordLink.onclick = (e) => {
 
     auth.sendPasswordResetEmail(email)
         .then(() => {
-            showMessageBox("Password reset email sent! Check your inbox.");
+            showMessageBox("Password reset email sent! Check your inbox.", 'success');
             emailInput.value = '';
         })
         .catch((error) => {
-            showMessageBox(`Error: ${error.message}`);
+            showMessageBox(`Error: ${error.message}`, 'error');
             console.error("Password reset error:", error);
         });
 };

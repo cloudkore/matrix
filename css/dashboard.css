@@ -345,3 +345,7 @@ h2, h3 {
     padding: 0;
     overflow: hidden; /* Hide any overflow from within the iframe's bounds */
 }
+
+#deleteAccountConfirmModal .modal-content p {
+    color: #ffffff; /* Sets the text color to white */
+}
