@@ -38,7 +38,7 @@ function showMessageBox(message, type = 'info', duration = 3000) {
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
             z-index: 10000;
             text-align: center;
-            font-family: 'Quicksand', sans-serif;
+            font-family: inherit;
             font-size: 1.1em;
             display: none; /* Hide by default */
         `;
