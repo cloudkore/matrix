@@ -782,7 +782,7 @@ document.querySelectorAll('.close-button').forEach(button => {
 
 // Update Forgot Master Password button behavior
 forgotPasswordBtn.onclick = () => {
-    showMessageBox("Your master password is tied to your login password. To reset it, please use the 'Forgot Password?' option on the login page.", "info", 5000);
+    showMessageBox("Your Master Password cannot be reset due to encryption. Your only option is to delete the account and create a new one!", "info", 5000);
     // Optionally, you could redirect them to the login page:
     // setTimeout(() => { window.location.href = "login.html"; }, 3000);
 };
