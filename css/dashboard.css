@@ -349,3 +349,24 @@ h2, h3 {
 #deleteAccountConfirmModal .modal-content p {
     color: #ffffff; /* Sets the text color to white */
 }
+
+/*
+ * Styles for the language selector to ensure visibility and position.
+ */
+.language-selector label,
+.language-selector select {
+    color: white; /* Sets the text color to white */
+    /* Add any other styling for the select box itself if needed,
+       for example, a white background or border. */
+}
+
+/* Optional: To make the dropdown background white and text readable when opened */
+.language-selector select {
+    background-color: black;
+    border: 1px solid #ccc; /* A light border for definition */
+}
+
+/* Optional: To ensure options are readable when the dropdown is open */
+.language-selector select option {
+    color: black; /* Text color for options within the dropdown */
+}

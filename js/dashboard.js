@@ -28,6 +28,8 @@ const logoutBtn = document.getElementById('logoutBtn');
 const deleteAccountBtn = document.getElementById('deleteAccountBtn');
 const customMessageBox = document.getElementById('customMessageBox');
 const messageBoxText = document.getElementById('messageBoxText');
+// Language Selector DOM element
+const languageSelect = document.getElementById('language-select');
 
 const notesModal = document.getElementById('notesModal');
 const notesBtn = document.getElementById('notesBtn');
@@ -47,11 +49,6 @@ const deleteAccountConfirmModal = document.getElementById('deleteAccountConfirmM
 const confirmDeleteAccountBtn = document.getElementById('confirmDeleteAccountBtn');
 const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
 
-// Master Password setup fields (in setup section)
-const masterPasswordInput = document.getElementById('masterPasswordInput');
-const confirmMasterPasswordInput = document.getElementById('confirmMasterPasswordInput');
-const masterPasswordSetupFields = document.querySelectorAll('.master-password-setup-field');
-
 // Master password unlock modal (for returning users)
 const masterPasswordPromptModal = document.getElementById('masterPasswordPromptModal');
 const masterPasswordUnlockInput = document.getElementById('masterPasswordUnlockInput');
@@ -64,9 +61,79 @@ let allAvatars = [];
 let currentUser = null;
 let currentEncryptionKey = null; // This will hold the derived encryption key for the session
 
+// --- Internationalization Variables and Functions ---
+let translations = {}; // Global variable to hold the current language translations
+
+// Function to fetch translations based on the selected language
+async function loadTranslations(lang) {
+    try {
+        const response = await fetch(`languages/${lang}.json`);
+        if (!response.ok) {
+            throw new Error(`Could not load translations for ${lang}`);
+        }
+        translations = await response.json();
+        console.log(`Translations loaded for ${lang}:`, translations);
+        applyTranslations();
+        // Store selected language in localStorage for persistence
+        localStorage.setItem('selectedLanguage', lang);
+    } catch (error) {
+        console.error('Error loading translations:', error);
+        // Fallback to English if loading fails
+        if (lang !== 'en') {
+            console.warn('Falling back to English translations.');
+            loadTranslations('en');
+        }
+    }
+}
+
+// Function to get a translated string by key
+function getTranslation(key) {
+    // Returns translated text or a fallback string if key is not found
+    return translations[key] || `[${key}]`;
+}
+
+// Function to apply translations to all elements with data-translate-key attribute
+function applyTranslations() {
+    console.log("Applying translations...");
+
+    // Translate dashboard title
+    document.title = getTranslation('dashboard_title');
+
+    $('[data-translate-key]').each(function() {
+        const key = $(this).data('translate-key');
+        let translatedText = getTranslation(key);
+
+        // Handle placeholders for input/textarea elements
+        if ($(this).is('input[placeholder], textarea[placeholder]')) {
+            $(this).attr('placeholder', translatedText);
+        } else {
+            // Check if the element has children before setting text, to preserve icons etc.
+            if ($(this).children().length > 0) {
+                // If it has children, only set the text content, preserving inner HTML structure
+                $(this).contents().filter(function() {
+                    return this.nodeType === 3; // Node.TEXT_NODE
+                }).replaceWith(translatedText);
+            } else {
+                $(this).text(translatedText);
+            }
+        }
+    });
+
+    // Handle the welcome message dynamically if it's already displayed
+    if ($('#dashboard-username').length && currentUser && currentUser.displayName) {
+        // Updated to use the correct welcome message structure
+        $('#main-dashboard h2.welcome-message').html(getTranslation('welcome_message') + ` <span id="dashboard-username">${currentUser.displayName}</span>!`);
+    }
+}
+
 // --- Utility Functions ---
-function showMessageBox(message, type = 'info', duration = 3000) {
-    messageBoxText.innerText = message;
+function showMessageBox(messageKeyOrText, type = 'info', duration = 3000) {
+    let messageToDisplay = messageKeyOrText;
+    // Check if the input is a translation key (i.e., exists in the current translations)
+    if (translations[messageKeyOrText]) {
+        messageToDisplay = getTranslation(messageKeyOrText);
+    }
+    messageBoxText.innerText = messageToDisplay;
     customMessageBox.style.display = 'block';
 
     customMessageBox.style.backgroundColor = '#333';
@@ -77,6 +144,9 @@ function showMessageBox(message, type = 'info', duration = 3000) {
     } else if (type === 'success') {
         customMessageBox.style.backgroundColor = '#22c55e';
         customMessageBox.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+    } else if (type === 'warning') {
+        customMessageBox.style.backgroundColor = '#f59e0b';
+        customMessageBox.style.boxShadow = '0 0 10px rgba(255, 255, 0, 0.5)';
     }
 
     setTimeout(() => {
@@ -96,6 +166,7 @@ function closeModal(modalElement) {
 function encryptData(dataToEncrypt) {
     if (!currentEncryptionKey) {
         console.error("Encryption key not available. Cannot encrypt data.");
+        showMessageBox(getTranslation("encryption_key_not_available_error"), "error");
         return null;
     }
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
@@ -117,6 +188,7 @@ function decryptData(encryptedData) {
         return decrypted.toString(CryptoJS.enc.Utf8);
     } catch (error) {
         console.error("Decryption failed:", error);
+        showMessageBox(getTranslation("decryption_failed_error"), "error");
         return null;
     }
 }
@@ -153,7 +225,7 @@ async function loadAvatars() {
         }
     } catch (error) {
         console.error("Error loading avatars:", error);
-        showMessageBox("Could not load avatars. Please check your network.", "error");
+        showMessageBox(getTranslation("could_not_load_avatars_error"), "error");
         currentAvatarDisplay.src = "https://placehold.co/100x100?text=Error";
     }
 }
@@ -181,73 +253,50 @@ async function saveProfile(user) {
     const username = usernameInput.value.trim();
     const selectedAvatar = allAvatars[currentAvatarIndex];
 
-    const masterPassword = masterPasswordSetupFields.length > 0 && masterPasswordSetupFields[0].style.display === 'block' ? masterPasswordInput.value : '';
-    const confirmMasterPassword = masterPasswordSetupFields.length > 0 && masterPasswordSetupFields[0].style.display === 'block' ? confirmMasterPasswordInput.value : '';
-
     const playerDocRef = db.collection('players').doc(user.uid);
     const playerDoc = await playerDocRef.get();
     const data = playerDoc.exists ? playerDoc.data() : {};
 
-    const hasSalt = !!data.salt;
-    const hasMasterPasswordHash = !!data.masterPasswordHash;
+    // Note: master password fields are no longer directly managed here.
+    // The presence of 'salt' and 'masterPasswordHash' will be checked during dashboard setup/unlock.
 
     if (!username || !selectedAvatar) {
-        showMessageBox("Please enter a username and select an avatar.", "error");
+        showMessageBox(getTranslation("message_box_please_enter_username_avatar"), "error");
         return;
-    }
-
-    if (masterPasswordSetupFields.length > 0 && masterPasswordSetupFields[0].style.display === 'block') {
-        if (masterPassword.length < 8) {
-            showMessageBox("Master password must be at least 8 characters long.", "error");
-            return;
-        }
-        if (masterPassword !== confirmMasterPassword) {
-            showMessageBox("Master passwords do not match.", "error");
-            return;
-        }
     }
 
     saveProfileBtn.disabled = true;
     saveProfileBtn.textContent = 'Saving...';
 
     try {
-        let userSalt = data.salt;
-        let masterPasswordHashToSave = data.masterPasswordHash;
-
-        if (masterPasswordSetupFields.length > 0 && masterPasswordSetupFields[0].style.display === 'block') {
-            userSalt = generateSalt();
-            masterPasswordHashToSave = (await deriveKey(masterPassword, userSalt)).toString(CryptoJS.enc.Hex);
-            showMessageBox("Generating and storing your master password. Do NOT forget it!", "info", 5000);
-        }
+        // Master password related fields are no longer handled by this saveProfile function.
+        // It's assumed the master password setup/hashing happens during initial registration in login.js
+        // or through a separate, dedicated "Set Master Password" flow if needed.
+        // This function will only update username and avatar.
 
         const updateData = {
             username: username,
             avatar: selectedAvatar,
-            level: data.level || 1
+            level: data.level || 1 // Preserve existing level or set default
         };
-
-        if (userSalt) {
-            updateData.salt = userSalt;
-        }
-        if (masterPasswordHashToSave) {
-            updateData.masterPasswordHash = masterPasswordHashToSave;
-        }
 
         await db.collection('players').doc(user.uid).set(updateData, { merge: true });
 
-        showMessageBox("Profile saved successfully!", "success");
+        showMessageBox(getTranslation("message_box_profile_saved_success"), "success");
 
         setupSection.style.display = 'none';
         mainDashboard.style.display = 'block';
         dashboardUsername.textContent = username;
         userAvatar.src = `avatars/${selectedAvatar}`;
 
+        applyTranslations();
+
     } catch (error) {
         console.error("Error saving profile:", error);
-        showMessageBox("Failed to save profile: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_save_profile") + error.message, "error");
     } finally {
         saveProfileBtn.disabled = false;
-        saveProfileBtn.textContent = 'Save Profile';
+        saveProfileBtn.textContent = getTranslation("save_profile_button");
     }
 }
 
@@ -268,8 +317,6 @@ async function setupDashboard(user) {
 
         console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}`);
 
-        // No attempt to load encryption key from sessionStorage here.
-        // The key is explicitly set via the unlock modal.
         currentEncryptionKey = null; // Ensure it's null on load
 
         // Scenario 1: User needs to complete their profile (username or avatar is missing)
@@ -293,17 +340,10 @@ async function setupDashboard(user) {
             }
             updateAvatarDisplay();
 
-            const shouldShowMasterPasswordFieldsInSetup = !(hasSalt && hasMasterPasswordHash);
-            console.log(`Debug: shouldShowMasterPasswordFieldsInSetup (for setup screen): ${shouldShowMasterPasswordFieldsInSetup}`);
+            // The master password setup fields are no longer displayed or managed in this setup section
+            // as per the requirement to remove them.
 
-            if (masterPasswordSetupFields.length > 0) {
-                masterPasswordSetupFields.forEach(div => {
-                    div.style.display = shouldShowMasterPasswordFieldsInSetup ? 'block' : 'none';
-                });
-            }
-
-            masterPasswordInput.value = '';
-            confirmMasterPasswordInput.value = '';
+            applyTranslations(); // Apply translations to setup section elements
             return;
         }
 
@@ -315,9 +355,12 @@ async function setupDashboard(user) {
         mainDashboard.style.display = 'block';
         closeModal(masterPasswordPromptModal);
 
+        // Apply translations once the dashboard is shown
+        applyTranslations();
+
     } catch (error) {
         console.error("Error setting up dashboard:", error);
-        showMessageBox("Failed to load dashboard: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_load_dashboard") + error.message, "error");
         setupSection.style.display = 'none';
         mainDashboard.style.display = 'none';
         closeModal(masterPasswordPromptModal);
@@ -329,7 +372,7 @@ unlockDashboardBtn.onclick = async () => {
     console.log("Unlock Dashboard button clicked.");
     const masterPassword = masterPasswordUnlockInput.value;
     if (!masterPassword) {
-        showMessageBox("Please enter your master password.", "error");
+        showMessageBox(getTranslation("message_box_please_enter_master_password"), "error");
         return;
     }
 
@@ -344,20 +387,20 @@ unlockDashboardBtn.onclick = async () => {
         const storedMasterPasswordHash = data.masterPasswordHash;
 
         if (!userSalt || !storedMasterPasswordHash) {
-             showMessageBox("Profile data incomplete. Please go to setup to set your master password.", "error");
-             unlockDashboardBtn.disabled = false;
-             unlockDashboardBtn.textContent = 'Unlock Dashboard';
-             setupSection.style.display = 'flex';
-             mainDashboard.style.display = 'none';
-             closeModal(masterPasswordPromptModal);
-             return;
+            showMessageBox(getTranslation("message_box_profile_data_incomplete"), "error");
+            unlockDashboardBtn.disabled = false;
+            unlockDashboardBtn.textContent = getTranslation("unlock_dashboard_button");
+            setupSection.style.display = 'flex'; // Show setup for incomplete profile
+            mainDashboard.style.display = 'none';
+            closeModal(masterPasswordPromptModal);
+            return;
         }
 
         const derivedKeyForVerification = await deriveKey(masterPassword, userSalt);
         const derivedMasterPasswordHash = derivedKeyForVerification.toString(CryptoJS.enc.Hex);
 
         if (derivedMasterPasswordHash !== storedMasterPasswordHash) {
-            showMessageBox("Incorrect master password. Please try again.", "error");
+            showMessageBox(getTranslation("message_box_incorrect_master_password"), "error");
             currentEncryptionKey = null;
             return;
         }
@@ -366,7 +409,7 @@ unlockDashboardBtn.onclick = async () => {
 
         closeModal(masterPasswordPromptModal);
         masterPasswordUnlockInput.value = '';
-        showMessageBox("Dashboard unlocked! You can now access your encrypted data.", "success", 4000);
+        showMessageBox(getTranslation("message_box_dashboard_unlocked"), "success", 4000);
         console.log("Dashboard unlocked successfully.");
 
         // If the user was trying to access Notes/Password Manager, re-open the respective modal
@@ -382,19 +425,19 @@ unlockDashboardBtn.onclick = async () => {
 
     } catch (error) {
         console.error("Error unlocking dashboard:", error);
-        showMessageBox("Error unlocking dashboard: " + error.message, "error");
+        showMessageBox(getTranslation("error_unlocking_dashboard_error") + error.message, "error");
         currentEncryptionKey = null;
     } finally {
         unlockDashboardBtn.disabled = false;
-        unlockDashboardBtn.textContent = 'Unlock Dashboard';
+        unlockDashboardBtn.textContent = getTranslation("unlock_dashboard_button");
     }
 };
 
 // Add event listener for 'Enter' key on masterPasswordUnlockInput
 masterPasswordUnlockInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        event.preventDefault(); // Prevent default form submission behavior (if any)
-        unlockDashboardBtn.click(); // Programmatically click the unlock button
+        event.preventDefault();
+        unlockDashboardBtn.click();
     }
 });
 
@@ -404,7 +447,7 @@ saveProfileBtn.onclick = () => {
     if (currentUser) {
         saveProfile(currentUser);
     } else {
-        showMessageBox("Please log in or sign up first.", "error");
+        showMessageBox(getTranslation("message_box_please_login_first"), "error");
     }
 };
 
@@ -428,13 +471,13 @@ auth.onAuthStateChanged(async (user) => {
         currentAvatarIndex = 0;
         updateAvatarDisplay();
         if (window.location.pathname !== '/login.html') {
-             window.location.href = "login.html";
+            window.location.href = "login.html";
         }
     }
 });
 
 
-// --- Dashboard Actions (Notes, Passwords, Ephemeral Files) ---
+// --- Dashboard Actions (Notes, Passwords) ---
 
 // Listener for Notes Modal
 notesBtn.onclick = () => {
@@ -450,37 +493,37 @@ notesBtn.onclick = () => {
 notesModal.querySelector('.close-button').onclick = () => closeModal(notesModal);
 saveNoteBtn.onclick = async () => {
     if (!currentUser || !currentEncryptionKey) {
-        showMessageBox("Please unlock dashboard.", "error");
+        showMessageBox(getTranslation("message_box_please_unlock_dashboard"), "error");
         return;
     }
     const noteText = noteInput.value.trim();
 
     if (!noteText) {
-        showMessageBox("Note content cannot be empty.", "error");
+        showMessageBox(getTranslation("message_box_note_empty"), "error");
         return;
     }
 
     try {
         const encryptedContent = encryptData(noteText);
         if (!encryptedContent) {
-            throw new Error("Encryption failed.");
+            throw new Error(getTranslation("message_box_encryption_failed"));
         }
         await db.collection('players').doc(currentUser.uid).collection('notes').add({
             content: encryptedContent,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         noteInput.value = '';
-        showMessageBox("Note added successfully!", "success");
+        showMessageBox(getTranslation("message_box_note_added_success"), "success");
     }
     catch (error) {
         console.error("Error adding note:", error);
-        showMessageBox("Failed to add note: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_add_note") + error.message, "error");
     }
 };
 
 async function loadNotes() {
     if (!currentUser || !currentEncryptionKey) {
-        savedNotesDisplay.innerHTML = '<p style="text-align: center; color: #94a3b8;">Please unlock dashboard to view notes.</p>';
+        savedNotesDisplay.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("unlock_dashboard_to_view_notes")}</p>`;
         return;
     }
     db.collection('players').doc(currentUser.uid).collection('notes')
@@ -488,7 +531,7 @@ async function loadNotes() {
         .onSnapshot((snapshot) => {
             savedNotesDisplay.innerHTML = '';
             if (snapshot.empty) {
-                savedNotesDisplay.innerHTML = '<p style="text-align: center; color: #94a3b8;">No notes saved yet.</p>';
+                savedNotesDisplay.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("no_notes_saved")}</p>`;
                 return;
             }
             snapshot.forEach(doc => {
@@ -497,37 +540,37 @@ async function loadNotes() {
                 if (decryptedContent === null) {
                     savedNotesDisplay.innerHTML += `
                         <div>
-                            <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : 'Saving...'}</strong></p>
-                            <p style="color: red;">[Decryption Failed or Invalid Data]</p>
-                            <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">Delete</button>
+                            <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : getTranslation("saving_status")}</strong></p>
+                            <p style="color: red;">${getTranslation("decryption_failed_invalid_data")}</p>
+                            <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">${getTranslation("Delete")}</button>
                         </div>
                     `;
                     return;
                 }
                 savedNotesDisplay.innerHTML += `
-                    <div>
-                        <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : 'Saving...'}</strong></p>
-                        <p>${decryptedContent}</p>
-                        <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">Delete</button>
-                    </div>
-                `;
+                        <div>
+                            <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : getTranslation("saving_status")}</strong></p>
+                            <p>${decryptedContent}</p>
+                            <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">${getTranslation("Delete")}</button>
+                        </div>
+                    `;
             });
             document.querySelectorAll('.delete-note-btn').forEach(button => {
                 button.onclick = async (event) => {
-                    showMessageBox("Deleting note...", 'info', 1500);
+                    showMessageBox(getTranslation("message_box_deleting_note"), 'info', 1500);
                     const noteId = event.target.dataset.noteId;
                     try {
                         await db.collection('players').doc(currentUser.uid).collection('notes').doc(noteId).delete();
-                        showMessageBox("Note deleted successfully!", "success");
+                        showMessageBox(getTranslation("message_box_note_deleted_success"), "success");
                     } catch (error) {
                         console.error("Error deleting note:", error);
-                        showMessageBox("Failed to delete note: " + error.message, "error");
+                        showMessageBox(getTranslation("message_box_failed_to_delete_note") + error.message, "error");
                     }
                 };
             });
         }, (error) => {
             console.error("Error loading notes:", error);
-            showMessageBox("Failed to load notes: " + error.message, "error");
+            showMessageBox(getTranslation("failed_to_load_notes_error") + error.message, "error");
         });
 }
 
@@ -545,7 +588,7 @@ passwordManagerBtn.onclick = () => {
 passwordManagerModal.querySelector('.close-button').onclick = () => closeModal(passwordManagerModal);
 savePmEntryBtn.onclick = async () => {
     if (!currentUser || !currentEncryptionKey) {
-        showMessageBox("Please unlock dashboard.", "error");
+        showMessageBox(getTranslation("message_box_please_unlock_dashboard"), "error");
         return;
     }
     const serviceName = pmServiceNameInput.value.trim();
@@ -553,14 +596,14 @@ savePmEntryBtn.onclick = async () => {
     const pmPassword = pmPasswordInput.value.trim();
 
     if (!serviceName || !pmUsername || !pmPassword) {
-        showMessageBox("All fields are required for a password entry.", "error");
+        showMessageBox(getTranslation("message_box_pm_all_fields_required"), "error");
         return;
     }
 
     try {
         const encryptedPassword = encryptData(pmPassword);
         if (!encryptedPassword) {
-            throw new Error("Encryption failed.");
+            throw new Error(getTranslation("message_box_encryption_failed"));
         }
         await db.collection('players').doc(currentUser.uid).collection('passwords').add({
             serviceName: serviceName,
@@ -571,16 +614,16 @@ savePmEntryBtn.onclick = async () => {
         pmServiceNameInput.value = '';
         pmUsernameInput.value = '';
         pmPasswordInput.value = '';
-        showMessageBox("Password added successfully!", "success");
+        showMessageBox(getTranslation("message_box_password_added_success"), "success");
     } catch (error) {
         console.error("Error adding password:", error);
-        showMessageBox("Failed to add password: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_add_password") + error.message, "error");
     }
 };
 
 async function loadPasswords() {
     if (!currentUser || !currentEncryptionKey) {
-        pmEntryList.innerHTML = '<p style="text-align: center; color: #94a3b8;">Please unlock dashboard to view passwords.</p>';
+        pmEntryList.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("unlock_dashboard_to_view_passwords")}</p>`;
         return;
     }
     db.collection('players').doc(currentUser.uid).collection('passwords')
@@ -588,147 +631,59 @@ async function loadPasswords() {
         .onSnapshot((snapshot) => {
             pmEntryList.innerHTML = '';
             if (snapshot.empty) {
-                pmEntryList.innerHTML = '<p style="text-align: center; color: #94a3b8;">No passwords saved yet.</p>';
+                pmEntryList.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("no_passwords_saved")}</p>`;
                 return;
             }
             snapshot.forEach(doc => {
                 const entry = doc.data();
                 const decryptedContent = decryptData(entry.password);
-                 if (decryptedContent === null) {
+                if (decryptedContent === null) {
                     pmEntryList.innerHTML += `
                         <div>
-                            <p><strong>Service:</strong> ${entry.serviceName}</p>
-                            <p><strong>Username:</strong> ${entry.username}</p>
-                            <p style="color: red;"><strong>Password:</strong> [Decryption Failed or Invalid Data]</p>
-                            <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">Delete</button>
+                            <p><strong>${getTranslation("service_label")}:</strong> ${entry.serviceName}</p>
+                            <p><strong>${getTranslation("username_label")}:</strong> ${entry.username}</p>
+                            <p style="color: red;"><strong>${getTranslation("password_label")}:</strong> ${getTranslation("decryption_failed_invalid_data")}</p>
+                            <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">${getTranslation("Delete")}</button>
                         </div>
                     `;
                     return;
                 }
                 pmEntryList.innerHTML += `
-                    <div>
-                        <p><strong>Service:</strong> ${entry.serviceName}</p>
-                        <p><strong>Username:</strong> ${entry.username}</p>
-                        <p><strong>Password:</strong> <span class="decrypted-password">${decryptedContent}</span></p>
-                        <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">Delete</button>
-                    </div>
-                `;
+                        <div>
+                            <p><strong>${getTranslation("service_label")}:</strong> ${entry.serviceName}</p>
+                            <p><strong>${getTranslation("username_label")}:</strong> ${entry.username}</p>
+                            <p><strong>${getTranslation("password_label")}:</strong> <span class="decrypted-password">${decryptedContent}</span></p>
+                            <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">${getTranslation("Delete")}</button>
+                        </div>
+                    `;
             });
             document.querySelectorAll('.delete-pm-btn').forEach(button => {
                 button.onclick = async (event) => {
-                    showMessageBox("Deleting password entry...", 'info', 1500);
+                    showMessageBox(getTranslation("message_box_deleting_pm_entry"), 'info', 1500);
                     const entryId = event.target.dataset.entryId;
                     try {
                         await db.collection('players').doc(currentUser.uid).collection('passwords').doc(entryId).delete();
-                        showMessageBox("Password entry deleted successfully!", "success");
+                        showMessageBox(getTranslation("message_box_pm_entry_deleted_success"), "success");
                     } catch (error) {
                         console.error("Error deleting password entry:", error);
-                        showMessageBox("Failed to delete password entry: " + error.message, "error");
+                        showMessageBox(getTranslation("message_box_failed_to_delete_pm_entry") + error.message, "error");
                     }
                 };
             });
         }, (error) => {
             console.error("Error loading passwords:", error);
-            showMessageBox("Failed to load passwords: " + error.message, "error");
+            showMessageBox(getTranslation("failed_to_load_passwords_error") + error.message, "error");
         });
 }
-
-// Ephemeral Files (assuming you still want this feature)
-const ephemeralFilesBtn = document.getElementById('ephemeralFilesBtn');
-const ephemeralFilesModal = document.getElementById('ephemeralFilesModal');
-const ephemeralFileInput = document.getElementById('ephemeralFileInput');
-const uploadEphemeralFileBtn = document.getElementById('uploadEphemeralFileBtn');
-const ephemeralFilesList = document.getElementById('ephemeralFilesList');
-
-if (ephemeralFilesBtn && ephemeralFilesModal && ephemeralFileInput && uploadEphemeralFileBtn && ephemeralFilesList) {
-    ephemeralFilesBtn.onclick = () => {
-        openModal(ephemeralFilesModal);
-        loadEphemeralFiles();
-    };
-    ephemeralFilesModal.querySelector('.close-button').onclick = () => closeModal(ephemeralFilesModal);
-
-    uploadEphemeralFileBtn.onclick = async () => {
-        if (!currentUser) {
-            showMessageBox("Please log in to upload files.", "error");
-            return;
-        }
-        const file = ephemeralFileInput.files[0];
-        if (!file) {
-            showMessageBox("Please select a file to upload.", "error");
-            return;
-        }
-
-        const fileRef = storage.ref().child(`ephemeral_files/${currentUser.uid}/${file.name}`);
-        try {
-            const snapshot = await fileRef.put(file);
-            const downloadURL = await snapshot.ref.getDownloadURL();
-
-            await db.collection('players').doc(currentUser.uid).collection('ephemeral_files').add({
-                name: file.name,
-                url: downloadURL,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            });
-            showMessageBox("File uploaded successfully!", "success");
-            ephemeralFileInput.value = '';
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            showMessageBox("Failed to upload file: " + error.message, "error");
-        }
-    };
-
-    async function loadEphemeralFiles() {
-        if (!currentUser) {
-            ephemeralFilesList.innerHTML = '<p>Please log in to view ephemeral files.</p>';
-            return;
-        }
-        db.collection('players').doc(currentUser.uid).collection('ephemeral_files')
-            .orderBy('timestamp', "desc")
-            .onSnapshot((snapshot) => {
-                ephemeralFilesList.innerHTML = '';
-                if (snapshot.empty) {
-                    ephemeralFilesList.innerHTML = '<p>No ephemeral files uploaded yet.</p>';
-                    return;
-                }
-                snapshot.forEach(doc => {
-                    const file = doc.data();
-                    ephemeralFilesList.innerHTML += `
-                        <div>
-                            <strong><a href="${file.url}" target="_blank">${file.name}</a></strong>
-                            <button class="delete-file-btn btn btn-danger" data-id="${doc.id}" data-url="${file.url}">Delete</button>
-                        </div>
-                    `;
-                });
-                document.querySelectorAll('.delete-file-btn').forEach(button => {
-                    button.onclick = async (event) => {
-                        showMessageBox("Deleting file...", 'info', 1500);
-                        const fileId = event.target.dataset.id;
-                        const fileUrl = event.target.dataset.url;
-                        try {
-                            const storageRef = storage.refFromURL(fileUrl);
-                            await storageRef.delete();
-                            await db.collection('players').doc(currentUser.uid).collection('ephemeral_files').doc(fileId).delete();
-                            showMessageBox("File deleted successfully!", "success");
-                        } catch (error) {
-                            console.error("Error deleting file:", error);
-                            showMessageBox("Failed to delete file: " + error.message, "error");
-                        }
-                    }
-                });
-            });
-    }
-} else {
-    console.warn("Ephemeral file elements not found in HTML. Ephemeral file functionality will not be active.");
-}
-
 
 // --- Logout and Delete Account ---
 logoutBtn.onclick = async () => {
     try {
         await auth.signOut();
-        showMessageBox("Logged out successfully!", "success");
+        showMessageBox(getTranslation("message_box_logged_out_success"), "success");
     } catch (error) {
         console.error("Error logging out:", error);
-        showMessageBox("Failed to log out: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_log_out") + error.message, "error");
     }
 };
 
@@ -739,20 +694,20 @@ deleteAccountBtn.onclick = () => {
 
 // Handle confirmation of account deletion
 confirmDeleteAccountBtn.onclick = async () => {
-    closeModal(deleteAccountConfirmModal); // Close modal immediately
-    showMessageBox("Initiating account deletion...", 'info', 2000);
+    closeModal(deleteAccountConfirmModal);
+    showMessageBox(getTranslation("message_box_initiating_account_deletion"), 'info', 2000);
     try {
         await db.collection('players').doc(currentUser.uid).delete(); // Delete user's profile document
         await currentUser.delete(); // Delete Firebase authentication account
-        showMessageBox("Account and associated profile data deleted successfully! Redirecting...", "success");
+        showMessageBox(getTranslation("message_box_account_deleted_success"), "success");
         setTimeout(() => {
             window.location.href = "login.html";
         }, 2000);
     } catch (error) {
         console.error("Error deleting account:", error);
-        showMessageBox("Failed to delete account: " + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_delete_account") + error.message, "error");
         if (error.code === 'auth/requires-recent-login') {
-            showMessageBox("Please log in again recently to delete your account. You will be redirected to the login page.", "warning", 5000);
+            showMessageBox(getTranslation("message_box_account_requires_recent_login"), "warning", 5000);
             setTimeout(() => {
                 auth.signOut().then(() => {
                     window.location.href = "login.html";
@@ -765,7 +720,7 @@ confirmDeleteAccountBtn.onclick = async () => {
 // Handle cancellation of account deletion
 cancelDeleteAccountBtn.onclick = () => {
     closeModal(deleteAccountConfirmModal);
-    showMessageBox("Account deletion cancelled.", "info", 2000);
+    showMessageBox(getTranslation("message_box_account_deletion_cancelled"), "info", 2000);
 };
 
 
@@ -782,10 +737,27 @@ document.querySelectorAll('.close-button').forEach(button => {
 
 // Update Forgot Master Password button behavior
 forgotPasswordBtn.onclick = () => {
-    showMessageBox("Your Master Password cannot be reset due to encryption. Your only option is to delete the account and create a new one!", "info", 5000);
-    // Optionally, you could redirect them to the login page:
-    // setTimeout(() => { window.location.href = "login.html"; }, 3000);
+    showMessageBox(getTranslation("message_box_master_password_cannot_be_reset"), "info", 5000);
 };
 
 // Initial load for avatars
 loadAvatars();
+
+
+// --- jQuery Document Ready for Language Selector and initial language load ---
+$(document).ready(function() {
+    // Set initial language based on localStorage or default to English
+    const storedLang = localStorage.getItem('selectedLanguage') || 'en';
+    if (languageSelect) {
+        languageSelect.value = storedLang;
+    }
+    loadTranslations(storedLang);
+
+    // Event listener for language selection
+    if (languageSelect) {
+        $('#language-select').on('change', function() {
+            const selectedLang = $(this).val();
+            loadTranslations(selectedLang);
+        });
+    }
+});

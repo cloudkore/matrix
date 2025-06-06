@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NinjaBase Dashboard</title>
+    <title data-translate-key="dashboard_title">NinjaBase Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/dashboard.css" rel="stylesheet">
@@ -18,9 +18,21 @@
     <div id="navbar-placeholder"></div>
     <iframe id="fullScreenPenEffect" src="pen_effect.html" frameborder="0" scrolling="no"></iframe>
 
+    <div class="language-selector">
+        <label for="language-select" data-translate-key="language_label">Language:</label>
+        <select id="language-select">
+            <option value="en">English</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="ml">Bahasa Malaysia</option>
+            <option value="pt">Tagalog</option>
+            <option value="tg">Português</option>
+            </select>
+    </div>
+
     <div id="setup-section" style="display:none;">
-        <h3>Set Username & Choose Avatar</h3>
-        <input id="usernameInput" type="text" class="form-control mb-3" placeholder="Enter username" />
+        <h3 data-translate-key="setup_heading">Set Username & Choose Avatar</h3>
+        <input id="usernameInput" type="text" class="form-control mb-3" data-translate-key="username_input_placeholder" placeholder="Enter username" />
 
         <div class="avatar-selector">
             <button id="prevAvatarBtn" class="nav-btn">&lt;</button>
@@ -30,44 +42,37 @@
             <button id="nextAvatarBtn" class="nav-btn">&gt;</button>
         </div>
 
-        <div class="inputBx master-password-setup-field">
-            <input type="password" id="masterPasswordInput" placeholder="Enter Master Password" class="form-control mb-2">
-        </div>
-        <div class="inputBx master-password-setup-field">
-            <input type="password" id="confirmMasterPasswordInput" placeholder="Confirm Master Password" class="form-control mb-3">
-        </div>
-
-        <button id="saveProfileBtn" class="btn btn-success">Save Profile</button>
+        <button id="saveProfileBtn" class="btn btn-success" data-translate-key="save_profile_button">Save Profile</button>
     </div>
 
     <div id="main-dashboard" style="display:none;">
-        <h2>Welcome, <span id="dashboard-username"></span>!</h2>
+        <h2 class="welcome-message"><span data-translate-key="welcome_message">Welcome,</span> <span id="dashboard-username"></span>!</h2>
         <img id="user-avatar" src="" alt="Avatar" class="user-avatar-display" />
         <div class="dashboard-buttons">
-            <button id="serverBtn" class="btn btn-primary">Server</button>
-            <button id="notesBtn" class="btn btn-secondary">Notes</button>
-            <button id="passwordManagerBtn" class="btn btn-secondary">Password Manager</button>
-            <button id="deleteAccountBtn" class="btn btn-danger mt-3">Delete Account</button>
-            <button id="logoutBtn" class="btn btn-danger mt-3">Logout</button>
+            <button id="serverBtn" class="btn btn-primary" data-translate-key="server_button">Server</button>
+            <button id="notesBtn" class="btn btn-secondary" data-translate-key="notes_button">Notes</button>
+            <button id="passwordManagerBtn" class="btn btn-secondary" data-translate-key="password_manager_button">Password Manager</button>
+            <button id="deleteAccountBtn" class="btn btn-danger mt-3" data-translate-key="delete_account_button">Delete Account</button>
+            <button id="logoutBtn" class="btn btn-danger mt-3" data-translate-key="logout_button">Logout</button>
         </div>
     </div>
 
     <div id="masterPasswordPromptModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-button" data-modal="masterPasswordPromptModal">&times;</span>
-            <h3>Enter Master Password to Unlock</h3>
-            <input type="password" id="masterPasswordUnlockInput" class="form-control mb-3" placeholder="Master Password" />
-            <button id="unlockDashboardBtn" class="btn btn-primary">Unlock Dashboard</button>
-            <button id="forgotPasswordBtn" class="btn btn-link mt-2" style="color: #66ccff;">Forgot Master Password?</button>
+            <h3 data-translate-key="master_password_prompt_title">Enter Master Password to Unlock</h3>
+            <input type="password" id="masterPasswordUnlockInput" class="form-control mb-3" data-translate-key="master_password_input_placeholder" placeholder="Master Password" />
+            <button id="unlockDashboardBtn" class="btn btn-primary" data-translate-key="unlock_dashboard_button">Unlock Dashboard</button>
+            <button id="forgotPasswordBtn" class="btn btn-link mt-2" style="color: #66ccff;" data-translate-key="forgot_master_password_button">Forgot Master Password?</button>
         </div>
     </div>
 
     <div id="notesModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-button" data-modal="notesModal">&times;</span>
-            <h3>Your Notes</h3>
-            <textarea id="noteInput" placeholder="Write your notes here..." class="form-control mb-3"></textarea>
-            <button id="saveNoteBtn" class="btn btn-success">Save Note</button>
+            <h3 data-translate-key="notes_modal_title">Your Notes</h3>
+            <textarea id="noteInput" data-translate-key="note_input_placeholder" placeholder="Write your notes here..." class="form-control mb-3"></textarea>
+            <button id="saveNoteBtn" class="btn btn-success" data-translate-key="save_note_button">Save Note</button>
             <div id="savedNotesDisplay" class="saved-notes-display"></div>
         </div>
     </div>
@@ -75,11 +80,11 @@
     <div id="passwordManagerModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-button" data-modal="passwordManagerModal">&times;</span>
-            <h3>ID/Password Manager</h3>
-            <input type="text" id="pmServiceName" class="form-control mb-2" placeholder="Service Name (e.g., Google)" />
-            <input type="text" id="pmUsername" class="form-control mb-2" placeholder="Username/Email" />
-            <input type="password" id="pmPassword" class="form-control mb-3" placeholder="Password" />
-            <button id="savePmEntryBtn" class="btn btn-success">Save Entry</button>
+            <h3 data-translate-key="password_manager_modal_title">ID/Password Manager</h3>
+            <input type="text" id="pmServiceName" class="form-control mb-2" data-translate-key="service_name_placeholder" placeholder="Service Name (e.g., Google)" />
+            <input type="text" id="pmUsername" class="form-control mb-2" data-translate-key="pm_username_placeholder" placeholder="Username/Email" />
+            <input type="password" id="pmPassword" class="form-control mb-3" data-translate-key="pm_password_placeholder" placeholder="Password" />
+            <button id="savePmEntryBtn" class="btn btn-success" data-translate-key="save_entry_button">Save Entry</button>
             <div id="pmEntryList" class="file-list-display"></div>
         </div>
     </div>
@@ -87,10 +92,10 @@
     <div id="deleteAccountConfirmModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-button" data-modal="deleteAccountConfirmModal">&times;</span>
-            <h3>Confirm Account Deletion</h3>
-            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-            <button id="confirmDeleteAccountBtn" class="btn btn-danger">Yes, Delete My Account</button>
-            <button id="cancelDeleteAccountBtn" class="btn btn-secondary">No, Keep My Account</button>
+            <h3 data-translate-key="confirm_delete_account_modal_title">Confirm Account Deletion</h3>
+            <p data-translate-key="confirm_delete_account_message">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <button id="confirmDeleteAccountBtn" class="btn btn-danger" data-translate-key="yes_delete_account_button">Yes, Delete My Account</button>
+            <button id="cancelDeleteAccountBtn" class="btn btn-secondary" data-translate-key="no_keep_account_button">No, Keep My Account</button>
         </div>
     </div>
 
