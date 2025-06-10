@@ -48,12 +48,12 @@ else
     sudo apt install -y coreutils
 fi
 
-mkdir ~/EMU
-cd ~/EMU
+mkdir /home/$USER/emu
+cd /home/$USER/emu
 wget https://github.com/cloudkore/matrix/raw/refs/heads/main/data/EMU/Desktop/AngelChipEmulator.jar
 
-mkdir ~/mods
-cd ~/mods
+mkdir /home/$USER/mods
+cd /home/$USER/mods
 wget https://github.com/cloudkore/matrix/raw/refs/heads/main/data/MODs/TDTV_Premium-X3.jar
 
 echo "[*] Downloading ac.sh script..."
