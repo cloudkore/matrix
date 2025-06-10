@@ -48,25 +48,14 @@ else
     sudo apt install -y coreutils
 fi
 
-# Set up emulator
-echo "[*] Setting up emulator..."
-mkdir -p ~/emu
-cd ~/emu
+mkdir ~/EMU
+cd ~/EMU
 wget https://github.com/cloudkore/matrix/raw/refs/heads/main/data/EMU/Desktop/AngelChipEmulator.jar
 
-# Return to home directory
-cd ~
-
-# Set up mods
-echo "[*] Setting up mods..."
-mkdir -p ~/mods
+mkdir ~/mods
 cd ~/mods
 wget https://github.com/cloudkore/matrix/raw/refs/heads/main/data/MODs/TDTV_Premium-X3.jar
 
-# Return to home directory
-cd ~
-
-# Download ac.sh and make it executable
 echo "[*] Downloading ac.sh script..."
 wget https://github.com/cloudkore/matrix/raw/refs/heads/main/dev/scripts/ac.sh -O ~/ac.sh
 chmod +x ~/ac.sh
