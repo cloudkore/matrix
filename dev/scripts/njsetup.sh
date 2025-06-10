@@ -14,8 +14,8 @@ sudo apt install -y xorg openbox pcmanfm lightdm
 
 # Create and move to packages directory
 echo "[*] Creating packages directory..."
-mkdir -p ~/packages
-cd ~/packages
+mkdir /home/$USER/packages
+cd /home/$USER/packages
 
 # Download Chrome Remote Desktop
 echo "[*] Downloading Chrome Remote Desktop..."
