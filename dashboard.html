@@ -5,15 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/dashboard.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="js/sound.js"></script>
-    <script src="js/essentials.js"></script>
-</head>
+    </head>
 <body>
     <div id="navbar-placeholder"></div>
     <iframe id="fullScreenPenEffect" src="pen_effect.html" frameborder="0" scrolling="no"></iframe>
@@ -27,7 +19,7 @@
             <option value="ml">Bahasa Malaysia</option>
             <option value="tg">Tagalog</option>
             <option value="pt">Português</option>
-            </select>
+        </select>
     </div>
 
     <div id="setup-section" style="display:none;">
@@ -52,6 +44,7 @@
             <button id="serverBtn" class="btn btn-primary" data-translate-key="server_button">Server</button>
             <button id="notesBtn" class="btn btn-secondary" data-translate-key="notes_button">Notes</button>
             <button id="passwordManagerBtn" class="btn btn-secondary" data-translate-key="password_manager_button">Password Manager</button>
+            <button id="ephemeralFilesBtn" class="btn btn-secondary" data-translate-key="ephemeral_files_button">Ephemeral Files</button>
             <button id="deleteAccountBtn" class="btn btn-danger mt-3" data-translate-key="delete_account_button">Delete Account</button>
             <button id="logoutBtn" class="btn btn-danger mt-3" data-translate-key="logout_button">Logout</button>
         </div>
@@ -89,6 +82,21 @@
         </div>
     </div>
 
+   <div id="ephemeralFilesModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" data-modal="ephemeralFilesModal">&times;</span>
+            <h3 data-translate-key="ephemeral_files_heading">Ephemeral Files</h3>
+            <div class="custom-file-upload mb-3">
+                <input type="file" id="fileUploadInput">
+                <label for="fileUploadInput" class="custom-file-upload-button btn btn-secondary" data-translate-key="choose_file_button">Choose File</label>
+                <span id="fileUploadFileName" class="file-name-display ms-2"></span>
+            </div>
+            <button id="uploadFileBtn" class="btn btn-primary" data-translate-key="upload_file_button">Upload File</button>
+            <ul id="fileListDisplay" class="list-group mt-3">
+                </ul>
+        </div>
+    </div>
+
     <div id="deleteAccountConfirmModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-button" data-modal="deleteAccountConfirmModal">&times;</span>
@@ -104,7 +112,20 @@
     </div>
 
     <div id="footer-placeholder"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/sound.js"></script>
+    <script src="js/essentials.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/fileChooser.js"></script>
 </body>
 </html>

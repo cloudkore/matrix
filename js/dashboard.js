@@ -12,7 +12,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-const storage = firebase.storage();
+const storage = firebase.storage(); // Firebase Storage is still here but won't be used for user files
+
+// --- Supabase Configuration ---
+const SUPABASE_URL = 'https://pshuqmmkxmwgmvhuaujn.supabase.co'; // e.g., 'https://abcdefghijk.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHVxbW1reG13Z212aHVhdWpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNzI4NDIsImV4cCI6MjA2NDg0ODg0Mn0.SiJ9fEjW-e-x8DOREhuS1snrAe-IuBeE5r3tNzjtPFw'; // e.g., 'eyJ... (public key)'
+
+// CORRECTED LINE: Access the global 'supabase' object from the window
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- DOM Elements ---
 const setupSection = document.getElementById('setup-section');
@@ -54,6 +61,13 @@ const masterPasswordPromptModal = document.getElementById('masterPasswordPromptM
 const masterPasswordUnlockInput = document.getElementById('masterPasswordUnlockInput');
 const unlockDashboardBtn = document.getElementById('unlockDashboardBtn');
 const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+
+// Ephemeral Files DOM elements
+const ephemeralFilesModal = document.getElementById('ephemeralFilesModal');
+const ephemeralFilesBtn = document.getElementById('ephemeralFilesBtn');
+const fileUploadInput = document.getElementById('fileUploadInput');
+const uploadFileBtn = document.getElementById('uploadFileBtn');
+const fileListDisplay = document.getElementById('fileListDisplay');
 
 // --- Global Variables ---
 let currentAvatarIndex = 0;
@@ -121,7 +135,6 @@ function applyTranslations() {
 
     // Handle the welcome message dynamically if it's already displayed
     if ($('#dashboard-username').length && currentUser && currentUser.displayName) {
-        // Updated to use the correct welcome message structure
         $('#main-dashboard h2.welcome-message').html(getTranslation('welcome_message') + ` <span id="dashboard-username">${currentUser.displayName}</span>!`);
     }
 }
@@ -257,23 +270,15 @@ async function saveProfile(user) {
     const playerDoc = await playerDocRef.get();
     const data = playerDoc.exists ? playerDoc.data() : {};
 
-    // Note: master password fields are no longer directly managed here.
-    // The presence of 'salt' and 'masterPasswordHash' will be checked during dashboard setup/unlock.
-
     if (!username || !selectedAvatar) {
         showMessageBox(getTranslation("message_box_please_enter_username_avatar"), "error");
         return;
     }
 
     saveProfileBtn.disabled = true;
-    saveProfileBtn.textContent = 'Saving...';
+    saveProfileBtn.textContent = getTranslation("saving_status"); // Use translation key for "Saving..."
 
     try {
-        // Master password related fields are no longer handled by this saveProfile function.
-        // It's assumed the master password setup/hashing happens during initial registration in login.js
-        // or through a separate, dedicated "Set Master Password" flow if needed.
-        // This function will only update username and avatar.
-
         const updateData = {
             username: username,
             avatar: selectedAvatar,
@@ -312,12 +317,25 @@ async function setupDashboard(user) {
 
         const hasUsername = !!data.username;
         const hasAvatar = !!data.avatar;
-        const hasSalt = !!data.salt;
+        const hasSalt = !!data.salt; // Check if salt exists (implies master password set)
         const hasMasterPasswordHash = !!data.masterPasswordHash;
 
         console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}`);
 
-        currentEncryptionKey = null; // Ensure it's null on load
+        // Try to restore encryption key from session storage
+        const storedKeyHex = sessionStorage.getItem('currentEncryptionKeyHex');
+        if (storedKeyHex) {
+            try {
+                currentEncryptionKey = CryptoJS.enc.Hex.parse(storedKeyHex);
+                console.log("Encryption key restored from sessionStorage.");
+            } catch (e) {
+                console.error("Failed to restore encryption key from sessionStorage:", e);
+                sessionStorage.removeItem('currentEncryptionKeyHex'); // Clear invalid key
+                currentEncryptionKey = null;
+            }
+        } else {
+            currentEncryptionKey = null; // Ensure it's null if not found
+        }
 
         // Scenario 1: User needs to complete their profile (username or avatar is missing)
         if (!hasUsername || !hasAvatar) {
@@ -340,20 +358,18 @@ async function setupDashboard(user) {
             }
             updateAvatarDisplay();
 
-            // The master password setup fields are no longer displayed or managed in this setup section
-            // as per the requirement to remove them.
-
             applyTranslations(); // Apply translations to setup section elements
-            return;
+            return; // Exit setupDashboard as profile setup is required
         }
 
-        // Scenario 2: User has a complete profile (username and avatar are present)
-        console.log("User has complete profile (username and avatar). Displaying main dashboard directly.");
+        // Scenario 2: User has complete profile. Now just display dashboard.
+        // The master password prompt will *only* be shown when accessing sensitive features.
+        console.log("User has complete profile. Displaying main dashboard.");
         dashboardUsername.textContent = data.username;
         userAvatar.src = `avatars/${data.avatar}`;
         setupSection.style.display = 'none';
         mainDashboard.style.display = 'block';
-        closeModal(masterPasswordPromptModal);
+        closeModal(masterPasswordPromptModal); // Ensure modal is closed if it was open for some reason
 
         // Apply translations once the dashboard is shown
         applyTranslations();
@@ -386,12 +402,10 @@ unlockDashboardBtn.onclick = async () => {
         const userSalt = data.salt;
         const storedMasterPasswordHash = data.masterPasswordHash;
 
+        // If no salt or hash, means master password was never set, so prompt for setup
+        // (You might want to redirect them to a specific setup for master password if you have one)
         if (!userSalt || !storedMasterPasswordHash) {
-            showMessageBox(getTranslation("message_box_profile_data_incomplete"), "error");
-            unlockDashboardBtn.disabled = false;
-            unlockDashboardBtn.textContent = getTranslation("unlock_dashboard_button");
-            setupSection.style.display = 'flex'; // Show setup for incomplete profile
-            mainDashboard.style.display = 'none';
+            showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info"); // NEW TRANSLATION KEY
             closeModal(masterPasswordPromptModal);
             return;
         }
@@ -401,18 +415,21 @@ unlockDashboardBtn.onclick = async () => {
 
         if (derivedMasterPasswordHash !== storedMasterPasswordHash) {
             showMessageBox(getTranslation("message_box_incorrect_master_password"), "error");
-            currentEncryptionKey = null;
+            currentEncryptionKey = null; // Ensure key is null on failed attempt
             return;
         }
 
         currentEncryptionKey = derivedKeyForVerification; // Set the global encryption key for the session
+        // NEW: Store the key in sessionStorage for persistence across page loads within the same session
+        sessionStorage.setItem('currentEncryptionKeyHex', currentEncryptionKey.toString(CryptoJS.enc.Hex));
+
 
         closeModal(masterPasswordPromptModal);
         masterPasswordUnlockInput.value = '';
         showMessageBox(getTranslation("message_box_dashboard_unlocked"), "success", 4000);
         console.log("Dashboard unlocked successfully.");
 
-        // If the user was trying to access Notes/Password Manager, re-open the respective modal
+        // If the user was trying to access Notes/Password Manager/Files, re-open the respective modal
         if (notesModal.dataset.pendingOpen === 'true') {
             openModal(notesModal);
             loadNotes();
@@ -421,12 +438,16 @@ unlockDashboardBtn.onclick = async () => {
             openModal(passwordManagerModal);
             loadPasswords();
             passwordManagerModal.dataset.pendingOpen = 'false';
+        } else if (ephemeralFilesModal.dataset.pendingOpen === 'true') {
+            openModal(ephemeralFilesModal);
+            listFiles();
+            ephemeralFilesModal.dataset.pendingOpen = 'false';
         }
 
     } catch (error) {
         console.error("Error unlocking dashboard:", error);
         showMessageBox(getTranslation("error_unlocking_dashboard_error") + error.message, "error");
-        currentEncryptionKey = null;
+        currentEncryptionKey = null; // Ensure key is null on error
     } finally {
         unlockDashboardBtn.disabled = false;
         unlockDashboardBtn.textContent = getTranslation("unlock_dashboard_button");
@@ -466,7 +487,7 @@ auth.onAuthStateChanged(async (user) => {
         userAvatar.src = '';
         usernameInput.value = '';
         currentEncryptionKey = null; // Clear encryption key on logout
-        sessionStorage.removeItem('currentEncryptionKey'); // Also remove from sessionStorage to be safe
+        sessionStorage.removeItem('currentEncryptionKeyHex'); // Also remove from sessionStorage to be safe
         closeModal(masterPasswordPromptModal);
         currentAvatarIndex = 0;
         updateAvatarDisplay();
@@ -676,6 +697,202 @@ async function loadPasswords() {
         });
 }
 
+// --- Ephemeral Files Functionality ---
+ephemeralFilesBtn.onclick = () => {
+    if (!currentEncryptionKey) { // Only prompt for master password if key not available
+        openModal(masterPasswordPromptModal);
+        ephemeralFilesModal.dataset.pendingOpen = 'true'; // Mark files modal to open after unlock
+        masterPasswordUnlockInput.value = ''; // Clear previous input
+        return;
+    }
+    openModal(ephemeralFilesModal);
+    listFiles();
+};
+ephemeralFilesModal.querySelector('.close-button').onclick = () => closeModal(ephemeralFilesModal);
+
+uploadFileBtn.onclick = async () => {
+    if (!currentUser) {
+        showMessageBox(getTranslation("message_box_please_login_upload_files"), "error");
+        return;
+    }
+    const file = fileUploadInput.files[0];
+    if (!file) {
+        showMessageBox(getTranslation("message_box_select_file_upload"), "error");
+        return;
+    }
+
+    showMessageBox(getTranslation("message_box_uploading_file"), 'info', 3000);
+
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('userId', currentUser.uid);
+        formData.append('fileName', file.name); // Send original file name
+
+        const idToken = await currentUser.getIdToken();
+
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/upload-file`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${idToken}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'File upload failed');
+        }
+
+        const result = await response.json();
+        console.log('File uploaded:', result);
+
+        showMessageBox(getTranslation("message_box_file_uploaded_success"), "success");
+        fileUploadInput.value = ''; // Clear the input
+        listFiles(); // Refresh file list
+    } catch (error) {
+        console.error("Error uploading file:", error);
+        showMessageBox(getTranslation("message_box_failed_to_upload_file") + error.message, "error");
+    }
+};
+
+async function listFiles() {
+    if (!currentUser) {
+        fileListDisplay.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("message_box_please_login_upload_files")}</p>`;
+        return;
+    }
+
+    try {
+        const idToken = await currentUser.getIdToken();
+
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/list-files`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`
+            },
+            body: JSON.stringify({ userId: currentUser.uid })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to list files');
+        }
+
+        const files = await response.json();
+        fileListDisplay.innerHTML = ''; // Clear existing list
+
+        if (files.length === 0) {
+            fileListDisplay.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("no_files_saved")}</p>`;
+            return;
+        }
+
+        files.forEach(file => {
+            const fileElement = document.createElement('div');
+            fileElement.classList.add('file-item');
+
+            let formattedTimestamp = '';
+            if (file.createdAt) {
+                const date = new Date(file.createdAt);
+                formattedTimestamp = `Uploaded: ${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            }
+
+            fileElement.innerHTML = `
+    <span class="file-name">${file.name}</span>
+    <span class="file-timestamp" style="font-size: 0.8em; color: #aaa; margin-left: 10px;">${formattedTimestamp}</span>
+    <div class="file-actions">
+        <button class="download-file-action-btn btn btn-info btn-sm"
+                data-signed-url="${file.signedUrl}"
+                data-original-file-name="${file.name}">
+            ${getTranslation("download_file_button")}
+        </button>
+        <button class="delete-file-btn btn btn-danger btn-sm"
+                data-file-name="${file.name}">
+            ${getTranslation("delete_file_button")}
+        </button>
+    </div>
+
+            `;
+            fileListDisplay.appendChild(fileElement);
+        });
+
+        // --- Event Delegation for both Download and Delete buttons ---
+        // Attach the listener once to the parent container (fileListDisplay)
+        fileListDisplay.onclick = async (event) => {
+            const target = event.target; // The actual element that was clicked
+
+            // Handle Delete Button Click
+            if (target.classList.contains('delete-file-btn')) {
+                showMessageBox(getTranslation("message_box_deleting_file"), 'info', 1500);
+                const fileName = target.dataset.fileName;
+
+                try {
+                    const idToken = await currentUser.getIdToken();
+                    const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-file`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify({ userId: currentUser.uid, fileName: fileName })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to delete file');
+                    }
+
+                    showMessageBox(getTranslation("message_box_file_deleted_success"), "success");
+                    listFiles(); // Refresh list
+                } catch (error) {
+                    console.error("Error deleting file:", error);
+                    showMessageBox(getTranslation("message_box_failed_to_delete_file") + error.message, "error");
+                }
+            }
+
+            // Handle Download Button Click
+            if (target.classList.contains('download-file-action-btn')) {
+                const signedUrl = target.dataset.signedUrl;
+                const originalFileName = target.dataset.originalFileName;
+
+                if (!signedUrl || !originalFileName) {
+                    showMessageBox(getTranslation("download_link_error"), "error");
+                    return;
+                }
+
+                showMessageBox(getTranslation("message_box_preparing_download"), "info", 2000);
+
+                try {
+                    const response = await fetch(signedUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = originalFileName; // Use the original file name for download
+                    document.body.appendChild(a);
+                    a.click(); // Programmatically click the link
+                    window.URL.revokeObjectURL(url); // Clean up the object URL
+                    showMessageBox(getTranslation("message_box_download_started"), "success", 2000);
+
+                } catch (error) {
+                    console.error("Error during download:", error);
+                    showMessageBox(getTranslation("message_box_failed_to_download_file") + error.message, "error");
+                }
+            }
+        };
+
+    } catch (error) {
+        console.error("Error listing files:", error);
+        showMessageBox(getTranslation("failed_to_load_files_error") + error.message, "error");
+    }
+}
+
+
 // --- Logout and Delete Account ---
 logoutBtn.onclick = async () => {
     try {
@@ -684,6 +901,10 @@ logoutBtn.onclick = async () => {
     } catch (error) {
         console.error("Error logging out:", error);
         showMessageBox(getTranslation("message_box_failed_to_log_out") + error.message, "error");
+    } finally {
+        // Ensure encryption key is cleared from memory and session storage on logout
+        currentEncryptionKey = null;
+        sessionStorage.removeItem('currentEncryptionKeyHex'); // Clear from session storage
     }
 };
 

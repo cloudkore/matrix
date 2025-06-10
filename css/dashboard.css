@@ -1,3 +1,33 @@
+/* ========================================= */
+/* Global CSS Variables (Custom Properties)  */
+/* Define your theme colors, spacing, etc. here for easy updates */
+/* ========================================= */
+:root {
+    /* Colors - Keeping existing for now as user's latest CSS doesn't use these widely for new elements */
+    --color-background-dark: #1A1A1A;
+    --color-text-light: #e2e8f0; /* Default text color */
+    --color-accent-blue: #60a5fa;
+    --color-card-background: rgba(15, 15, 15, 0.7);
+    --color-modal-background: rgba(15, 15, 15, 0.9); /* From user's latest CSS */
+    --color-border-dark: #333; /* Used in old ephemeral, re-evaluate */
+    --color-list-background: #2a2a2a; /* Specific background for file list */
+
+    /* Spacing */
+    --spacing-xs: 5px;
+    --spacing-sm: 8px;
+    --spacing-md: 10px;
+    --spacing-lg: 15px;
+    --spacing-xl: 30px;
+
+    /* Border Radius - Aligning to user's latest values */
+    --border-radius-sm: 0.375rem; /* Consistent with form-control, nav-btn */
+    --border-radius-md: 0.5rem; /* Consistent with general buttons */
+    --border-radius-lg: 0.75rem; /* Consistent with cards/modals */
+
+    /* Font */
+    --font-size-sm: 0.8em; /* For timestamps */
+}
+
 /* General body and text styling for a modern dark theme */
 body {
   background-color: #1A1A1A; /* User's specified dark background */
@@ -12,7 +42,7 @@ body {
   padding: 30px 24px; /* Increased top/bottom padding for more vertical space */
   background-color: rgba(15, 15, 15, 0.7); /* Semi-transparent dark background */
   border: none; /* Remove explicit border */
-  border-radius: 0.75rem; /* Large border-radius for smooth cards */
+  border-radius: var(--border-radius-lg); /* Large border-radius for smooth cards */
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
   display: flex; /* Ensure flex for column layout */
   flex-direction: column; /* Stack children vertically */
@@ -34,7 +64,7 @@ h2, h3 {
   text-align: center;
   padding: 12px 16px; /* Slightly more vertical padding for better touch targets */
   width: 100%;
-  border-radius: 0.375rem; /* Rounded corners for input */
+  border-radius: var(--border-radius-sm); /* Rounded corners for input */
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
   margin-bottom: 20px; /* Ensure good spacing below the input field */
 }
@@ -91,10 +121,10 @@ h2, h3 {
   cursor: pointer;
   font-size: 1.5em; /* Slightly smaller arrows for better fit */
   line-height: 1;
-  border-radius: 0.375rem; /* Rounded corners */
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.2s ease-in-out;
+  border-radius: var(--border-radius-sm); /* Rounded corners */
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
   flex-shrink: 0; /* Prevent from shrinking */
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.2s ease-in-out;
 }
 .nav-btn:hover {
   background-color: #60a5fa; /* Blue background on hover */
@@ -107,12 +137,13 @@ h2, h3 {
 
 /* Bootstrap button overrides for modern look */
 .btn {
-  border-radius: 0.5rem; /* Rounded corners for all buttons */
+  border-radius: var(--border-radius-md); /* Rounded corners for all buttons */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
   text-shadow: none;
   padding: 10px 20px;
   margin: 8px; /* Adjusted margin */
   transition: all 0.2s ease-in-out;
+  color: white; /* Ensure all buttons have white text by default */
 }
 
 .btn-primary, .btn-success {
@@ -201,10 +232,10 @@ h2, h3 {
 }
 
 .modal-content {
-    background-color: rgba(15, 15, 15, 0.9); /* Semi-transparent for modals too */
+    background-color: var(--color-modal-background); /* Using variable */
     margin: auto;
     padding: 20px;
-    border-radius: 0.75rem;
+    border-radius: var(--border-radius-lg);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
     width: 90%; /* Responsive width */
     max-width: 400px; /* Max width for desktop */
@@ -236,8 +267,158 @@ h2, h3 {
     cursor: pointer;
 }
 
+/* --- Ephemeral Files Section Styling (Magic Design) --- */
+
+/* Custom File Upload Input Wrapper */
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjusted gap for consistency with avatar-selector */
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 30px auto; /* Adjusted margin-bottom for consistency */
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Hide the default file input visually */
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+/* Custom "Choose File" button styling - aligned with btn-secondary */
+.custom-file-upload-button {
+    display: inline-block;
+    padding: 10px 20px; /* Aligned with .btn padding */
+    cursor: pointer;
+    border-radius: var(--border-radius-md); /* Aligned with general button radius */
+    background-color: #475569; /* Aligned with btn-secondary */
+    color: white;
+    border: transparent; /* Aligned with btn-secondary */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Aligned with .btn shadow */
+}
+
+.custom-file-upload-button:hover {
+    background-color: #334155; /* Aligned with btn-secondary:hover */
+    box-shadow: 0 6px 10px -2px rgba(71, 85, 105, 0.3), 0 3px 5px -1px rgba(71, 85, 105, 0.2); /* Aligned with btn-secondary:hover */
+}
+
+.custom-file-upload-button:active {
+    transform: translateY(1px); /* Consistent with nav-btn:active */
+}
+
+/* Display for selected file name */
+.file-name-display {
+    color: #e2e8f0; /* Ensure light text */
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px; /* Consistent with var(--spacing-xs) */
+    min-width: 50px;
+}
+
+/* Styles for the Ephemeral Files List Container - aligned with saved-notes-display */
+#fileListDisplay {
+    max-height: 200px; /* Ensures a scrollbar appears if content exceeds this height */
+    overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
+    border: 1px solid #475569; /* Aligned with saved-notes-display */
+    padding: 15px; /* Aligned with saved-notes-display */
+    border-radius: 0.375rem; /* Aligned with saved-notes-display */
+    background-color: #1f2937; /* Aligned with saved-notes-display */
+    margin-top: 20px; /* Aligned with saved-notes-display */
+    list-style: none;
+    padding-left: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Consistent shadow */
+}
+
+/* Styling for individual file list items */
+#fileListDisplay li {
+    display: flex; /* Changed to flex for simpler responsive stacking */
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: space-between; /* Space out items (file name left, actions right) */
+    align-items: center;
+    padding: 8px 0; /* Aligned with saved-notes-display item padding */
+    margin-bottom: 0; /* Handled by padding and border-bottom */
+    background-color: transparent; /* No specific background for individual items, rely on parent */
+    border-bottom: 1px solid #2b3a4a; /* Aligned with saved-notes-display item border */
+    border-radius: 0; /* No radius for individual items within list */
+    box-shadow: none; /* No shadow on individual items within list */
+
+    &:last-child {
+        border-bottom: none; /* No border on last item */
+    }
+}
+
+/* File name within the list */
+.file-name {
+    color: #a78bfa; /* Consistent with strong text in notes */
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    font-weight: bold; /* Make file name bold */
+}
+
+/* File timestamp within the list */
+.file-timestamp {
+    font-size: var(--font-size-sm);
+    color: #94a3b8; /* Lighter grey for timestamps */
+    white-space: nowrap;
+    margin-left: 10px; /* Add some spacing */
+}
+
+/* Container for download/delete buttons */
+.file-actions {
+    display: flex;
+    gap: 10px; /* Consistent gap for actions */
+    flex-shrink: 0;
+    margin-left: auto; /* Push buttons to the right */
+}
+
+/* Specific styling for download button - aligned with btn-primary/success */
+.download-file-action-btn {
+    background-color: #2563eb; /* Blue */
+    border-color: transparent;
+    color: white;
+    padding: 4px 8px; /* Smaller padding for actions within list items */
+    border-radius: 0.25rem; /* Consistent with other action buttons */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
+    font-size: 0.8em; /* Smaller font size */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow for small buttons */
+}
+.download-file-action-btn:hover {
+    background-color: #1d4ed8; /* Darker blue on hover */
+    box-shadow: 0 2px 4px -1px rgba(37, 99, 235, 0.2); /* Subtle hover shadow */
+}
+
+/* Specific styling for delete button - aligned with btn-danger */
+.delete-file-btn {
+    background-color: #ef4444; /* Red */
+    border-color: transparent;
+    color: white;
+    padding: 4px 8px; /* Smaller padding for actions within list items */
+    border-radius: 0.25rem; /* Consistent with other action buttons */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
+    font-size: 0.8em; /* Smaller font size */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow for small buttons */
+}
+.delete-file-btn:hover {
+    background-color: #dc2626; /* Darker red on hover */
+    box-shadow: 0 2px 4px -1px rgba(239, 68, 68, 0.2); /* Subtle hover shadow */
+}
+
+
 /* Notes & Password Manager & Ephemeral File List Display */
-.saved-notes-display, .file-list-display {
+/* Consolidated with fileListDisplay where possible, but keeping this block for any distinct styles */
+.saved-notes-display, .file-list-display { /* .file-list-display class was not explicitly used for ephemeral files before, only #fileListDisplay ID */
     background-color: #1f2937;
     border-radius: 0.375rem;
     padding: 15px;
@@ -247,7 +428,7 @@ h2, h3 {
     overflow-y: auto;
     border: 1px solid #475569;
 }
-.saved-notes-display p, .file-list-display div {
+.saved-notes-display p, .file-list-display div { /* .file-list-display div also likely applies to ephemeral items indirectly */
     padding: 8px 0;
     border-bottom: 1px solid #2b3a4a;
     color: #e2e8f0;
@@ -329,6 +510,34 @@ h2, h3 {
       width: calc(50% - 16px); /* Two buttons per row, considering margin */
       margin: 8px;
   }
+
+  /* Responsive for ephemeral file upload */
+  .custom-file-upload {
+      flex-direction: column;
+      align-items: center; /* Center items in column layout */
+      gap: 10px; /* Adjusted gap */
+      margin-bottom: 20px;
+  }
+  .custom-file-upload-button, .file-name-display {
+      width: 100%;
+      text-align: center;
+  }
+
+  /* Responsive for ephemeral file list items */
+  #fileListDisplay li {
+      flex-direction: column; /* Stack vertically on small screens */
+      align-items: center; /* ALIGNED TO CENTER */
+      padding: 8px 0; /* Maintain padding */
+      gap: 5px; /* Smaller gap when stacked */
+  }
+  .file-timestamp {
+      margin-left: 0; /* Remove margin when stacked */
+      align-self: center; /* ALIGNED TO CENTER */
+  }
+  .file-actions {
+      width: 100%;
+      justify-content: center; /* ALIGNED TO CENTER */
+  }
 }
 
 #fullScreenPenEffect {
@@ -353,20 +562,20 @@ h2, h3 {
 /*
  * Styles for the language selector to ensure visibility and position.
  */
-.language-selector label,
-.language-selector select {
+.language-selector label {
     color: white; /* Sets the text color to white */
-    /* Add any other styling for the select box itself if needed,
-       for example, a white background or border. */
 }
 
-/* Optional: To make the dropdown background white and text readable when opened */
 .language-selector select {
-    background-color: black;
-    border: 1px solid #ccc; /* A light border for definition */
+    background-color: #2b3a4a; /* Darker grey from theme, consistent with form-control */
+    border: 1px solid #475569; /* Use a consistent border color */
+    color: #e2e8f0; /* Ensure text is light grey for contrast */
+    padding: 8px 12px; /* Add some padding */
+    border-radius: 0.375rem; /* Rounded corners */
 }
 
-/* Optional: To ensure options are readable when the dropdown is open */
+/* Ensure options are readable when the dropdown is open */
 .language-selector select option {
-    color: black; /* Text color for options within the dropdown */
+    background-color: #2b3a4a; /* Set option background to match select */
+    color: #e2e8f0; /* Set option text to light grey for readability */
 }

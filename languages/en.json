@@ -11,6 +11,7 @@
     "save_master_password_button": "Set Master Password",
     "notes_button": "Notes",
     "password_manager_button": "ID/Password Manager",
+    "ephemeral_files_button": "Ephemeral Files",
     "logout_button": "Logout",
     "delete_account_button": "Delete Account",
     "forgot_master_password_button": "Forgot Master Password?",
@@ -79,5 +80,18 @@
     "decryption_failed_invalid_data": "[Decryption Failed or Invalid Data]",
     "service_label": "Service",
     "username_label": "Username",
-    "password_label": "Password"
+    "password_label": "Password",
+    "ephemeral_files_modal_title": "Your Files",
+    "upload_file_button": "Upload File",
+    "download_file_button": "Download",
+    "delete_file_button": "Delete",
+    "no_files_saved": "No files saved yet.",
+    "message_box_please_login_upload_files": "Please log in to manage files.",
+    "message_box_select_file_upload": "Please select a file to upload.",
+    "message_box_uploading_file": "Uploading file...",
+    "message_box_file_uploaded_success": "File uploaded successfully!",
+    "message_box_failed_to_upload_file": "Failed to upload file: ",
+    "message_box_deleting_file": "Deleting file...",
+    "message_box_file_deleted_success": "File deleted successfully!",
+    "message_box_failed_to_delete_file": "Failed to delete file: "
 }
