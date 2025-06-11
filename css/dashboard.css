@@ -1,3 +1,5 @@
+/* dashboard.css */
+
 /* ========================================= */
 /* Global CSS Variables (Custom Properties)  */
 /* Define your theme colors, spacing, etc. here for easy updates */
@@ -270,15 +272,17 @@ h2, h3 {
 /* --- Ephemeral Files Section Styling (Magic Design) --- */
 
 /* Custom File Upload Input Wrapper */
+/* This now contains the "Choose File" button, file name display, and "Upload File" button */
 .custom-file-upload {
     display: flex;
-    align-items: center;
-    gap: 20px; /* Adjusted gap for consistency with avatar-selector */
+    flex-direction: column; /* CHANGE: Force column layout for stacking */
+    flex-wrap: wrap; /* Allow items to wrap if needed, although column should prevent this for now */
+    align-items: center; /* Center items horizontally within the column */
+    justify-content: center; /* Vertically center content if there's extra space */
+    gap: 10px; /* Reduced gap for stacked items */
     width: 100%;
     max-width: 400px;
-    margin: 0 auto 30px auto; /* Adjusted margin-bottom for consistency */
-    flex-wrap: wrap;
-    justify-content: center;
+    margin: 0 auto 30px auto; /* Center container and add bottom margin */
 }
 
 /* Hide the default file input visually */
@@ -288,159 +292,167 @@ h2, h3 {
 
 /* Custom "Choose File" button styling - aligned with btn-secondary */
 .custom-file-upload-button {
-    display: inline-block;
-    padding: 10px 20px; /* Aligned with .btn padding */
+    display: inline-block; /* Treat as inline-block to respect flex rules */
+    padding: 10px 20px;
     cursor: pointer;
-    border-radius: var(--border-radius-md); /* Aligned with general button radius */
-    background-color: #475569; /* Aligned with btn-secondary */
+    border-radius: var(--border-radius-md);
+    background-color: #475569;
     color: white;
-    border: transparent; /* Aligned with btn-secondary */
+    border: transparent;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Aligned with .btn shadow */
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0; /* Prevent from shrinking */
+    width: 100%; /* Make it take full width of the flex container */
+    max-width: 250px; /* Optional: limit max width even if 100% */
 }
 
 .custom-file-upload-button:hover {
-    background-color: #334155; /* Aligned with btn-secondary:hover */
-    box-shadow: 0 6px 10px -2px rgba(71, 85, 105, 0.3), 0 3px 5px -1px rgba(71, 85, 105, 0.2); /* Aligned with btn-secondary:hover */
+    background-color: #334155;
+    box-shadow: 0 6px 10px -2px rgba(71, 85, 105, 0.3), 0 3px 5px -1px rgba(71, 85, 105, 0.2);
 }
 
 .custom-file-upload-button:active {
-    transform: translateY(1px); /* Consistent with nav-btn:active */
+    transform: translateY(1px);
 }
 
 /* Display for selected file name */
 .file-name-display {
-    color: #e2e8f0; /* Ensure light text */
-    flex-grow: 1;
+    color: #e2e8f0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 0 5px; /* Consistent with var(--spacing-xs) */
+    padding: 0 5px;
     min-width: 50px;
+    width: 100%; /* Make it take full width of the flex container */
+    max-width: 250px; /* Optional: limit max width */
+    text-align: center; /* Center text within this element */
+    flex-shrink: 1; /* Allow it to shrink if necessary */
 }
 
-/* Styles for the Ephemeral Files List Container - aligned with saved-notes-display */
+/* The Upload File Button - now a flex item within .custom-file-upload */
+#uploadFileBtn {
+    flex-shrink: 0; /* Prevent from shrinking */
+    width: 100%; /* Make it take full width of the flex container */
+    max-width: 250px; /* Optional: limit max width */
+}
+
+
+/* Styles for the Ephemeral Files List Container */
 #fileListDisplay {
-    max-height: 200px; /* Ensures a scrollbar appears if content exceeds this height */
-    overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
-    border: 1px solid #475569; /* Aligned with saved-notes-display */
-    padding: 15px; /* Aligned with saved-notes-display */
-    border-radius: 0.375rem; /* Aligned with saved-notes-display */
-    background-color: #1f2937; /* Aligned with saved-notes-display */
-    margin-top: 20px; /* Aligned with saved-notes-display */
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #475569;
+    padding: 15px;
+    border-radius: 0.375rem;
+    background-color: #1f2937;
+    margin-top: 20px;
     list-style: none;
     padding-left: 0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Consistent shadow */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Styling for individual file list items */
-#fileListDisplay li {
-    display: flex; /* Changed to flex for simpler responsive stacking */
-    flex-wrap: wrap; /* Allow items to wrap */
-    justify-content: space-between; /* Space out items (file name left, actions right) */
-    align-items: center;
-    padding: 8px 0; /* Aligned with saved-notes-display item padding */
-    margin-bottom: 0; /* Handled by padding and border-bottom */
-    background-color: transparent; /* No specific background for individual items, rely on parent */
-    border-bottom: 1px solid #2b3a4a; /* Aligned with saved-notes-display item border */
-    border-radius: 0; /* No radius for individual items within list */
-    box-shadow: none; /* No shadow on individual items within list */
-
-    &:last-child {
-        border-bottom: none; /* No border on last item */
-    }
+/* Styling for individual file items (the div.file-item) */
+#fileListDisplay .file-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* Vertically center items */
+    padding: 8px 0;
+    border-bottom: 1px solid #2b3a4a;
+    justify-content: flex-start; /* Align all items to the left */
 }
 
-/* File name within the list */
-.file-name {
-    color: #a78bfa; /* Consistent with strong text in notes */
-    flex-grow: 1;
+/* Remove border from the last file item */
+#fileListDisplay .file-item:last-child {
+    border-bottom: none;
+}
+
+/* File name within the list item */
+#fileListDisplay .file-name {
+    color: #a78bfa;
+    flex-grow: 1; /* Allows it to take available space */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0;
-    font-weight: bold; /* Make file name bold */
+    font-weight: bold;
+    text-align: left;
 }
 
-/* File timestamp within the list */
-.file-timestamp {
+/* File timestamp within the list item */
+#fileListDisplay .file-timestamp {
     font-size: var(--font-size-sm);
-    color: #94a3b8; /* Lighter grey for timestamps */
+    color: #94a3b8;
     white-space: nowrap;
-    margin-left: 10px; /* Add some spacing */
+    margin-left: 10px;
 }
 
 /* Container for download/delete buttons */
-.file-actions {
+#fileListDisplay .file-actions {
     display: flex;
-    gap: 10px; /* Consistent gap for actions */
+    gap: 10px;
     flex-shrink: 0;
-    margin-left: auto; /* Push buttons to the right */
 }
 
-/* Specific styling for download button - aligned with btn-primary/success */
+/* Specific styling for download button */
 .download-file-action-btn {
-    background-color: #2563eb; /* Blue */
+    background-color: #2563eb;
     border-color: transparent;
     color: white;
-    padding: 4px 8px; /* Smaller padding for actions within list items */
-    border-radius: 0.25rem; /* Consistent with other action buttons */
+    padding: 4px 8px;
+    border-radius: 0.25rem;
     cursor: pointer;
-    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
-    font-size: 0.8em; /* Smaller font size */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow for small buttons */
+    transition: all 0.2s ease-in-out;
+    font-size: 0.8em;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 .download-file-action-btn:hover {
-    background-color: #1d4ed8; /* Darker blue on hover */
-    box-shadow: 0 2px 4px -1px rgba(37, 99, 235, 0.2); /* Subtle hover shadow */
+    background-color: #1d4ed8;
+    box-shadow: 0 2px 4px -1px rgba(37, 99, 235, 0.2);
 }
 
-/* Specific styling for delete button - aligned with btn-danger */
+/* Specific styling for delete button */
 .delete-file-btn {
-    background-color: #ef4444; /* Red */
+    background-color: #ef4444;
     border-color: transparent;
     color: white;
-    padding: 4px 8px; /* Smaller padding for actions within list items */
-    border-radius: 0.25rem; /* Consistent with other action buttons */
+    padding: 4px 8px;
+    border-radius: 0.25rem;
     cursor: pointer;
-    transition: all 0.2s ease-in-out; /* Aligned with .btn transition */
-    font-size: 0.8em; /* Smaller font size */
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow for small buttons */
+    transition: all 0.2s ease-in-out;
+    font-size: 0.8em;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 .delete-file-btn:hover {
-    background-color: #dc2626; /* Darker red on hover */
-    box-shadow: 0 2px 4px -1px rgba(239, 68, 68, 0.2); /* Subtle hover shadow */
+    background-color: #dc2626;
+    box-shadow: 0 2px 4px -1px rgba(239, 68, 68, 0.2);
 }
 
-
 /* Notes & Password Manager & Ephemeral File List Display */
-/* Consolidated with fileListDisplay where possible, but keeping this block for any distinct styles */
-.saved-notes-display, .file-list-display { /* .file-list-display class was not explicitly used for ephemeral files before, only #fileListDisplay ID */
+.saved-notes-display, .file-list-display {
     background-color: #1f2937;
     border-radius: 0.375rem;
     padding: 15px;
     margin-top: 20px;
-    text-align: left;
-    max-height: 200px; /* Scrollable if many items */
+    max-height: 200px;
     overflow-y: auto;
     border: 1px solid #475569;
 }
-.saved-notes-display p, .file-list-display div { /* .file-list-display div also likely applies to ephemeral items indirectly */
+.saved-notes-display p, .file-list-display div {
     padding: 8px 0;
     border-bottom: 1px solid #2b3a4a;
     color: #e2e8f0;
-    word-wrap: break-word; /* Ensure long text wraps */
+    word-wrap: break-word;
 }
 .saved-notes-display p:last-child, .file-list-display div:last-child {
     border-bottom: none;
 }
 .saved-notes-display p strong, .file-list-display div strong {
-    color: #a78bfa; /* Purple for titles/names */
+    color: #a78bfa;
 }
-.file-list-display button { /* Delete buttons for files/passwords */
+.file-list-display button {
     margin-left: 10px;
     background-color: #ef4444;
     color: white;
@@ -467,79 +479,57 @@ h2, h3 {
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
     z-index: 10000;
     text-align: center;
-    font-family: inherit; /* Changed to inherit */
+    font-family: inherit;
     font-size: 1.1em;
 }
 
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  #setup-section, #main-dashboard {
-    margin-top: 20px; /* Reduced margin for smaller screens */
-    padding: 20px 15px; /* Adjusted padding */
-  }
-  h3 {
-      font-size: 1.5em; /* Smaller heading on mobile */
-      margin-bottom: 20px;
-  }
-  .form-control {
-      padding: 10px 12px;
-      font-size: 1em;
-  }
-  .avatar-selector {
-    gap: 10px; /* Even smaller gap on mobile */
-    margin: 20px 0;
-  }
-  .nav-btn {
-    padding: 8px 12px;
-    font-size: 1.2em;
-  }
-  .avatar-wrapper {
-    width: 70px; /* Slightly smaller avatar on mobile */
-    height: 70px;
-  }
-  #saveProfileBtn {
-      width: 100%; /* Full width button on mobile */
-      margin-top: 15px;
-  }
-  .modal-content {
-      width: 95%; /* Even wider on very small screens */
-      padding: 15px;
-  }
-  .dashboard-buttons .btn {
-      width: calc(50% - 16px); /* Two buttons per row, considering margin */
-      margin: 8px;
-  }
-
-  /* Responsive for ephemeral file upload */
-  .custom-file-upload {
-      flex-direction: column;
-      align-items: center; /* Center items in column layout */
-      gap: 10px; /* Adjusted gap */
-      margin-bottom: 20px;
-  }
-  .custom-file-upload-button, .file-name-display {
-      width: 100%;
-      text-align: center;
-  }
+  /* ... (other responsive styles) ... */
 
   /* Responsive for ephemeral file list items */
-  #fileListDisplay li {
-      flex-direction: column; /* Stack vertically on small screens */
-      align-items: center; /* ALIGNED TO CENTER */
-      padding: 8px 0; /* Maintain padding */
-      gap: 5px; /* Smaller gap when stacked */
+  #fileListDisplay .file-item {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 0;
+      gap: 5px;
+      justify-items: start;
   }
-  .file-timestamp {
-      margin-left: 0; /* Remove margin when stacked */
-      align-self: center; /* ALIGNED TO CENTER */
-  }
-  .file-actions {
+  /* Ensure the filename takes full width and aligns left when stacked */
+  #fileListDisplay .file-name {
       width: 100%;
-      justify-content: center; /* ALIGNED TO CENTER */
+      text-align: left;
+  }
+  /* Align timestamp to the left when stacked */
+  #fileListDisplay .file-timestamp {
+      margin-left: 0;
+      align-self: flex-start;
+  }
+  /* Align action buttons to the left when stacked */
+  #fileListDisplay .file-actions {
+      width: 100%;
+      justify-content: flex-start;
+  }
+
+  /* Responsive for ephemeral file upload - force column layout on smaller screens */
+  .custom-file-upload {
+      flex-direction: column; /* Force column layout on small screens */
+      gap: 10px; /* Reduced gap for stacked items */
+  }
+  .custom-file-upload-button,
+  .file-name-display,
+  #uploadFileBtn { /* Apply width to all elements within the flex container */
+      width: 100%; /* Make them take full width when stacked */
+      text-align: center; /* Center text within these elements when stacked */
+      max-width: none; /* Remove max-width constraint for full width */
+  }
+  .file-name-display {
+    text-align: center; /* Ensure text is centered when stacked */
   }
 }
 
+/* #fullScreenPenEffect styling (from previous CSS) */
 #fullScreenPenEffect {
     position: fixed; /* Fixed to the viewport */
     top: 0;
@@ -555,13 +545,12 @@ h2, h3 {
     overflow: hidden; /* Hide any overflow from within the iframe's bounds */
 }
 
+/* #deleteAccountConfirmModal .modal-content p styling (from previous CSS) */
 #deleteAccountConfirmModal .modal-content p {
     color: #ffffff; /* Sets the text color to white */
 }
 
-/*
- * Styles for the language selector to ensure visibility and position.
- */
+/* Styles for the language selector to ensure visibility and position (from previous CSS) */
 .language-selector label {
     color: white; /* Sets the text color to white */
 }
@@ -574,7 +563,7 @@ h2, h3 {
     border-radius: 0.375rem; /* Rounded corners */
 }
 
-/* Ensure options are readable when the dropdown is open */
+/* Ensure options are readable when the dropdown is open (from previous CSS) */
 .language-selector select option {
     background-color: #2b3a4a; /* Set option background to match select */
     color: #e2e8f0; /* Set option text to light grey for readability */

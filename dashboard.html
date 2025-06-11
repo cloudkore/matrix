@@ -86,12 +86,13 @@
         <div class="modal-content">
             <span class="close-button" data-modal="ephemeralFilesModal">&times;</span>
             <h3 data-translate-key="ephemeral_files_heading">Ephemeral Files</h3>
+            <!-- MODIFIED: Both Choose File and Upload File buttons are now in the same flex container -->
             <div class="custom-file-upload mb-3">
                 <input type="file" id="fileUploadInput">
                 <label for="fileUploadInput" class="custom-file-upload-button btn btn-secondary" data-translate-key="choose_file_button">Choose File</label>
                 <span id="fileUploadFileName" class="file-name-display ms-2"></span>
+                <button id="uploadFileBtn" class="btn btn-primary" data-translate-key="upload_file_button">Upload File</button>
             </div>
-            <button id="uploadFileBtn" class="btn btn-primary" data-translate-key="upload_file_button">Upload File</button>
             <ul id="fileListDisplay" class="list-group mt-3">
                 </ul>
         </div>
