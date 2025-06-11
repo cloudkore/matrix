@@ -11,7 +11,7 @@
     "save_master_password_button": "Set Master Password",
     "notes_button": "Notes",
     "password_manager_button": "ID/Password Manager",
-    "ephemeral_files_button": "Ephemeral Files",
+    "ephemeral_files_button": "Storage",
     "logout_button": "Logout",
     "delete_account_button": "Delete Account",
     "forgot_master_password_button": "Forgot Master Password?",
