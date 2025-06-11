@@ -16,7 +16,7 @@ const storage = firebase.storage(); // Firebase Storage is still here but won't 
 
 // --- Supabase Configuration ---
 const SUPABASE_URL = 'https://pshuqmmkxmwgmvhuaujn.supabase.co'; // e.g., 'https://abcdefghijk.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHVxbW1reG13Z212aHVhdWpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNzI4NDIsImV4cCI6MjA2NDg0ODg0Mn0.SiJ9fEjW-e-x8DOREhuS1snrAe-IuBeE5r3tNzjtPFw'; // e.g., 'eyJ... (public key)'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHVxbW1reG13Z212aHVauWpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNzI4NDIsImV4cCI6MjA2NDg0ODg0Mn0.SiJ9fEjW-e-x8DOREhuS1snrAe-IuBeE5r3tNzjtPFw'; // e.g., 'eyJ... (public key)'
 
 // CORRECTED LINE: Access the global 'supabase' object from the window
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -96,7 +96,7 @@ async function loadTranslations(lang) {
     try {
         const response = await fetch(`languages/${lang}.json`);
         if (!response.ok) {
-            throw new Error(`Could not load translations for ${lang}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         translations = await response.json();
         console.log(`Translations loaded for ${lang}:`, translations);
@@ -231,7 +231,7 @@ async function deriveKey(masterPassword, salt) {
     return CryptoJS.PBKDF2(masterPassword, CryptoJS.enc.Hex.parse(salt), {
         keySize: KEY_SIZE,
         iterations: PBKDF2_ITERATIONS,
-        hasher: CryptoJS.algo.SHA256
+        hasher: CryptoJS.algo.SHA256 // Corrected from SHA265 to SHA256
     });
 }
 
@@ -904,8 +904,7 @@ async function listFiles() {
         </button>
         <button class="delete-file-btn btn btn-danger btn-sm"
                 data-file-name="${file.name}">
-            ${getTranslation("delete_file_button")}
-        </button>
+            ${getTranslation("delete_file_button")}</button>
     </div>
             `;
             fileListDisplay.appendChild(fileElement);
@@ -974,10 +973,9 @@ confirmDeleteFileBtn.onclick = async () => {
 };
 
 // Handle cancellation for file deletion
-cancelDeleteFileBtn.onclick = () => {
-    closeModal(deleteFileConfirmModal);
-    fileToDeleteName = null; // Clear the stored file name
-    showMessageBox(getTranslation("message_box_file_deletion_cancelled"), "info", 2000);
+cancelDeleteAccountBtn.onclick = () => {
+    closeModal(deleteAccountConfirmModal);
+    showMessageBox(getTranslation("message_box_account_deletion_cancelled"), "info", 2000);
 };
 
 
@@ -1004,17 +1002,79 @@ deleteAccountBtn.onclick = () => {
 // Handle confirmation of account deletion
 confirmDeleteAccountBtn.onclick = async () => {
     closeModal(deleteAccountConfirmModal);
-    showMessageBox(getTranslation("message_box_initiating_account_deletion"), 'info', 2000);
+    showMessageBox(getTranslation("message_box_initiating_account_deletion"), 'info', 0); // Keep message box open
+
+    if (!currentUser) {
+        showMessageBox(getTranslation("message_box_please_login_first"), "error");
+        return;
+    }
+
     try {
-        await db.collection('players').doc(currentUser.uid).delete(); // Delete user's profile document
-        await currentUser.delete(); // Delete Firebase authentication account
-        showMessageBox(getTranslation("message_box_account_deleted_success"), "success");
+        const idToken = await currentUser.getIdToken();
+
+        // 1. Delete Supabase data (files and metadata) via Edge Function
+        console.log("Calling delete-user-data Edge Function...");
+        const supabaseDeleteResponse = await fetch(`${SUPABASE_URL}/functions/v1/delete-user-data`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}` // Still send Firebase ID token for potential future validation in Edge Function
+            },
+            body: JSON.stringify({ id: currentUser.uid }) // Send userId explicitly
+        });
+
+        if (!supabaseDeleteResponse.ok) {
+            const errorData = await supabaseDeleteResponse.json();
+            throw new Error(errorData.message || 'Failed to delete Supabase data');
+        }
+        console.log("Supabase data deletion successful.");
+        showMessageBox(getTranslation("message_box_supabase_data_deleted_success"), "success", 2000);
+
+
+        // 2. Delete Firebase notes and passwords from Firestore
+        console.log("Deleting user notes from Firestore...");
+        const notesRef = db.collection('players').doc(currentUser.uid).collection('notes');
+        const notesSnapshot = await notesRef.get();
+        const deleteNotesPromises = [];
+        notesSnapshot.forEach(doc => {
+            deleteNotesPromises.push(doc.ref.delete());
+        });
+        await Promise.all(deleteNotesPromises);
+        console.log("User notes deleted from Firestore.");
+
+        console.log("Deleting user passwords from Firestore...");
+        const passwordsRef = db.collection('players').doc(currentUser.uid).collection('passwords');
+        const passwordsSnapshot = await passwordsRef.get();
+        const deletePasswordsPromises = [];
+        passwordsSnapshot.forEach(doc => {
+            deletePasswordsPromises.push(doc.ref.delete());
+        });
+        await Promise.all(deletePasswordsPromises);
+        console.log("User passwords deleted from Firestore.");
+
+        // 3. Delete user's Firebase profile document
+        console.log("Deleting user profile document from Firestore...");
+        await db.collection('players').doc(currentUser.uid).delete();
+        console.log("User profile document deleted from Firestore.");
+
+        // 4. Delete Firebase authentication account
+        console.log("Deleting Firebase authentication account...");
+        await currentUser.delete();
+        console.log("Firebase authentication account deleted.");
+
+        showMessageBox(getTranslation("message_box_account_deleted_success"), "success", 3000);
         setTimeout(() => {
             window.location.href = "login.html";
-        }, 2000);
+        }, 3000);
+
     } catch (error) {
-        console.error("Error deleting account:", error);
-        showMessageBox(getTranslation("message_box_failed_to_delete_account") + error.message, "error");
+        console.error("Error during full account deletion:", error);
+        let errorMessage = getTranslation("message_box_failed_to_delete_account");
+        if (error.message) {
+            errorMessage += `: ${error.message}`;
+        }
+        showMessageBox(errorMessage, "error", 5000);
+
         if (error.code === 'auth/requires-recent-login') {
             showMessageBox(getTranslation("message_box_account_requires_recent_login"), "warning", 5000);
             setTimeout(() => {
