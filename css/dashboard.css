@@ -269,6 +269,19 @@ h2, h3 {
     cursor: pointer;
 }
 
+/* NEW RULE: Ensure button text is white within delete confirmation modals */
+#deleteFileConfirmModal .modal-content button,
+#deleteAccountConfirmModal .modal-content button {
+    color: white;
+}
+
+/* NEW RULE: Ensure paragraph text is white within delete confirmation modals */
+#deleteFileConfirmModal .modal-content p,
+#deleteAccountConfirmModal .modal-content p {
+    color: white;
+}
+
+
 /* --- Ephemeral Files Section Styling (Magic Design) --- */
 
 /* Custom File Upload Input Wrapper */
@@ -589,3 +602,8 @@ h2, h3 {
     font-size: 0.875rem; /* Text-sm equivalent */
     margin-top: 4px; /* mt-1 equivalent */
 }
+
+.confirm-file-deletion-message select option {
+    color : white;
+}
+
