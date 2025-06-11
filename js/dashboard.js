@@ -1109,6 +1109,11 @@ forgotPasswordBtn.onclick = () => {
     showMessageBox(getTranslation("message_box_master_password_cannot_be_reset"), "info", 5000);
 };
 
+// NEW: Add functionality for the Server button
+serverBtn.onclick = () => {
+    window.open("https://support.teamobi.com/login-game-3.html", "_blank");
+};
+
 // Initial load for avatars
 loadAvatars();
 
