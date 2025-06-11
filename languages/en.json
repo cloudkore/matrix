@@ -10,7 +10,7 @@
     "confirm_master_password_input": "Confirm Master Password",
     "save_master_password_button": "Set Master Password",
     "notes_button": "Notes",
-    "password_manager_button": "ID/Password Manager",
+    "password_manager_button": "Password Manager",
     "ephemeral_files_button": "Storage",
     "logout_button": "Logout",
     "delete_account_button": "Delete Account",
