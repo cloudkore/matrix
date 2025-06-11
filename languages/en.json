@@ -93,5 +93,20 @@
     "message_box_failed_to_upload_file": "Failed to upload file: ",
     "message_box_deleting_file": "Deleting file...",
     "message_box_file_deleted_success": "File deleted successfully!",
-    "message_box_failed_to_delete_file": "Failed to delete file: "
+    "message_box_failed_to_delete_file": "Failed to delete file: ",
+    "ephemeral_files_heading": "Ephemeral Files",
+    "choose_file_button": "Choose File",
+    "confirm_file_deletion_modal_title": "Confirm File Deletion",
+    "confirm_file_deletion_message": "Are you sure you want to delete this file? This action cannot be undone.",
+    "yes_delete_file_button": "Yes, Delete File",
+    "no_keep_file_button": "No, Keep File",
+    "encryption_key_not_available_error": "Encryption key not available. Cannot encrypt data.",
+    "decryption_failed_error": "Decryption failed.",
+    "could_not_load_avatars_error": "Could not load avatars.",
+    "message_box_no_master_password_set_yet": "No master password set yet.",
+    "error_unlocking_dashboard_error": "Error unlocking dashboard: ",
+    "Delete": "Delete",
+    "download_link_error": "Download link is not available.",
+    "message_box_preparing_download": "Preparing download...",
+    "message_box_download_started": "Download started!"
 }
