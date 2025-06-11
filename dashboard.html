@@ -86,15 +86,30 @@
         <div class="modal-content">
             <span class="close-button" data-modal="ephemeralFilesModal">&times;</span>
             <h3 data-translate-key="ephemeral_files_heading">Ephemeral Files</h3>
-            <!-- MODIFIED: Both Choose File and Upload File buttons are now in the same flex container -->
             <div class="custom-file-upload mb-3">
                 <input type="file" id="fileUploadInput">
                 <label for="fileUploadInput" class="custom-file-upload-button btn btn-secondary" data-translate-key="choose_file_button">Choose File</label>
                 <span id="fileUploadFileName" class="file-name-display ms-2"></span>
                 <button id="uploadFileBtn" class="btn btn-primary" data-translate-key="upload_file_button">Upload File</button>
+                <!-- NEW HTML FOR PROGRESS DISPLAY -->
+                <div id="fileUploadProgressBarContainer" class="w-full bg-gray-700 rounded-full h-2.5 mt-2 overflow-hidden" style="display: none;">
+                    <div id="fileUploadProgressBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-100 ease-linear" style="width: 0%;"></div>
+                </div>
+                <span id="fileUploadProgressText" class="text-sm text-gray-400 mt-1" style="display: none;">0%</span>
             </div>
             <ul id="fileListDisplay" class="list-group mt-3">
                 </ul>
+        </div>
+    </div>
+
+    <!-- New: File Deletion Confirmation Modal -->
+    <div id="deleteFileConfirmModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" data-modal="deleteFileConfirmModal">&times;</span>
+            <h3 data-translate-key="confirm_file_deletion_modal_title">Confirm File Deletion</h3>
+            <p data-translate-key="confirm_file_deletion_message">Are you sure you want to delete this file? This action cannot be undone.</p>
+            <button id="confirmDeleteFileBtn" class="btn btn-danger" data-translate-key="yes_delete_file_button">Yes, Delete File</button>
+            <button id="cancelDeleteFileBtn" class="btn btn-secondary" data-translate-key="no_keep_file_button">No, Keep File</button>
         </div>
     </div>
 

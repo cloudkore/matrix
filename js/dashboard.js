@@ -39,7 +39,7 @@ const messageBoxText = document.getElementById('messageBoxText');
 const languageSelect = document.getElementById('language-select');
 
 const notesModal = document.getElementById('notesModal');
-const notesBtn = document.getElementById('notesBtn');
+const notesBtn = document.getElementById('notesBtn'); // Corrected typo here
 const noteInput = document.getElementById('noteInput');
 const saveNoteBtn = document.getElementById('saveNoteBtn');
 const savedNotesDisplay = document.getElementById('savedNotesDisplay');
@@ -69,11 +69,24 @@ const fileUploadInput = document.getElementById('fileUploadInput');
 const uploadFileBtn = document.getElementById('uploadFileBtn');
 const fileListDisplay = document.getElementById('fileListDisplay');
 
+// File Deletion Confirmation Modal DOM elements
+const deleteFileConfirmModal = document.getElementById('deleteFileConfirmModal');
+const confirmDeleteFileBtn = document.getElementById('confirmDeleteFileBtn');
+const cancelDeleteFileBtn = document.getElementById('cancelDeleteFileBtn');
+
+// Progress Bar DOM elements (will still be displayed but percentage might be less accurate for Edge Functions)
+const fileUploadProgressBarContainer = document.getElementById('fileUploadProgressBarContainer');
+const fileUploadProgressBar = document.getElementById('fileUploadProgressBar');
+const fileUploadProgressText = document.getElementById('fileUploadProgressText');
+
+
 // --- Global Variables ---
 let currentAvatarIndex = 0;
 let allAvatars = [];
 let currentUser = null;
 let currentEncryptionKey = null; // This will hold the derived encryption key for the session
+let fileToDeleteName = null; // To store the name of the file to be deleted
+
 
 // --- Internationalization Variables and Functions ---
 let translations = {}; // Global variable to hold the current language translations
@@ -405,7 +418,7 @@ unlockDashboardBtn.onclick = async () => {
         // If no salt or hash, means master password was never set, so prompt for setup
         // (You might want to redirect them to a specific setup for master password if you have one)
         if (!userSalt || !storedMasterPasswordHash) {
-            showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info"); // NEW TRANSLATION KEY
+            showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info");
             closeModal(masterPasswordPromptModal);
             return;
         }
@@ -420,7 +433,7 @@ unlockDashboardBtn.onclick = async () => {
         }
 
         currentEncryptionKey = derivedKeyForVerification; // Set the global encryption key for the session
-        // NEW: Store the key in sessionStorage for persistence across page loads within the same session
+        // Store the key in sessionStorage for persistence across page loads within the same session
         sessionStorage.setItem('currentEncryptionKeyHex', currentEncryptionKey.toString(CryptoJS.enc.Hex));
 
 
@@ -721,7 +734,13 @@ uploadFileBtn.onclick = async () => {
         return;
     }
 
-    showMessageBox(getTranslation("message_box_uploading_file"), 'info', 3000);
+    // Display progress elements
+    fileUploadProgressBarContainer.style.display = 'block';
+    fileUploadProgressBar.style.width = '0%';
+    fileUploadProgressText.style.display = 'block';
+    fileUploadProgressText.innerText = '0%';
+
+    showMessageBox(getTranslation("message_box_uploading_file"), 'info', 0); // Keep message box open until upload completes
 
     try {
         const formData = new FormData();
@@ -731,30 +750,106 @@ uploadFileBtn.onclick = async () => {
 
         const idToken = await currentUser.getIdToken();
 
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/upload-file`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Authorization': `Bearer ${idToken}`
+        // --- START: XMLHttpRequest for upload progress ---
+        const xhr = new XMLHttpRequest();
+
+        // Setup the progress event listener
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100);
+                fileUploadProgressBar.style.width = `${percent}%`;
+                fileUploadProgressText.innerText = `${percent}%`;
             }
+        };
+
+        // Setup the load (completion) event listener
+        const responsePromise = new Promise((resolve, reject) => {
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        resolve(JSON.parse(xhr.responseText));
+                    } catch (e) {
+                        reject(new Error('Invalid JSON response from server.'));
+                    }
+                } else {
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        reject(new Error(errorData.message || `Server error: ${xhr.status}`));
+                    } catch (e) {
+                        reject(new Error(`HTTP error! Status: ${xhr.status}`));
+                    }
+                }
+            };
+
+            // Setup the error event listener
+            xhr.onerror = () => {
+                reject(new Error('Network error during file upload.'));
+            };
+
+            xhr.onabort = () => {
+                reject(new Error('File upload aborted.'));
+            };
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'File upload failed');
-        }
 
-        const result = await response.json();
+        xhr.open('POST', `${SUPABASE_URL}/functions/v1/upload-file`);
+        xhr.setRequestHeader('Authorization', `Bearer ${idToken}`);
+        xhr.send(formData);
+
+        const result = await responsePromise;
+        // --- END: XMLHttpRequest for upload progress ---
+
         console.log('File uploaded:', result);
 
-        showMessageBox(getTranslation("message_box_file_uploaded_success"), "success");
+        showMessageBox(getTranslation("message_box_file_uploaded_success"), "success", 3000); // Show success for 3 seconds
         fileUploadInput.value = ''; // Clear the input
         listFiles(); // Refresh file list
     } catch (error) {
         console.error("Error uploading file:", error);
-        showMessageBox(getTranslation("message_box_failed_to_upload_file") + error.message, "error");
+        showMessageBox(getTranslation("message_box_failed_to_upload_file") + error.message, "error", 5000); // Show error for longer
+    } finally {
+        // Hide progress bar elements after upload attempt (success or failure)
+        setTimeout(() => {
+            fileUploadProgressBarContainer.style.display = 'none';
+            fileUploadProgressText.style.display = 'none';
+            fileUploadProgressBar.style.width = '0%'; // Reset bar
+        }, 1000); // Give a moment for the final message to show
     }
 };
+
+// Function to handle the actual file deletion
+async function performFileDeletion(fileName) {
+    if (!currentUser) {
+        showMessageBox(getTranslation("message_box_please_login_delete_files"), "error");
+        return;
+    }
+    showMessageBox(getTranslation("message_box_deleting_file"), 'info', 1500);
+
+    try {
+        const idToken = await currentUser.getIdToken();
+        // Reverting to fetch API call for Edge Function
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-file`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`
+            },
+            body: JSON.stringify({ userId: currentUser.uid, fileName: fileName })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to delete file');
+        }
+
+        showMessageBox(getTranslation("message_box_file_deleted_success"), "success");
+        listFiles(); // Refresh list after deletion
+    } catch (error) {
+        console.error("Error deleting file:", error);
+        showMessageBox(getTranslation("message_box_failed_to_delete_file") + error.message, "error");
+    }
+}
+
 
 async function listFiles() {
     if (!currentUser) {
@@ -764,7 +859,7 @@ async function listFiles() {
 
     try {
         const idToken = await currentUser.getIdToken();
-
+        // Reverting to fetch API call for Edge Function
         const response = await fetch(`${SUPABASE_URL}/functions/v1/list-files`, {
             method: 'POST',
             headers: {
@@ -787,11 +882,12 @@ async function listFiles() {
             return;
         }
 
-        files.forEach(file => {
+        for (const file of files) { // Using for...of for async operations if needed, or simple forEach
             const fileElement = document.createElement('div');
             fileElement.classList.add('file-item');
 
             let formattedTimestamp = '';
+            // Assuming the Edge Function returns `createdAt` in a format Date can parse
             if (file.createdAt) {
                 const date = new Date(file.createdAt);
                 formattedTimestamp = `Uploaded: ${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
@@ -811,43 +907,19 @@ async function listFiles() {
             ${getTranslation("delete_file_button")}
         </button>
     </div>
-
             `;
             fileListDisplay.appendChild(fileElement);
-        });
+        }
 
         // --- Event Delegation for both Download and Delete buttons ---
         // Attach the listener once to the parent container (fileListDisplay)
         fileListDisplay.onclick = async (event) => {
             const target = event.target; // The actual element that was clicked
 
-            // Handle Delete Button Click
+            // Handle Delete Button Click - Show confirmation modal
             if (target.classList.contains('delete-file-btn')) {
-                showMessageBox(getTranslation("message_box_deleting_file"), 'info', 1500);
-                const fileName = target.dataset.fileName;
-
-                try {
-                    const idToken = await currentUser.getIdToken();
-                    const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-file`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${idToken}`
-                        },
-                        body: JSON.stringify({ userId: currentUser.uid, fileName: fileName })
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Failed to delete file');
-                    }
-
-                    showMessageBox(getTranslation("message_box_file_deleted_success"), "success");
-                    listFiles(); // Refresh list
-                } catch (error) {
-                    console.error("Error deleting file:", error);
-                    showMessageBox(getTranslation("message_box_failed_to_delete_file") + error.message, "error");
-                }
+                fileToDeleteName = target.dataset.fileName; // Store file name for confirmation
+                openModal(deleteFileConfirmModal);
             }
 
             // Handle Download Button Click
@@ -891,6 +963,22 @@ async function listFiles() {
         showMessageBox(getTranslation("failed_to_load_files_error") + error.message, "error");
     }
 }
+
+// Handle confirmation for file deletion
+confirmDeleteFileBtn.onclick = async () => {
+    closeModal(deleteFileConfirmModal);
+    if (fileToDeleteName) {
+        await performFileDeletion(fileToDeleteName);
+        fileToDeleteName = null; // Clear the stored file name
+    }
+};
+
+// Handle cancellation for file deletion
+cancelDeleteFileBtn.onclick = () => {
+    closeModal(deleteFileConfirmModal);
+    fileToDeleteName = null; // Clear the stored file name
+    showMessageBox(getTranslation("message_box_file_deletion_cancelled"), "info", 2000);
+};
 
 
 // --- Logout and Delete Account ---
