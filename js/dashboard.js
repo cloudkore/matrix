@@ -79,6 +79,8 @@ const fileUploadProgressBarContainer = document.getElementById('fileUploadProgre
 const fileUploadProgressBar = document.getElementById('fileUploadProgressBar');
 const fileUploadProgressText = document.getElementById('fileUploadProgressText');
 
+const serverBtn = document.getElementById('serverBtn');
+
 
 // --- Global Variables ---
 let currentAvatarIndex = 0;
@@ -984,9 +986,10 @@ confirmDeleteFileBtn.onclick = async () => {
 };
 
 // Handle cancellation for file deletion
-cancelDeleteAccountBtn.onclick = () => {
-    closeModal(deleteAccountConfirmModal);
-    showMessageBox(getTranslation("message_box_account_deletion_cancelled"), "info", 2000);
+cancelDeleteFileBtn.onclick = () => {
+    closeModal(deleteFileConfirmModal); // Close the correct modal
+    showMessageBox(getTranslation("cancelled!"), "info", 2000); // Specific message for file deletion cancellation
+    fileToDeleteName = null; // Clear the stored file name if the user cancels
 };
 
 
