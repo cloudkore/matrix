@@ -16,7 +16,7 @@ const storage = firebase.storage(); // Firebase Storage is still here but won't 
 
 // --- Supabase Configuration ---
 const SUPABASE_URL = 'https://pshuqmmkxmwgmvhuaujn.supabase.co'; // e.g., 'https://abcdefghijk.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHVxbW1reG13Z212aHVauWpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNzI4NDIsImV4cCI6MjA2NDg0ODg0Mn0.SiJ9fEjW-e-x8DOREhuS1snrAe-IuBeE5r3tNzjtPFw'; // e.g., 'eyJ... (public key)'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzaHVxbW1reG13Z212aHVhdWpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNzI4NDIsImV4cCI6MjA2NDg0ODg0Mn0.SiJ9fEjW-e-x8DOREhuS1snrAe-IuBeE5r3tNzjtPFw'; // e.g., 'eyJ... (public key)'
 
 // CORRECTED LINE: Access the global 'supabase' object from the window
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -39,7 +39,7 @@ const messageBoxText = document.getElementById('messageBoxText');
 const languageSelect = document.getElementById('language-select');
 
 const notesModal = document.getElementById('notesModal');
-const notesBtn = document.getElementById('notesBtn'); // Corrected typo here
+const notesBtn = document.getElementById('notesBtn');
 const noteInput = document.getElementById('noteInput');
 const saveNoteBtn = document.getElementById('saveNoteBtn');
 const savedNotesDisplay = document.getElementById('savedNotesDisplay');
@@ -69,24 +69,11 @@ const fileUploadInput = document.getElementById('fileUploadInput');
 const uploadFileBtn = document.getElementById('uploadFileBtn');
 const fileListDisplay = document.getElementById('fileListDisplay');
 
-// File Deletion Confirmation Modal DOM elements
-const deleteFileConfirmModal = document.getElementById('deleteFileConfirmModal');
-const confirmDeleteFileBtn = document.getElementById('confirmDeleteFileBtn');
-const cancelDeleteFileBtn = document.getElementById('cancelDeleteFileBtn');
-
-// Progress Bar DOM elements (will still be displayed but percentage might be less accurate for Edge Functions)
-const fileUploadProgressBarContainer = document.getElementById('fileUploadProgressBarContainer');
-const fileUploadProgressBar = document.getElementById('fileUploadProgressBar');
-const fileUploadProgressText = document.getElementById('fileUploadProgressText');
-
-
 // --- Global Variables ---
 let currentAvatarIndex = 0;
 let allAvatars = [];
 let currentUser = null;
 let currentEncryptionKey = null; // This will hold the derived encryption key for the session
-let fileToDeleteName = null; // To store the name of the file to be deleted
-
 
 // --- Internationalization Variables and Functions ---
 let translations = {}; // Global variable to hold the current language translations
@@ -96,7 +83,7 @@ async function loadTranslations(lang) {
     try {
         const response = await fetch(`languages/${lang}.json`);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Could not load translations for ${lang}`);
         }
         translations = await response.json();
         console.log(`Translations loaded for ${lang}:`, translations);
@@ -231,7 +218,7 @@ async function deriveKey(masterPassword, salt) {
     return CryptoJS.PBKDF2(masterPassword, CryptoJS.enc.Hex.parse(salt), {
         keySize: KEY_SIZE,
         iterations: PBKDF2_ITERATIONS,
-        hasher: CryptoJS.algo.SHA256 // Corrected from SHA265 to SHA256
+        hasher: CryptoJS.algo.SHA256
     });
 }
 
@@ -418,7 +405,7 @@ unlockDashboardBtn.onclick = async () => {
         // If no salt or hash, means master password was never set, so prompt for setup
         // (You might want to redirect them to a specific setup for master password if you have one)
         if (!userSalt || !storedMasterPasswordHash) {
-            showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info");
+            showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info"); // NEW TRANSLATION KEY
             closeModal(masterPasswordPromptModal);
             return;
         }
@@ -433,7 +420,7 @@ unlockDashboardBtn.onclick = async () => {
         }
 
         currentEncryptionKey = derivedKeyForVerification; // Set the global encryption key for the session
-        // Store the key in sessionStorage for persistence across page loads within the same session
+        // NEW: Store the key in sessionStorage for persistence across page loads within the same session
         sessionStorage.setItem('currentEncryptionKeyHex', currentEncryptionKey.toString(CryptoJS.enc.Hex));
 
 
@@ -734,13 +721,18 @@ uploadFileBtn.onclick = async () => {
         return;
     }
 
-    // Display progress elements
-    fileUploadProgressBarContainer.style.display = 'block';
-    fileUploadProgressBar.style.width = '0%';
-    fileUploadProgressText.style.display = 'block';
-    fileUploadProgressText.innerText = '0%';
+    // --- NEW: File Size Limit Check ---
+    const MAX_FILE_SIZE_MB = 5;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // Convert MB to Bytes
 
-    showMessageBox(getTranslation("message_box_uploading_file"), 'info', 0); // Keep message box open until upload completes
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+        showMessageBox(getTranslation("Limit Exceeded!") + ` (${MAX_FILE_SIZE_MB}MB)`, "error", 5000);
+        fileUploadInput.value = ''; // Clear the input
+        return; // Prevent upload
+    }
+    // --- END NEW ---
+
+    showMessageBox(getTranslation("message_box_uploading_file"), 'info', 3000);
 
     try {
         const formData = new FormData();
@@ -750,106 +742,30 @@ uploadFileBtn.onclick = async () => {
 
         const idToken = await currentUser.getIdToken();
 
-        // --- START: XMLHttpRequest for upload progress ---
-        const xhr = new XMLHttpRequest();
-
-        // Setup the progress event listener
-        xhr.upload.onprogress = (event) => {
-            if (event.lengthComputable) {
-                const percent = Math.round((event.loaded / event.total) * 100);
-                fileUploadProgressBar.style.width = `${percent}%`;
-                fileUploadProgressText.innerText = `${percent}%`;
-            }
-        };
-
-        // Setup the load (completion) event listener
-        const responsePromise = new Promise((resolve, reject) => {
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    try {
-                        resolve(JSON.parse(xhr.responseText));
-                    } catch (e) {
-                        reject(new Error('Invalid JSON response from server.'));
-                    }
-                } else {
-                    try {
-                        const errorData = JSON.parse(xhr.responseText);
-                        reject(new Error(errorData.message || `Server error: ${xhr.status}`));
-                    } catch (e) {
-                        reject(new Error(`HTTP error! Status: ${xhr.status}`));
-                    }
-                }
-            };
-
-            // Setup the error event listener
-            xhr.onerror = () => {
-                reject(new Error('Network error during file upload.'));
-            };
-
-            xhr.onabort = () => {
-                reject(new Error('File upload aborted.'));
-            };
-        });
-
-
-        xhr.open('POST', `${SUPABASE_URL}/functions/v1/upload-file`);
-        xhr.setRequestHeader('Authorization', `Bearer ${idToken}`);
-        xhr.send(formData);
-
-        const result = await responsePromise;
-        // --- END: XMLHttpRequest for upload progress ---
-
-        console.log('File uploaded:', result);
-
-        showMessageBox(getTranslation("message_box_file_uploaded_success"), "success", 3000); // Show success for 3 seconds
-        fileUploadInput.value = ''; // Clear the input
-        listFiles(); // Refresh file list
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        showMessageBox(getTranslation("message_box_failed_to_upload_file") + error.message, "error", 5000); // Show error for longer
-    } finally {
-        // Hide progress bar elements after upload attempt (success or failure)
-        setTimeout(() => {
-            fileUploadProgressBarContainer.style.display = 'none';
-            fileUploadProgressText.style.display = 'none';
-            fileUploadProgressBar.style.width = '0%'; // Reset bar
-        }, 1000); // Give a moment for the final message to show
-    }
-};
-
-// Function to handle the actual file deletion
-async function performFileDeletion(fileName) {
-    if (!currentUser) {
-        showMessageBox(getTranslation("message_box_please_login_delete_files"), "error");
-        return;
-    }
-    showMessageBox(getTranslation("message_box_deleting_file"), 'info', 1500);
-
-    try {
-        const idToken = await currentUser.getIdToken();
-        // Reverting to fetch API call for Edge Function
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-file`, {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/upload-file`, {
             method: 'POST',
+            body: formData,
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${idToken}`
-            },
-            body: JSON.stringify({ userId: currentUser.uid, fileName: fileName })
+            }
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to delete file');
+            throw new Error(errorData.message || 'File upload failed');
         }
 
-        showMessageBox(getTranslation("message_box_file_deleted_success"), "success");
-        listFiles(); // Refresh list after deletion
-    } catch (error) {
-        console.error("Error deleting file:", error);
-        showMessageBox(getTranslation("message_box_failed_to_delete_file") + error.message, "error");
-    }
-}
+        const result = await response.json();
+        console.log('File uploaded:', result);
 
+        showMessageBox(getTranslation("message_box_file_uploaded_success"), "success");
+        fileUploadInput.value = ''; // Clear the input
+        listFiles(); // Refresh file list
+    } catch (error) {
+        console.error("Error uploading file:", error);
+        showMessageBox(getTranslation("message_box_failed_to_upload_file") + error.message, "error");
+    }
+};
 
 async function listFiles() {
     if (!currentUser) {
@@ -859,7 +775,7 @@ async function listFiles() {
 
     try {
         const idToken = await currentUser.getIdToken();
-        // Reverting to fetch API call for Edge Function
+
         const response = await fetch(`${SUPABASE_URL}/functions/v1/list-files`, {
             method: 'POST',
             headers: {
@@ -882,12 +798,11 @@ async function listFiles() {
             return;
         }
 
-        for (const file of files) { // Using for...of for async operations if needed, or simple forEach
+        files.forEach(file => {
             const fileElement = document.createElement('div');
             fileElement.classList.add('file-item');
 
             let formattedTimestamp = '';
-            // Assuming the Edge Function returns `createdAt` in a format Date can parse
             if (file.createdAt) {
                 const date = new Date(file.createdAt);
                 formattedTimestamp = `Uploaded: ${date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
@@ -904,21 +819,46 @@ async function listFiles() {
         </button>
         <button class="delete-file-btn btn btn-danger btn-sm"
                 data-file-name="${file.name}">
-            ${getTranslation("delete_file_button")}</button>
+            ${getTranslation("delete_file_button")}
+        </button>
     </div>
+
             `;
             fileListDisplay.appendChild(fileElement);
-        }
+        });
 
         // --- Event Delegation for both Download and Delete buttons ---
         // Attach the listener once to the parent container (fileListDisplay)
         fileListDisplay.onclick = async (event) => {
             const target = event.target; // The actual element that was clicked
 
-            // Handle Delete Button Click - Show confirmation modal
+            // Handle Delete Button Click
             if (target.classList.contains('delete-file-btn')) {
-                fileToDeleteName = target.dataset.fileName; // Store file name for confirmation
-                openModal(deleteFileConfirmModal);
+                showMessageBox(getTranslation("message_box_deleting_file"), 'info', 1500);
+                const fileName = target.dataset.fileName;
+
+                try {
+                    const idToken = await currentUser.getIdToken();
+                    const response = await fetch(`${SUPABASE_URL}/functions/v1/delete-file`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify({ userId: currentUser.uid, fileName: fileName })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to delete file');
+                    }
+
+                    showMessageBox(getTranslation("message_box_file_deleted_success"), "success");
+                    listFiles(); // Refresh list
+                } catch (error) {
+                    console.error("Error deleting file:", error);
+                    showMessageBox(getTranslation("message_box_failed_to_delete_file") + error.message, "error");
+                }
             }
 
             // Handle Download Button Click
@@ -963,21 +903,6 @@ async function listFiles() {
     }
 }
 
-// Handle confirmation for file deletion
-confirmDeleteFileBtn.onclick = async () => {
-    closeModal(deleteFileConfirmModal);
-    if (fileToDeleteName) {
-        await performFileDeletion(fileToDeleteName);
-        fileToDeleteName = null; // Clear the stored file name
-    }
-};
-
-// Handle cancellation for file deletion
-cancelDeleteAccountBtn.onclick = () => {
-    closeModal(deleteAccountConfirmModal);
-    showMessageBox(getTranslation("message_box_account_deletion_cancelled"), "info", 2000);
-};
-
 
 // --- Logout and Delete Account ---
 logoutBtn.onclick = async () => {
@@ -1002,79 +927,17 @@ deleteAccountBtn.onclick = () => {
 // Handle confirmation of account deletion
 confirmDeleteAccountBtn.onclick = async () => {
     closeModal(deleteAccountConfirmModal);
-    showMessageBox(getTranslation("message_box_initiating_account_deletion"), 'info', 0); // Keep message box open
-
-    if (!currentUser) {
-        showMessageBox(getTranslation("message_box_please_login_first"), "error");
-        return;
-    }
-
+    showMessageBox(getTranslation("message_box_initiating_account_deletion"), 'info', 2000);
     try {
-        const idToken = await currentUser.getIdToken();
-
-        // 1. Delete Supabase data (files and metadata) via Edge Function
-        console.log("Calling delete-user-data Edge Function...");
-        const supabaseDeleteResponse = await fetch(`${SUPABASE_URL}/functions/v1/delete-user-data`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${idToken}` // Still send Firebase ID token for potential future validation in Edge Function
-            },
-            body: JSON.stringify({ id: currentUser.uid }) // Send userId explicitly
-        });
-
-        if (!supabaseDeleteResponse.ok) {
-            const errorData = await supabaseDeleteResponse.json();
-            throw new Error(errorData.message || 'Failed to delete Supabase data');
-        }
-        console.log("Supabase data deletion successful.");
-        showMessageBox(getTranslation("message_box_supabase_data_deleted_success"), "success", 2000);
-
-
-        // 2. Delete Firebase notes and passwords from Firestore
-        console.log("Deleting user notes from Firestore...");
-        const notesRef = db.collection('players').doc(currentUser.uid).collection('notes');
-        const notesSnapshot = await notesRef.get();
-        const deleteNotesPromises = [];
-        notesSnapshot.forEach(doc => {
-            deleteNotesPromises.push(doc.ref.delete());
-        });
-        await Promise.all(deleteNotesPromises);
-        console.log("User notes deleted from Firestore.");
-
-        console.log("Deleting user passwords from Firestore...");
-        const passwordsRef = db.collection('players').doc(currentUser.uid).collection('passwords');
-        const passwordsSnapshot = await passwordsRef.get();
-        const deletePasswordsPromises = [];
-        passwordsSnapshot.forEach(doc => {
-            deletePasswordsPromises.push(doc.ref.delete());
-        });
-        await Promise.all(deletePasswordsPromises);
-        console.log("User passwords deleted from Firestore.");
-
-        // 3. Delete user's Firebase profile document
-        console.log("Deleting user profile document from Firestore...");
-        await db.collection('players').doc(currentUser.uid).delete();
-        console.log("User profile document deleted from Firestore.");
-
-        // 4. Delete Firebase authentication account
-        console.log("Deleting Firebase authentication account...");
-        await currentUser.delete();
-        console.log("Firebase authentication account deleted.");
-
-        showMessageBox(getTranslation("message_box_account_deleted_success"), "success", 3000);
+        await db.collection('players').doc(currentUser.uid).delete(); // Delete user's profile document
+        await currentUser.delete(); // Delete Firebase authentication account
+        showMessageBox(getTranslation("message_box_account_deleted_success"), "success");
         setTimeout(() => {
             window.location.href = "login.html";
-        }, 3000);
-
+        }, 2000);
     } catch (error) {
-        console.error("Error during full account deletion:", error);
-        let errorMessage = getTranslation("message_box_failed_to_delete_account");
-        if (error.message) {
-            errorMessage += `: ${error.message}`;
-        }
-        showMessageBox(errorMessage, "error", 5000);
-
+        console.error("Error deleting account:", error);
+        showMessageBox(getTranslation("message_box_failed_to_delete_account") + error.message, "error");
         if (error.code === 'auth/requires-recent-login') {
             showMessageBox(getTranslation("message_box_account_requires_recent_login"), "warning", 5000);
             setTimeout(() => {
@@ -1107,11 +970,6 @@ document.querySelectorAll('.close-button').forEach(button => {
 // Update Forgot Master Password button behavior
 forgotPasswordBtn.onclick = () => {
     showMessageBox(getTranslation("message_box_master_password_cannot_be_reset"), "info", 5000);
-};
-
-// NEW: Add functionality for the Server button
-serverBtn.onclick = () => {
-    window.open("https://support.teamobi.com/login-game-3.html", "_blank");
 };
 
 // Initial load for avatars
