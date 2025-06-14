@@ -1,61 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>NinjaBase</title>
+  <title>NinjaBase - MODs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/bootstrap.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link href="css/mods.css" rel="stylesheet"> <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/essentials.js"></script>
-  <style>
-      body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.container {
-  flex: 1;
-  padding-bottom: 50px; /* Give space for footer */
-}
-
-#footer-placeholder {
-  height: 40px;
-}
-</style>
 </head>
 <body>
-  <!-- Navbar Placeholder -->
   <div id="navbar-placeholder"></div>
 
   <div class="container">
-    <span class="label label-danger" style="display:block; width:100%; text-align:center;">
+    <span class="label label-danger">
       MODs Repository
     </span>
 
-    <!-- Search -->
-    <div class="well" style="margin-top:15px;">
+    <div class="well">
       <label for="searchInput">Search:</label>
       <input type="text" id="searchInput" class="form-control" placeholder="Type to filter MODs">
     </div>
 
-    <!-- Info -->
     <div class="alert alert-info">
       <h4 class="alert-heading">
-        Working MODs are published here. Obsolete MODs will be moved to 
-        <a href="https://nsomatrix.xyz/archives" style="color: red;">Archives</a>
+        Working MODs are published here. Obsolete MODs will be moved to
+        <a href="https://cloudkore.github.io/matrix/library.html" style="color: red;">Archives</a>
       </h4>
     </div>
 
-    <!-- MOD File List -->
-    <ul id="fileList"></ul>
+    <ul id="fileList" class="loading">
+        <li>Loading MODs... <span class="braille-spinner"></span></li>
+    </ul>
   </div>
 
-  <!-- Footer Placeholder -->
   <div id="footer-placeholder"></div>
 
-  <!-- Scripts -->
   <script src="js/bootstrap.min.js"></script>
-  <script src="js/fileList.js"></script>
-</body>
+  <script src="js/braille-spinner.js"></script> <script src="js/fileList.js"></script>      </body>
 </html>

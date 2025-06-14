@@ -1,0 +1,155 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #1a1a1a; /* Dark background */
+  color: #e0e0e0; /* Light text for contrast */
+}
+
+.container {
+  flex: 1;
+  padding-top: 20px; /* Add some padding at the top */
+  padding-bottom: 50px;
+}
+
+#footer-placeholder {
+  height: 40px;
+  background-color: #000; /* Consistent with other footers */
+}
+
+/* Specific styling for the label at the top */
+.label-danger {
+  background-color: #dc3545; /* Bootstrap danger color */
+  padding: 10px 0; /* More padding for better appearance */
+  font-size: 1.5em; /* Larger text */
+  margin-bottom: 20px; /* Space below the label */
+  border-radius: 8px; /* Slightly rounded corners */
+}
+
+/* Search bar styling */
+.well {
+  background-color: #2a2a2a; /* Darker well background */
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+}
+
+.form-control {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #555;
+  border-radius: 5px;
+}
+
+.form-control::placeholder {
+  color: #aaa;
+}
+
+/* Alert Info styling */
+.alert-info {
+  background-color: #2a2a3a; /* Darker blue for alert */
+  border: 1px solid #4a4a6a;
+  color: #add8e6; /* Light blue text */
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.alert-heading {
+  color: #fff; /* White heading */
+  margin-bottom: 10px;
+}
+
+.alert-info a {
+  color: #ff6347; /* Tomato color for archive link */
+  font-weight: bold;
+}
+
+/* MOD File List styling */
+#fileList {
+  list-style: none; /* Remove bullet points */
+  padding: 0;
+  margin-top: 20px;
+  display: grid; /* Use grid for responsive layout */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive columns */
+  gap: 15px; /* Space between grid items */
+}
+
+.mod-item {
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 8px; /* The card (li) has rounded corners */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.mod-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.mod-item a {
+  display: block; /* Make the whole card clickable */
+  color: #00ffcc; /* Cyan color for links */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1em;
+  word-wrap: break-word; /* Ensure long file names wrap */
+  outline: none; /* Crucial: Remove the default browser outline/focus ring */
+  transition: background-color 0.2s ease; /* Smooth transition for background color */
+  padding: 15px; /* Padding moved here */
+  border-radius: 8px; /* ADDED: Apply border-radius to the link as well */
+}
+
+.mod-item a:hover {
+  text-decoration: underline;
+  color: #00e6b8; /* Slightly darker cyan on hover */
+}
+
+/* Loading state styling */
+#fileList.loading {
+    min-height: 100px; /* Ensure some height during loading */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: #00ffcc;
+}
+
+/* Spinner styling */
+.braille-spinner {
+  font-family: monospace;
+  font-size: 20px;
+  color: #00ffcc; /* Adjust color to fit mods.html theme */
+  display: inline-block;
+  white-space: pre;
+  margin-left: 10px;
+  visibility: hidden; /* Hide by default */
+  width: 20px; /* Give it a fixed width to prevent shifting */
+  text-align: left;
+}
+
+/* When parent is loading, make spinner visible */
+#fileList.loading .braille-spinner {
+    visibility: visible;
+}
+
+/* Rule for individual download spinners - this makes the spinner visible when 'downloading' class is added */
+.mod-item a.downloading .braille-spinner {
+    visibility: visible;
+}
+
+/* Style for when the item is being downloaded (clicked) */
+.mod-item a.downloading {
+    background-color: #000; /* Change background to solid black */
+    box-shadow: none; /* Optional: removes any subtle shadow when active */
+}
+
+/* Optional: This provides immediate feedback as soon as the user clicks/holds the item */
+.mod-item a:active {
+    background-color: #000; /* Ensures immediate black on click/hold */
+    box-shadow: none;
+}
