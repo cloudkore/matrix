@@ -31,7 +31,7 @@ body {
 
 .emulator-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 10px #00ffcc;
+  box-shadow: 0 0 10px red;
 }
 
 .emulator-info {
