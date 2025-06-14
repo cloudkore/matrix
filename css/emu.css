@@ -71,11 +71,20 @@ body {
   color: #000;
 }
 
+./* Add this to emu.css */
 .braille-spinner {
   font-family: monospace;
   font-size: 20px;
   color: black;
-  display: inline-block;
+  display: inline-block; /* Keep it inline */
   white-space: pre;
   margin-left: 10px;
+  visibility: hidden; /* Hide by default */
+  width: 20px; /* Give it a fixed width to prevent shifting */
+  text-align: left; /* Align spinner characters */
+}
+
+/* When active, make it visible */
+.btn-download.loading .braille-spinner {
+    visibility: visible;
 }

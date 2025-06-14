@@ -19,11 +19,8 @@
     </div>
 
     <div class="row" id="emulator-list">
-      <!-- Cards will be inserted here dynamically OR statically, shown below -->
-      
       <div class="row" id="emulator-list">
 
-  <!-- CoffeeVM -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -39,7 +36,6 @@
     </div>
   </div>
 
-  <!-- Microemulator -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -55,7 +51,6 @@
     </div>
   </div>
 
-  <!-- J2ME Loader -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -71,7 +66,6 @@
     </div>
   </div>
 
-  <!-- KEmulator -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -87,7 +81,6 @@
     </div>
   </div>
 
-  <!-- PhoneME -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -103,7 +96,6 @@
 </div>
   </div>
 
-  <!-- AngelChip -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -119,7 +111,6 @@
     </div>
   </div>
 
-  <!-- JLMod -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -135,7 +126,6 @@
 </div>
   </div>
 
-  <!-- NetMite -->
   <div class="col-sm-6 mb-4">
     <div class="emulator-card">
       <div class="emulator-info">
@@ -153,48 +143,13 @@
 
 </div>
 
-      <!-- Repeat above block for each emulator -->
-      
-    </div>
+      </div>
   </div>
 
   <div id="footer-placeholder"></div>
 
   <script src="js/bootstrap.min.js"></script>
-  
-  <script>
-const brailleFrames = ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"];
-let brailleIndex = 0;
+  <script src="js/braille-spinner.js"></script>
 
-function showBrailleSpinner(span) {
-  return setInterval(() => {
-    span.textContent = brailleFrames[brailleIndex % brailleFrames.length];
-    brailleIndex++;
-  }, 100);
-}
-
-document.querySelectorAll('.btn-download').forEach(button => {
-  button.addEventListener('click', function () {
-    const spinner = this.querySelector('.braille-spinner');
-    spinner.textContent = '';
-    const interval = showBrailleSpinner(spinner);
-
-    // Wait 1.5s then download
-    setTimeout(() => {
-      clearInterval(interval);
-      spinner.textContent = ''; // Stop spinner
-
-      // Force download
-      const link = document.createElement("a");
-      link.href = this.dataset.href;
-      link.download = "";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }, 1500);
-  });
-});
-</script>
-  
 </body>
 </html>
