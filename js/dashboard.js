@@ -54,7 +54,7 @@ const pmEntryList = document.getElementById('pmEntryList');
 
 const deleteAccountConfirmModal = document.getElementById('deleteAccountConfirmModal');
 const confirmDeleteAccountBtn = document.getElementById('confirmDeleteAccountBtn');
-const cancelDeleteAccountBtn = document.getElementById('cancelDeleteAccountBtn');
+const cancelDeleteAccountBtn = document = document.getElementById('cancelDeleteAccountBtn');
 
 // Master password unlock modal (for returning users)
 const masterPasswordPromptModal = document.getElementById('masterPasswordPromptModal');
@@ -573,23 +573,30 @@ async function loadNotes() {
             snapshot.forEach(doc => {
                 const note = doc.data();
                 const decryptedContent = decryptData(note.content);
+
+                const noteDiv = document.createElement('div');
+                const timestampP = document.createElement('p');
+                // Timestamp is safe to use with innerHTML here as it's not user-controlled
+                timestampP.innerHTML = `<strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : getTranslation("saving_status")}</strong>`;
+
+                const contentP = document.createElement('p');
                 if (decryptedContent === null) {
-                    savedNotesDisplay.innerHTML += `
-                        <div>
-                            <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : getTranslation("saving_status")}</strong></p>
-                            <p style="color: red;">${getTranslation("decryption_failed_invalid_data")}</p>
-                            <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">${getTranslation("Delete")}</button>
-                        </div>
-                    `;
-                    return;
+                    contentP.style.color = 'red';
+                    contentP.textContent = getTranslation("decryption_failed_invalid_data");
+                } else {
+                    // XSS PREVENTION: Use textContent for user-provided content
+                    contentP.textContent = decryptedContent;
                 }
-                savedNotesDisplay.innerHTML += `
-                        <div>
-                            <p><strong>${note.timestamp ? new Date(note.timestamp.toDate()).toLocaleString() : getTranslation("saving_status")}</strong></p>
-                            <p>${decryptedContent}</p>
-                            <button class="delete-note-btn btn btn-danger" data-note-id="${doc.id}">${getTranslation("Delete")}</button>
-                        </div>
-                    `;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-note-btn btn btn-danger';
+                deleteButton.dataset.noteId = doc.id;
+                deleteButton.textContent = getTranslation("Delete");
+
+                noteDiv.appendChild(timestampP);
+                noteDiv.appendChild(contentP);
+                noteDiv.appendChild(deleteButton);
+                savedNotesDisplay.appendChild(noteDiv);
             });
             document.querySelectorAll('.delete-note-btn').forEach(button => {
                 button.onclick = async (event) => {
@@ -673,25 +680,46 @@ async function loadPasswords() {
             snapshot.forEach(doc => {
                 const entry = doc.data();
                 const decryptedContent = decryptData(entry.password);
+
+                const entryDiv = document.createElement('div');
+                const serviceP = document.createElement('p');
+                serviceP.innerHTML = `<strong>${getTranslation("service_label")}:</strong> `;
+                const serviceNameSpan = document.createElement('span');
+                // XSS PREVENTION: Use textContent for user-provided serviceName
+                serviceNameSpan.textContent = entry.serviceName;
+                serviceP.appendChild(serviceNameSpan);
+
+                const usernameP = document.createElement('p');
+                usernameP.innerHTML = `<strong>${getTranslation("username_label")}:</strong> `;
+                const usernameSpan = document.createElement('span');
+                // XSS PREVENTION: Use textContent for user-provided username
+                usernameSpan.textContent = entry.username;
+                usernameP.appendChild(usernameSpan);
+
+                const passwordP = document.createElement('p');
+                passwordP.innerHTML = `<strong>${getTranslation("password_label")}:</strong> `;
+                const decryptedPasswordSpan = document.createElement('span');
+                decryptedPasswordSpan.className = 'decrypted-password';
+
                 if (decryptedContent === null) {
-                    pmEntryList.innerHTML += `
-                        <div>
-                            <p><strong>${getTranslation("service_label")}:</strong> ${entry.serviceName}</p>
-                            <p><strong>${getTranslation("username_label")}:</strong> ${entry.username}</p>
-                            <p style="color: red;"><strong>${getTranslation("password_label")}:</strong> ${getTranslation("decryption_failed_invalid_data")}</p>
-                            <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">${getTranslation("Delete")}</button>
-                        </div>
-                    `;
-                    return;
+                    decryptedPasswordSpan.style.color = 'red';
+                    decryptedPasswordSpan.textContent = getTranslation("decryption_failed_invalid_data");
+                } else {
+                    // XSS PREVENTION: Use textContent for decrypted password
+                    decryptedPasswordSpan.textContent = decryptedContent;
                 }
-                pmEntryList.innerHTML += `
-                        <div>
-                            <p><strong>${getTranslation("service_label")}:</strong> ${entry.serviceName}</p>
-                            <p><strong>${getTranslation("username_label")}:</strong> ${entry.username}</p>
-                            <p><strong>${getTranslation("password_label")}:</strong> <span class="decrypted-password">${decryptedContent}</span></p>
-                            <button class="delete-pm-btn btn btn-danger" data-entry-id="${doc.id}">${getTranslation("Delete")}</button>
-                        </div>
-                    `;
+                passwordP.appendChild(decryptedPasswordSpan);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-pm-btn btn btn-danger';
+                deleteButton.dataset.entryId = doc.id;
+                deleteButton.textContent = getTranslation("Delete");
+
+                entryDiv.appendChild(serviceP);
+                entryDiv.appendChild(usernameP);
+                entryDiv.appendChild(passwordP);
+                entryDiv.appendChild(deleteButton);
+                pmEntryList.appendChild(entryDiv);
             });
             document.querySelectorAll('.delete-pm-btn').forEach(button => {
                 button.onclick = async (event) => {

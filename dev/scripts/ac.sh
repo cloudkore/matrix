@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nohup java -jar /home/$USER/emu/AngelChipEmulator.jar &
+java -jar /home/admin/EMU/AngelChipEmulator.jar
