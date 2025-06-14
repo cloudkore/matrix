@@ -100,6 +100,28 @@ body {
     outline: none;
 }
 
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-container input {
+    padding-right: 50px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.2em;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent; /* Remove black box on touch */
+}
+
+
 .login .inputBx button {
     width: 100%;
     padding: 12px 20px;
@@ -137,7 +159,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    margin-top: 10px; /* Add space above links */
+    margin-top: 10px;
 }
 
 .login .links a {

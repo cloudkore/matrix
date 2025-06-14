@@ -18,6 +18,24 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const forgotPasswordLink = document.querySelector(".login .links a[href='#']");
 
+const togglePassword = document.getElementById("togglePassword");
+
+if (togglePassword) {
+    togglePassword.addEventListener("click", () => {
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+
+        const eyeIcon = togglePassword.querySelector('i');
+        if (type === "password") {
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        } else {
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        }
+    });
+}
+
 // --- Utility Functions (for messages and spinners) ---
 function showMessageBox(message, type = 'info', duration = 3000) {
     let messageBox = document.getElementById('customMessageBox');

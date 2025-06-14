@@ -6,13 +6,14 @@
     <title>NinjaBase Login</title>
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/aes.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/lib-typedarrays.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/pbkdf2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/aes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/lib-typedarrays.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/pbkdf2.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -31,8 +32,11 @@
             <div class="inputBx">
                 <input type="email" id="email" placeholder="Email">
             </div>
-            <div class="inputBx">
+            <div class="inputBx password-input-container">
                 <input type="password" id="password" placeholder="Password">
+                <span class="toggle-password" id="togglePassword">
+                    <i class="fa fa-eye"></i>
+                </span>
             </div>
             <div class="inputBx">
                 <button id="loginBtn" type="submit">Sign in</button>
