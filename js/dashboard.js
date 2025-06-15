@@ -74,6 +74,17 @@ const deleteFileConfirmModal = document.getElementById('deleteFileConfirmModal')
 const confirmDeleteFileBtn = document.getElementById('confirmDeleteFileBtn');
 const cancelDeleteFileBtn = document.getElementById('cancelDeleteFileBtn');
 
+// NEW: Note Deletion Confirmation Modal DOM elements
+const deleteNoteConfirmModal = document.getElementById('deleteNoteConfirmModal');
+const confirmDeleteNoteBtn = document.getElementById('confirmDeleteNoteBtn');
+const cancelDeleteNoteBtn = document.getElementById('cancelDeleteNoteBtn');
+
+// NEW: Password Manager Entry Deletion Confirmation Modal DOM elements
+const deletePmEntryConfirmModal = document.getElementById('deletePmEntryConfirmModal');
+const confirmDeletePmEntryBtn = document.getElementById('confirmDeletePmEntryBtn');
+const cancelDeletePmEntryBtn = document.getElementById('cancelDeletePmEntryBtn');
+
+
 // Progress Bar DOM elements (will still be displayed but percentage might be less accurate for Edge Functions)
 const fileUploadProgressBarContainer = document.getElementById('fileUploadProgressBarContainer');
 const fileUploadProgressBar = document.getElementById('fileUploadProgressBar');
@@ -88,6 +99,8 @@ let allAvatars = [];
 let currentUser = null;
 let currentEncryptionKey = null; // This will hold the derived encryption key for the session
 let fileToDeleteName = null; // To store the name of the file to be deleted
+let noteToDeleteId = null; // NEW: To store the ID of the note to be deleted
+let pmEntryToDeleteId = null; // NEW: To store the ID of the password manager entry to be deleted
 
 
 // --- Internationalization Variables and Functions ---
@@ -557,6 +570,22 @@ saveNoteBtn.onclick = async () => {
     }
 };
 
+// NEW: Function to perform note deletion
+async function performNoteDeletion(noteId) {
+    if (!currentUser) {
+        showMessageBox(getTranslation("message_box_please_login_delete_notes"), "error");
+        return;
+    }
+    showMessageBox(getTranslation("message_box_deleting_note"), 'info', 1500);
+    try {
+        await db.collection('players').doc(currentUser.uid).collection('notes').doc(noteId).delete();
+        showMessageBox(getTranslation("message_box_note_deleted_success"), "success");
+    } catch (error) {
+        console.error("Error deleting note:", error);
+        showMessageBox(getTranslation("message_box_failed_to_delete_note") + error.message, "error");
+    }
+}
+
 async function loadNotes() {
     if (!currentUser || !currentEncryptionKey) {
         savedNotesDisplay.innerHTML = `<p style="text-align: center; color: #94a3b8;">${getTranslation("unlock_dashboard_to_view_notes")}</p>`;
@@ -600,15 +629,8 @@ async function loadNotes() {
             });
             document.querySelectorAll('.delete-note-btn').forEach(button => {
                 button.onclick = async (event) => {
-                    showMessageBox(getTranslation("message_box_deleting_note"), 'info', 1500);
-                    const noteId = event.target.dataset.noteId;
-                    try {
-                        await db.collection('players').doc(currentUser.uid).collection('notes').doc(noteId).delete();
-                        showMessageBox(getTranslation("message_box_note_deleted_success"), "success");
-                    } catch (error) {
-                        console.error("Error deleting note:", error);
-                        showMessageBox(getTranslation("message_box_failed_to_delete_note") + error.message, "error");
-                    }
+                    noteToDeleteId = event.target.dataset.noteId; // Store note ID for confirmation
+                    openModal(deleteNoteConfirmModal); // Open confirmation modal
                 };
             });
         }, (error) => {
@@ -616,6 +638,23 @@ async function loadNotes() {
             showMessageBox(getTranslation("failed_to_load_notes_error") + error.message, "error");
         });
 }
+
+// Handle confirmation for note deletion
+confirmDeleteNoteBtn.onclick = async () => {
+    closeModal(deleteNoteConfirmModal);
+    if (noteToDeleteId) {
+        await performNoteDeletion(noteToDeleteId);
+        noteToDeleteId = null; // Clear the stored note ID
+    }
+};
+
+// Handle cancellation for note deletion
+cancelDeleteNoteBtn.onclick = () => {
+    closeModal(deleteNoteConfirmModal);
+    showMessageBox(getTranslation("cancelled!"), "info", 2000); // Specific message for note deletion cancellation
+    noteToDeleteId = null; // Clear the stored note ID if the user cancels
+};
+
 
 // Listener for Password Manager Modal
 passwordManagerBtn.onclick = () => {
@@ -663,6 +702,22 @@ savePmEntryBtn.onclick = async () => {
         showMessageBox(getTranslation("message_box_failed_to_add_password") + error.message, "error");
     }
 };
+
+// NEW: Function to perform password manager entry deletion
+async function performPmEntryDeletion(entryId) {
+    if (!currentUser) {
+        showMessageBox(getTranslation("message_box_please_login_delete_pm_entries"), "error");
+        return;
+    }
+    showMessageBox(getTranslation("message_box_deleting_pm_entry"), 'info', 1500);
+    try {
+        await db.collection('players').doc(currentUser.uid).collection('passwords').doc(entryId).delete();
+        showMessageBox(getTranslation("message_box_pm_entry_deleted_success"), "success");
+    } catch (error) {
+        console.error("Error deleting password entry:", error);
+        showMessageBox(getTranslation("message_box_failed_to_delete_pm_entry") + error.message, "error");
+    }
+}
 
 async function loadPasswords() {
     if (!currentUser || !currentEncryptionKey) {
@@ -723,15 +778,8 @@ async function loadPasswords() {
             });
             document.querySelectorAll('.delete-pm-btn').forEach(button => {
                 button.onclick = async (event) => {
-                    showMessageBox(getTranslation("message_box_deleting_pm_entry"), 'info', 1500);
-                    const entryId = event.target.dataset.entryId;
-                    try {
-                        await db.collection('players').doc(currentUser.uid).collection('passwords').doc(entryId).delete();
-                        showMessageBox(getTranslation("message_box_pm_entry_deleted_success"), "success");
-                    } catch (error) {
-                        console.error("Error deleting password entry:", error);
-                        showMessageBox(getTranslation("message_box_failed_to_delete_pm_entry") + error.message, "error");
-                    }
+                    pmEntryToDeleteId = event.target.dataset.entryId; // Store entry ID for confirmation
+                    openModal(deletePmEntryConfirmModal); // Open confirmation modal
                 };
             });
         }, (error) => {
@@ -739,6 +787,22 @@ async function loadPasswords() {
             showMessageBox(getTranslation("failed_to_load_passwords_error") + error.message, "error");
         });
 }
+
+// Handle confirmation for password manager entry deletion
+confirmDeletePmEntryBtn.onclick = async () => {
+    closeModal(deletePmEntryConfirmModal);
+    if (pmEntryToDeleteId) {
+        await performPmEntryDeletion(pmEntryToDeleteId);
+        pmEntryToDeleteId = null; // Clear the stored entry ID
+    }
+};
+
+// Handle cancellation for password manager entry deletion
+cancelDeletePmEntryBtn.onclick = () => {
+    closeModal(deletePmEntryConfirmModal);
+    showMessageBox(getTranslation("cancelled!"), "info", 2000); // Specific message for PM entry deletion cancellation
+    pmEntryToDeleteId = null; // Clear the stored entry ID if the user cancels
+};
 
 // --- Ephemeral Files Functionality ---
 ephemeralFilesBtn.onclick = () => {

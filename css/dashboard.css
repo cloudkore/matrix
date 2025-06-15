@@ -271,13 +271,19 @@ h2, h3 {
 
 /* NEW RULE: Ensure button text is white within delete confirmation modals */
 #deleteFileConfirmModal .modal-content button,
-#deleteAccountConfirmModal .modal-content button {
+#deleteAccountConfirmModal .modal-content button,
+#deleteNoteConfirmModal .modal-content button, /* NEW */
+#deletePmEntryConfirmModal .modal-content button /* NEW */
+{
     color: white;
 }
 
 /* NEW RULE: Ensure paragraph text is white within delete confirmation modals */
 #deleteFileConfirmModal .modal-content p,
-#deleteAccountConfirmModal .modal-content p {
+#deleteAccountConfirmModal .modal-content p,
+#deleteNoteConfirmModal .modal-content p, /* NEW */
+#deletePmEntryConfirmModal .modal-content p /* NEW */
+{
     color: white;
 }
 
@@ -606,4 +612,3 @@ h2, h3 {
 .confirm-file-deletion-message select option {
     color : white;
 }
-
