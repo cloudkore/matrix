@@ -3,24 +3,23 @@
 <head>
     <title>NinjaBase</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="css/boot.css">
     <link rel="stylesheet" href="css/home.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Include essentials.js file -->
     <script src="js/sound.js"></script>
     <script src="js/essentials.js"></script>
     <script src="js/ut.js"></script>
 <body>
 
-
     <div id="bootScreen">
-  <img src="assets/ninjax1.gif" class="boot-gif">
-  <div id="progressText">Initializing...</div>
-  <div class="progress-bar-outer">
-    <div id="progressBar" class="progress-bar-inner"></div>
-  </div>
-</div>
+        <div id="bootLog"></div>
+
+        <div id="bootLoaderArea">
+            <span id="bootLoaderText">Initializing modules</span><span id="loadingAnimation"></span>
+        </div>
+        </div>
 
 
 <div id="navbar-placeholder"></div>
@@ -44,10 +43,8 @@
              </center>
 
 <script src="js/ajaxuptime.js"></script>
-    <!-- Placeholder for the footer -->
     <div id="footer-placeholder"></div>
 
-    <!-- Include Bootstrap JS if needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/boot.js"></script>
 
