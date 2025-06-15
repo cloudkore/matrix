@@ -107,7 +107,7 @@ window.addEventListener("DOMContentLoaded", () => {
         bootLoaderText.innerText = `[${percent}%] ${currentStatusText}`;
         loadingAnimation.textContent = spinner;
     } else {
-        bootLoaderText.innerText = `[100%] Boot sequence complete. Starting application.`;
+        bootLoaderText.innerText = `[100%] Processing WebApp`;
         loadingAnimation.textContent = ''; // Clear spinner
         bootLoaderText.classList.add('blinker'); // Add blinker for final text
         // Ensure final color is red when 100% is reached
