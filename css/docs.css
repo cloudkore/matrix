@@ -1,0 +1,28 @@
+/* This is your custom CSS file */
+
+/* Styles for the main content wrapper */
+.main-content-wrapper {
+    padding: 20px;
+    width: calc(100% - 40px); /* Adjusts for 20px padding on each side */
+    max-width: 800px;
+    margin: 0 auto;
+    color: #EEE; /* Keeps text color light for dark background */
+    background-color: #222; /* Dark background */
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 80px;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+}
+
+/* Optional: Responsive adjustments for very small screens if needed */
+@media (max-width: 480px) {
+    .main-content-wrapper {
+        padding: 10px; /* Reduce padding on very small screens */
+        width: calc(100% - 20px); /* Adjust width for new padding (10px on each side) */
+    }
+}
+
+/* New rule to make headings red */
+h2, h3, h4 {
+    color: red;
+}
