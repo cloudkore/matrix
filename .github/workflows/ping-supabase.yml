@@ -12,4 +12,4 @@ jobs:
       - name: Curl keepalive function with JWT auth
         run: |
           curl -s https://pshuqmmkxmwgmvhuaujn.functions.supabase.co/keepalive \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
