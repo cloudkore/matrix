@@ -1,0 +1,13 @@
+name: Keep Supabase Awake
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # Every 2 hours (adjust if needed)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl keepalive function
+        run: curl -s https://pshuqmmkxmwgmvhuaujn.functions.supabase.co/keepalive
