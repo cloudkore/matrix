@@ -130,4 +130,69 @@
 @keyframes blink-caret {
   from, to { border-right-color: transparent; }
   50% { border-right-color: #c0c0c0; }
+}er animation */
+  min-width: 20px; /* Ensure space for the loader characters */
+}
+
+/* Optional: Subtle blinker for cursor-like effect on the last line */
+.blinker {
+  animation: blink-caret 0.75s step-end infinite;
+  border-right: 2px solid transparent; /* Mimic a cursor */
+}
+
+@keyframes blink-caret {
+  from, to { border-right-color: transparent; }
+  50% { border-right-color: #c0c0c0; }
+}/* Keep text on one line if possible */
+}
+
+#loadingAnimation {
+  font-size: 15px;
+  color: #c0c0c0;
+  white-space: pre; /* Crucial for character animation */
+  min-width: 20px; /* Ensure space for the loader characters */
+}
+
+/* Optional: Subtle blinker for cursor-like effect on the last line */
+.blinker {
+  animation: blink-caret 0.75s step-end infinite;
+  border-right: 2px solid transparent; /* Mimic a cursor */
+}
+
+@keyframes blink-caret {
+  from, to { border-right-color: transparent; }
+  50% { border-right-color: #c0c0c0; }
+}-spacing: 0.5px;
+  text-align: left;
+  margin-right: 10px; /* Space between text and loader animation */
+  white-space: pre; /* Keep text on one line if possible */
+  font-family: 'IBM Plex Mono', monospace; /* Ensure font is consistent */
+}
+
+#loadingAnimation {
+  font-size: 15px;
+  color: #c0c0c0;
+  white-space: pre; /* Crucial for character animation */
+  min-width: 20px; /* Ensure space for the loader characters */
+  font-family: 'IBM Plex Mono', monospace; /* Ensure font is consistent */
+}
+
+/* Optional: Subtle blinker for cursor-like effect on the last line */
+.blinker {
+  animation: blink-caret 0.75s step-end infinite;
+  border-right: 2px solid transparent; /* Mimic a cursor */
+}
+
+@keyframes blink-caret {
+  from, to { border-right-color: transparent; }
+  50% { border-right-color: #c0c0c0; }
+}t {
+  from, to { border-right-color: transparent; }
+  50% { border-right-color: #c0c0c0; }
+}t; /* Mimic a cursor */
+}
+
+@keyframes blink-caret {
+  from, to { border-right-color: transparent; }
+  50% { border-right-color: #c0c0c0; }
 }

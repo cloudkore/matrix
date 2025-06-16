@@ -13,9 +13,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const messages = [
     "Matrix OS BOOT INITIATED",
     "C-Ninja Corp. 2019",
-    "Build: v7.3.1-alpha",
+    "Build: v0.2.1-alpha",
     "",
-    "Verifying system integrity...",
+    "Verifying system integrity",
     "Kernel & Services: OK",
     "",
     "Auth Protocols Init:",
@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
     "  Data sync running",
     "",
     "Distributed services:",
-    "  AWS Cloud Established [OK]",
+    "  AWS Cloud Established",
     "  Edge Functions Active",
     "  TCP/IP configured",
     "",
@@ -39,13 +39,8 @@ window.addEventListener("DOMContentLoaded", () => {
     "  Mods module init",
     "",
     "GitHub Repo Access:",
-    "  Fetching WebApp from GitHub",
-    "  Repo sync complete",
-    "",
-    "Ninja School assets:",
-    "  Maps data loading",
-    "  Characters & Animations decrypting",
-    "  Game assets optimized"
+    "  Fetching WebApp core",
+    "  Repo sync complete"
 ];
 
   const spinnerFrames = ['⣾', '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽'];
