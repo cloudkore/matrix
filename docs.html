@@ -14,15 +14,38 @@
     <div id="navbar-placeholder"></div>
 
     <div class="main-content-wrapper">
-        <p>Welcome to the Matrix™ Dashboard, your personal, secure space built with privacy and convenience in mind. Inspired by the tactical world of Ninja School Online, our dashboard provides essential tools to manage your digital life with robust security measures.</p>
+        <p>Welcome to the Matrix™ WEB, your personal, secure space built with privacy, convenience and longevity in mind. Encoded by the tactical world of Ninja School Online, our dashboard provides essential tools to manage your digital space with robust security measures.</p>
+
+        <h3>Accessibility and Cross-Platform Compatibility</h3>
+<p>
+The emulators integrated into our web application are designed with cross-platform compatibility in mind. We provide support for a range of platforms to ensure users can enjoy modified J2ME MIDlets with ease.
+</p>
+<ul>
+    <li><strong>Desktop:</strong> Emulators are available for both <strong>Windows</strong> and <strong>Linux</strong> systems. Some operating systems may require a pre-installed Java environment for the emulators to function correctly.</li>
+    <li><strong>Mobile:</strong> Compatible with <strong>Android</strong> devices, allowing users to run J2ME MIDlets directly from their smartphones or tablets.</li>
+    <li><strong>Legacy Devices:</strong> J2ME-based phones and older devices can also run many of the available MIDlets, depending on hardware and software limitations.</li>
+</ul>
+
+
+        <h3>Modified J2ME MIDlets</h3>
+<p>
+MODs section features modified J2ME MIDlets specifically for the game <em>Ninja School</em>, with a focus on the Hirosaki server (formerly World). It offers a collection of game mods that are compatible with various cross-platform J2ME emulators.
+</p>
+<p>
+The mods available here are sourced both from in-house development and third-party contributors. Since some modifications are user-uploaded, users are advised to use them at their own discretion.
+</p>
+<p>
+All mods are hosted on GitHub repositories to ensure redundancy and availability, enabling a smoother and more enjoyable in-game grinding experience.
+</p>
+
 
         <h3>What is the Matrix™ Dashboard?</h3>
-        <p>The Matrix™ Dashboard is the central hub of your Matrix™ web application. It's designed to give you easy access to critical personal tools like:</p>
+        <p>The Matrix™ Dashboard is the central hub of your web application. It's designed to give you easy access to critical personal tools like:</p>
         <ul>
             <li><strong>Secure Notes:</strong> Store important thoughts, reminders, or game strategies.</li>
             <li><strong>Password Manager:</strong> Safely keep track of your login credentials for various services.</li>
-            <li><strong>Ephemeral Files Storage:</strong> Upload and manage temporary files securely.</li>
-            <li><strong>Profile Management:</strong> Customize your in-app identity.</li>
+            <li><strong>Storage Disk:</strong> Upload and manage small files securely.</li>
+            <li><strong>Profile Management:</strong> Customize your in-app character.</li>
         </ul>
 
         <h3>Your Data, Your Security: Encryption Explained</h3>
@@ -32,9 +55,9 @@
             <li><strong>Master Password:</strong> When you first set up your account or access sensitive features, you'll be prompted to create or enter a "Master Password." This password is never stored on our servers.</li>
             <li><strong>Key Derivation:</strong> Your Master Password is used to derive a unique <strong>encryption key</strong> on your device using a strong, industry-standard algorithm called <strong>PBKDF2 (Password-Based Key Derivation Function 2)</strong> with 200,000 iterations and SHA256 hashing. This process ensures that even if our databases were compromised, your Master Password cannot be reverse-engineered, and your data remains unreadable.</li>
             <li><strong>Session-Based Key:</strong> For your convenience and continued security, this derived encryption key is stored temporarily in your browser's <code>sessionStorage</code>. This allows you to access your encrypted data throughout your current session without re-entering your Master Password for every action. However, once you log out or close your browser, this session key is automatically cleared.</li>
-            <li><strong>No Server Access:</strong> Because your data is encrypted on your device using a key *only you know*, <strong>no one else, not even the Matrix™ administrators or developers, can access or read your sensitive notes, passwords, or files.</strong> This provides a strong guarantee of privacy and confidentiality.</li>
+            <li><strong>No Server Access:</strong> Because your data is encrypted on your device using a key *only you know*, <strong>no one else, not even the Matrix™ administrators , can access or read your sensitive notes, passwords, or files.</strong> This provides a strong guarantee of confidentiality.</li>
         </ul>
-        <p><strong>Important:</strong> Due to this robust encryption method, if you forget your Master Password, <strong>there is no way to reset it or recover your encrypted data.</strong> We recommend storing your Master Password in a safe, offline location.</p>
+        <p><strong>Important:</strong> Due to this robust encryption method, if you forget your Master Password, <strong>there is no way to reset it or recover due to our encryption method , your only option is to delete the existing account and create a new one!</strong> We recommend storing your Master Password in a safe, offline location.</p>
 
         <h3>Dashboard Features</h3>
 
@@ -64,10 +87,10 @@
             <li><strong>Deleting an Entry:</strong> Use the "Delete" button next to an entry to remove it. A confirmation prompt will appear before permanent deletion.</li>
         </ul>
 
-        <h4>4. Ephemeral Files Storage</h4>
-        <p>Upload and manage files that you need to store temporarily and securely.</p>
+        <h4>4. Storage Disk</h4>
+        <p>Upload and manage files that you need to store securely.</p>
         <ul>
-            <li><strong>Accessing Files:</strong> Click the "Ephemeral Files" button. You will be prompted for your Master Password if your encryption key is not available.</li>
+            <li><strong>Accessing Files:</strong> Click the "Storage" button. You will be prompted for your Master Password if your encryption key is not available.</li>
             <li><strong>Uploading Files:</strong>
                 <ul>
                     <li>Click "Choose File" and select the file from your device.</li>
@@ -99,6 +122,7 @@
                             <li>All your notes and password manager entries from our database.</li>
                             <li>Your user profile document.</li>
                             <li>Your Firebase authentication account.</li>
+                            <li>Your Supabase storage account.</li>
                         </ul>
                     </li>
                     <li><strong>Recent Login Requirement:</strong> For security, Firebase may require you to have recently logged in to delete your account. If this is the case, you'll be informed and may be logged out to re-authenticate before attempting deletion again.</li>
@@ -106,20 +130,12 @@
             </li>
         </ul>
 
-        <h3>Underlying Technologies</h3>
+        <h3>Backend Processing</h3>
         <p>The Matrix™ application leverages powerful and secure cloud technologies to provide its services:</p>
         <ul>
             <li><strong>Google Firebase:</strong> Used for user authentication (managing your login and user sessions) and for storing your encrypted notes and password manager entries in its Firestore database. Your user profile data (username, avatar, encryption salt, and master password hash) is also stored here.</li>
-            <li><strong>Supabase:</strong> Utilized for secure and ephemeral file storage. File uploads, listings, and deletions are handled via Supabase Edge Functions for efficient and secure operations.</li>
+            <li><strong>Supabase:</strong> Utilized for secure and file storage. File uploads, listings, and deletions are handled via Supabase Edge Functions for efficient and secure operations.</li>
             <li><strong>Cryptographic Libraries (CryptoJS):</strong> Powers the robust encryption and decryption of your sensitive data using AES encryption and PBKDF2 for key derivation.</li>
-        </ul>
-
-        <h3>Accessibility and Cross-Platform Compatibility</h3>
-        <p>Matrix™ is designed as a web application, making it accessible across a variety of platforms:</p>
-        <ul>
-            <li><strong>Desktop:</strong> You can access the Matrix™ Dashboard seamlessly on <strong>Windows</strong> and <strong>Linux</strong> desktop operating systems using any modern web browser.</li>
-            <li><strong>Mobile:</strong> The web application is designed to be responsive, providing a good user experience on mobile devices, including <strong>Android</strong> smartphones and tablets.</li>
-            <li><strong>Legacy Devices (J2ME Emulators):</strong> While not officially supported for optimal performance or full feature compatibility, the web-based nature of Matrix™ means it *may* be accessible to varying degrees on J2ME (Java Platform, Micro Edition) emulators, although specific functionality and rendering cannot be guaranteed due to the limitations of these older environments. For the best experience, we recommend modern browsers on up-to-date operating systems.</li>
         </ul>
     </div>
     <div id="footer-placeholder"></div>
