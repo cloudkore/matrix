@@ -196,6 +196,14 @@ h2, h3 {
   color: #60a5fa; /* Blue for main dashboard text */
 }
 
+.last-login-display {
+    text-align: center;
+    color: #94a3b8; /* Lighter grey color */
+    font-size: 0.9em;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
 .user-avatar-display {
   width: 100px;
   height: 100px;

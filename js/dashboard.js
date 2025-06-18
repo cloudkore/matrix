@@ -347,8 +347,9 @@ async function setupDashboard(user) {
         const hasAvatar = !!data.avatar;
         const hasSalt = !!data.salt; // Check if salt exists (implies master password set)
         const hasMasterPasswordHash = !!data.masterPasswordHash;
+        const lastLoginTimestamp = data.lastLogin; // Get existing last login timestamp
 
-        console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}`);
+        console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}, lastLogin: ${lastLoginTimestamp}`);
 
         // Try to restore encryption key from session storage
         const storedKeyHex = sessionStorage.getItem('currentEncryptionKeyHex');
@@ -398,6 +399,20 @@ async function setupDashboard(user) {
         setupSection.style.display = 'none';
         mainDashboard.style.display = 'block';
         closeModal(masterPasswordPromptModal); // Ensure modal is closed if it was open for some reason
+
+        // Update and display last login time
+        const lastLoginDisplay = document.getElementById('lastLoginDisplay');
+        if (lastLoginDisplay) {
+            if (lastLoginTimestamp) {
+                const date = lastLoginTimestamp.toDate(); // Convert Firestore Timestamp to Date object
+                lastLoginDisplay.innerHTML = `${getTranslation("last_login_label")}: ${date.toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}`;
+            } else {
+                lastLoginDisplay.innerHTML = `${getTranslation("last_login_label")}: ${getTranslation("never")}`; // Or a placeholder like "Never"
+            }
+            // Update last login timestamp in Firestore
+            await playerDocRef.set({ lastLogin: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+        }
+
 
         // Apply translations once the dashboard is shown
         applyTranslations();

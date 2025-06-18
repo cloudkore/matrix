@@ -16,6 +16,8 @@
     "delete_account_button": "Delete Account",
     "forgot_master_password_button": "Forgot Master Password?",
     "welcome_message": "Welcome, ",
+    "last_login_label": "Last Login",
+    "never": "Never",
     "notes_modal_title": "Notes",
     "note_input_placeholder": "Enter your note here...",
     "save_note_button": "Save Note",
