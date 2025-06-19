@@ -1,0 +1,101 @@
+        /* Category Tabs - More defined and modern */
+        .category-tabs {
+            margin-bottom: 30px; /* Increased margin */
+            border-bottom: 2px solid #e9ecef; /* Thicker, lighter border for the tab row */
+        }
+        .nav-link {
+            color: #6c757d; /* Muted tab text color */
+            border: 1px solid transparent; /* Transparent border for non-active tabs */
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            margin-right: 5px; /* Small space between tabs */
+            transition: all 0.3s ease; /* Smooth transition for hover and active states */
+            padding: 10px 20px; /* More padding for larger clickable area */
+            font-weight: 500; /* Slightly bolder text */
+        }
+        .nav-link:hover {
+            color: #0056b3; /* Darker blue on hover */
+            border-color: #e9ecef #e9ecef #dee2e6; /* Subtle border change on hover */
+        }
+        .nav-link.active {
+            color: #007bff; /* Primary blue for active tab text */
+            background-color: #ffffff; /* White background for active tab */
+            border-color: #007bff #007bff #ffffff; /* Blue border on top/sides, white on bottom */
+            font-weight: 600; /* Bolder active tab text */
+            box-shadow: 0 -2px 5px rgba(0,0,0,.05); /* Subtle shadow for active tab */
+        }
+
+        /* Image Thumbnails - Enhanced visual appeal */
+        .img-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid #e0e0e0; /* Lighter, more subtle border */
+            border-radius: 8px; /* Slightly rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transitions */
+        }
+        .img-thumbnail:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+        }
+
+        /* Style for the infinite scroll loading indicator (kept from your file) */
+        #infinite-scroll-loading {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            color: #6c757d; /* Muted color */
+            display: flex; /* Use flexbox to center content */
+            flex-direction: column; /* Stack children vertically */
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            min-height: 80px; /* Give it some minimum height */
+        }
+
+        /* Modal Enhancements */
+        .modal-content {
+            border-radius: 10px; /* Rounded corners for the modal */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for the modal */
+        }
+        .modal-header {
+            border-bottom: 1px solid #dee2e6; /* Clean border */
+            padding: 1rem 1.5rem; /* More consistent padding */
+        }
+        .modal-title {
+            font-weight: 600; /* Bolder modal title */
+            color: #343a40;
+        }
+        .modal-body {
+            padding: 1.5rem; /* More padding inside the modal body */
+        }
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Remove extra space below image */
+            margin: auto; /* Center image in modal */
+            border-radius: 5px; /* Slightly rounded corners for modal image */
+        }
+        .modal-footer {
+            border-top: 1px solid #dee2e6; /* Clean border */
+            padding: 1rem 1.5rem; /* More consistent padding */
+        }
+
+        /* Initial Loading / Error Messages - More polished */
+        #loading-indicator,
+        #error-message,
+        #no-images-message {
+            padding: 40px 20px; /* More vertical padding for prominence */
+            font-size: 1.1em;
+            color: #6c757d;
+            border: 1px solid #e9ecef; /* A subtle solid border for these messages */
+            border-radius: 5px;
+            margin-top: 20px;
+            background-color: #ffffff; /* White background */
+            box-shadow: 0 2px 4px rgba(0,0,0,.05); /* Subtle shadow */
+        }
+        #error-message p {
+            color: #dc3545; /* Bootstrap danger red */
+            font-weight: 600;
+        }

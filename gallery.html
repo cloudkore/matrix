@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+     <link href="css/gallery.css" rel="stylesheet" media="screen">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container" style="margin-top: 20px;">
+        <h2 class="text-center">My Image Gallery</h2>
+        <hr>
+
+        <ul class="nav nav-tabs category-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="all-tab" data-category-filter="all" href="#">All Images</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="android-tab" data-category-filter="open-images" href="#">Android</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="j2me-tab" data-category-filter="java-images" href="#">J2ME</a>
+            </li>
+        </ul>
+
+        <div id="image-gallery" class="row">
+            <div class="col-xs-12 text-center" id="loading-indicator">
+                <p>Loading images...</p>
+            </div>
+            <div class="col-xs-12 text-center" id="error-message" style="display: none;">
+                <p class="text-danger">Failed to load images. Please check your connection or Supabase configuration.</p>
+            </div>
+            <div class="col-xs-12 text-center" id="no-images-message" style="display: none;">
+                <p>No images found in this category.</p>
+            </div>
+        </div>
+
+        <div id="infinite-scroll-loading" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p class="mt-2">Loading more images...</p>
+        </div>
+
+        <div class="text-center mt-4">
+            </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" class="img-fluid" id="modalImage" alt="Full size image">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/sound.js"></script>
+    <script src="js/essentials.js"></script>
+    <script src="js/supabase-gallery.js"></script>
+
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
