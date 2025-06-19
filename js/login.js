@@ -139,7 +139,7 @@ async function handleLogin() {
         if (playerData && playerData.salt && playerData.masterPasswordHash) {
             const derivedEncryptionKey = await deriveKey(password, playerData.salt);
             // Store the derived key in sessionStorage (dashboard.js will not rely on it for this version)
-            sessionStorage.setItem('currentEncryptionKey', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
+            sessionStorage.setItem('currentEncryptionKeyHex', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
         } else {
             console.warn("User data (salt/masterPasswordHash) missing for login. Encryption features might require manual unlock.");
         }
@@ -206,7 +206,7 @@ signupBtn.onclick = async () => {
 
         // Store the derived key in sessionStorage (dashboard.js will not rely on it for this version)
         const derivedEncryptionKey = await deriveKey(password, userSalt);
-        sessionStorage.setItem('currentEncryptionKey', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
+        sessionStorage.setItem('currentEncryptionKeyHex', derivedEncryptionKey.toString(CryptoJS.enc.Hex));
 
         showMessageBox("Account created successfully! Redirecting to dashboard...", 'success');
         setTimeout(() => {

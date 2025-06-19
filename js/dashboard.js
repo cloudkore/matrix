@@ -161,10 +161,12 @@ function applyTranslations() {
         }
     });
 
-    // Handle the welcome message dynamically if it's already displayed
-    if ($('#dashboard-username').length && currentUser && currentUser.displayName) {
-        $('#main-dashboard h2.welcome-message').html(getTranslation('welcome_message') + ` <span id="dashboard-username">${currentUser.displayName}</span>!`);
-    }
+if ($('#dashboard-username').length && currentUser && currentUser.displayName) {
+    // First, set the static HTML structure
+    $('#main-dashboard h2.welcome-message').html(getTranslation('welcome_message') + ` <span id="dashboard-username"></span>!`);
+    // Then, safely insert the display name as plain text into the span
+    $('#dashboard-username').text(currentUser.displayName);
+}
 }
 
 // --- Utility Functions ---
