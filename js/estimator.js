@@ -132,7 +132,7 @@ $(document).ready(function() {
 
         // Disable button and show spinner
         calculateButton.prop('disabled', true);
-        calculateButton.html('<span class="braille-spinner-icon"></span> Calculating...'); // Replace text with spinner
+        calculateButton.html('<span class="braille-spinner-icon"></span> Calculating'); // Replace text with spinner
         levelResult.html(''); // Clear previous results
         countdownTimerElement.text(''); // Clear previous countdown
 
