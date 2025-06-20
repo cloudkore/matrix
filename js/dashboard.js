@@ -111,7 +111,7 @@ function startSessionTimer() {
         currentEncryptionKey = null;
         sessionStorage.removeItem('currentEncryptionKeyHex');
         showMessageBox(getTranslation("message_box_session_expired_re_enter_master_password"), 'warning'); // Use getTranslation here
-    }, 1 * 60 * 1000); // 5 minutes
+    }, 5 * 60 * 1000); // 5 minutes
 }
 
 document.addEventListener('mousemove', startSessionTimer);
