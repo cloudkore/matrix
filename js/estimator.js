@@ -1,16 +1,77 @@
 $(document).ready(function() {
     // Helper function to format numbers with dot as thousand separator and no decimals
     function formatNumberWithDots(number) {
+        if (isNaN(number) || number === null) return ''; // Handle non-numeric or null input
         // Ensure it's an integer by flooring
         let num = Math.floor(number);
         // Convert to string and add dots as thousand separators
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
+    // Helper function to remove dot separators for parsing
+    function unformatNumber(formattedString) {
+        if (typeof formattedString !== 'string') return ''; // Ensure it's a string
+        return formattedString.replace(/\./g, '');
+    }
+
+    // Apply input formatting to Kins per hour and Span fields
+    $('#kinsPerHour, #span').on('input', function() {
+        let input = $(this);
+        let value = input.val();
+        let cursorPosition = input[0].selectionStart;
+
+        // Step 1: Clean the input value - allow only digits
+        let cleanedValueForParsing = value.replace(/[^0-9]/g, '');
+
+        // If the cleaned value is empty, clear the input and return
+        if (cleanedValueForParsing.trim() === '') {
+            input.val('');
+            return;
+        }
+
+        // Step 2: Parse the number
+        let numberValue = parseFloat(cleanedValueForParsing);
+
+        // If the parsed value is not a valid number (e.g., user typed only non-digits)
+        if (isNaN(numberValue)) {
+            input.val(''); // Clear the input if it's completely non-numeric
+            return;
+        }
+
+        // Step 3: Format the number with dots
+        let formattedValue = formatNumberWithDots(numberValue);
+
+        // --- Cursor position adjustment logic ---
+        // Calculate the part of the original value before the cursor
+        const originalValueBeforeCursor = value.substring(0, cursorPosition);
+        // Unformat this part to get its clean numeric representation
+        const unformattedValueBeforeCursor = unformatNumber(originalValueBeforeCursor);
+        // Now format this unformatted part to see what its new length would be with dots
+        // Use parseFloat here to ensure it's treated as a number before formatting
+        const formattedValueBeforeCursor = formatNumberWithDots(parseFloat(unformattedValueBeforeCursor));
+
+        let newCursorPosition = formattedValueBeforeCursor.length;
+
+        // If the original cursor was at the very end of the input, ensure the new one is too.
+        if (cursorPosition === value.length) {
+            newCursorPosition = formattedValue.length;
+        }
+        // --- End cursor position adjustment logic ---
+
+        // Step 4: Update the input field value
+        input.val(formattedValue);
+
+        // Step 5: Set the cursor position
+        // This must be done AFTER setting the value
+        input[0].setSelectionRange(newCursorPosition, newCursorPosition);
+    });
+
     // Kins Estimator
     $('#calculateKins').on('click', function() {
-        const kinsPerHour = parseFloat($('#kinsPerHour').val());
-        const span = parseFloat($('#span').val());
+        // Unformat the input values before performing calculations
+        const kinsPerHour = parseFloat(unformatNumber($('#kinsPerHour').val()));
+        const span = parseFloat(unformatNumber($('#span').val()));
+
         const kinsResult = $('#kinsResult');
         const calculateButton = $(this); // Get a reference to the clicked button
 
@@ -91,20 +152,27 @@ $(document).ready(function() {
                 return;
             }
 
-            const experienceRequiredForNextLevel = (currentLevel + 1) * 1000;
-            const absoluteExperience = (currentExperience / 100) * experienceRequiredForNextLevel;
-            const remainingExperience = experienceRequiredForNextLevel - absoluteExperience;
+            // Define the base XP required for one complete level
+            const BASE_XP_PER_LEVEL = 1000; // Assuming 1000 XP is always required for one full level
 
-            if (experiencePerHourPercent === 0) {
+            // Calculate current experience within the current level, converted to absolute XP
+            const currentXPInCurrentLevel = (currentExperience / 100) * BASE_XP_PER_LEVEL;
+
+            // Remaining XP needed for the CURRENT level
+            const remainingXPForCurrentLevel = BASE_XP_PER_LEVEL - currentXPInCurrentLevel;
+
+            // Absolute XP gained per hour based on the percentage of BASE_XP_PER_LEVEL
+            const xpPerHourAbsolute = (experiencePerHourPercent / 100) * BASE_XP_PER_LEVEL;
+
+            if (xpPerHourAbsolute === 0) {
                 levelResult.html('<span style="color: red;">Experience per hour cannot be zero.</span>');
                 // Restore button state on error
                 calculateButton.prop('disabled', false);
                 calculateButton.text(originalButtonText);
                 return;
             }
-            const experiencePerHour = (experiencePerHourPercent / 100) * experienceRequiredForNextLevel;
 
-            const timeToNextLevelHours = remainingExperience / experiencePerHour;
+            const timeToNextLevelHours = remainingXPForCurrentLevel / xpPerHourAbsolute;
 
             if (timeToNextLevelHours < 0) {
                 levelResult.html('You have already reached or surpassed 100% for this level! Consider leveling up.');

@@ -63,7 +63,8 @@ label {
 }
 
 /* Input Field Styling */
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
     width: 100%;
     padding: 0.75rem 1rem; /* More generous padding */
     font-size: 1rem;
