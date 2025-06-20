@@ -1,4 +1,12 @@
 $(document).ready(function() {
+    // Helper function to format numbers with dot as thousand separator and no decimals
+    function formatNumberWithDots(number) {
+        // Ensure it's an integer by flooring
+        let num = Math.floor(number);
+        // Convert to string and add dots as thousand separators
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     // Kins Estimator
     $('#calculateKins').on('click', function() {
         const kinsPerHour = parseFloat($('#kinsPerHour').val());
@@ -11,7 +19,7 @@ $(document).ready(function() {
 
         // Disable button and show spinner
         calculateButton.prop('disabled', true);
-        calculateButton.html('<span class="braille-spinner-icon"></span> Calculating...'); // Replace text with spinner
+        calculateButton.html('<span class="braille-spinner-icon"></span> Calculating'); // Replace text with spinner
         kinsResult.html(''); // Clear previous results
 
         // Simulate a delay for calculation
@@ -24,17 +32,20 @@ $(document).ready(function() {
                 return;
             }
 
-            const totalYen = kinsPerHour * 24 * span;
+            // Calculate Kins for a fixed 24-hour period for the first line
+            const totalKins24Hours = kinsPerHour * 24;
+
+            // Existing calculations for other periods
             const totalKinsPerWeek = kinsPerHour * 24 * 7;
             const totalKinsPerMonth = kinsPerHour * 24 * 30; // Assuming 30 days in a month
             const totalKinsPerYear = kinsPerHour * 24 * 365; // Assuming 365 days in a year
 
             const result = `
-                Estimated Total Kins in ${span} days: ${totalYen.toFixed(2)}<br>
-                Kins per hour: ${kinsPerHour.toFixed(2)}<br>
-                Kins per week: ${totalKinsPerWeek.toFixed(2)}<br>
-                Kins per month: ${totalKinsPerMonth.toFixed(2)}<br>
-                Kins per year: ${totalKinsPerYear.toFixed(2)}
+                Estimated Total Kins in 24 hours: ${formatNumberWithDots(totalKins24Hours)}<br>
+                Kins per hour: ${formatNumberWithDots(kinsPerHour)}<br>
+                Kins per week: ${formatNumberWithDots(totalKinsPerWeek)}<br>
+                Kins per month: ${formatNumberWithDots(totalKinsPerMonth)}<br>
+                Kins per year: ${formatNumberWithDots(totalKinsPerYear)}
             `;
             kinsResult.html(result);
 
