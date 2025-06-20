@@ -11,8 +11,6 @@ html, body { /* Ensure html and body have no default margins/paddings and take f
 body {
     background-color: #1a1a1a; /* Even darker, richer background */
     color: #e0e0e0; /* Softer light text color */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Bootstrap's default font stack */
-    line-height: 1.6; /* Slightly increased line height for readability */
 }
 
 /* Main Estimator Container */
