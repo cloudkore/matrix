@@ -102,6 +102,28 @@ let fileToDeleteName = null; // To store the name of the file to be deleted
 let noteToDeleteId = null; // NEW: To store the ID of the note to be deleted
 let pmEntryToDeleteId = null; // NEW: To store the ID of the password manager entry to be deleted
 
+// Session expiration logic (5 mins inactivity) - ADD THIS BLOCK
+let sessionExpiryTimer = null;
+function startSessionTimer() {
+    clearTimeout(sessionExpiryTimer);
+    sessionExpiryTimer = setTimeout(() => {
+        console.warn("Session expired due to inactivity. Clearing encryption key.");
+        currentEncryptionKey = null;
+        sessionStorage.removeItem('currentEncryptionKeyHex');
+        showMessageBox(getTranslation("message_box_session_expired_re_enter_master_password"), 'warning'); // Use getTranslation here
+    }, 5 * 60 * 1000); // 5 minutes
+}
+
+document.addEventListener('mousemove', startSessionTimer);
+document.addEventListener('keydown', startSessionTimer);
+document.addEventListener('click', startSessionTimer);
+startSessionTimer(); // start on load
+
+// Throttle master password unlock attempts - ADD THESE VARIABLES
+let failedUnlockAttempts = 0;
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_TIME = 30 * 1000; // 30 sec
+let unlockLocked = false;
 
 // --- Internationalization Variables and Functions ---
 let translations = {}; // Global variable to hold the current language translations
@@ -353,21 +375,6 @@ async function setupDashboard(user) {
 
         console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}, lastLogin: ${lastLoginTimestamp}`);
 
-        // Try to restore encryption key from session storage
-        const storedKeyHex = sessionStorage.getItem('currentEncryptionKeyHex');
-        if (storedKeyHex) {
-            try {
-                currentEncryptionKey = CryptoJS.enc.Hex.parse(storedKeyHex);
-                console.log("Encryption key restored from sessionStorage.");
-            } catch (e) {
-                console.error("Failed to restore encryption key from sessionStorage:", e);
-                sessionStorage.removeItem('currentEncryptionKeyHex'); // Clear invalid key
-                currentEncryptionKey = null;
-            }
-        } else {
-            currentEncryptionKey = null; // Ensure it's null if not found
-        }
-
         // Scenario 1: User needs to complete their profile (username or avatar is missing)
         if (!hasUsername || !hasAvatar) {
             console.log("Showing unified setup section: Username or avatar missing.");
@@ -430,47 +437,61 @@ async function setupDashboard(user) {
 
 // Handler for unlocking the dashboard with master password (triggered by modal)
 unlockDashboardBtn.onclick = async () => {
-    console.log("Unlock Dashboard button clicked.");
-    const masterPassword = masterPasswordUnlockInput.value;
+    if (unlockLocked) {
+        showMessageBox(getTranslation("message_box_too_many_failed_attempts"), "error"); // Use translation key
+        return;
+    }
+
+    const masterPassword = masterPasswordUnlockInput.value.trim();
     if (!masterPassword) {
         showMessageBox(getTranslation("message_box_please_enter_master_password"), "error");
         return;
     }
 
     unlockDashboardBtn.disabled = true;
-    unlockDashboardBtn.textContent = 'Unlocking...';
+    unlockDashboardBtn.textContent = getTranslation("unlocking_status"); // Use translation key
 
     try {
-        const playerDocRef = db.collection('players').doc(currentUser.uid);
-        const doc = await playerDocRef.get();
-        const data = doc.data();
-        const userSalt = data.salt;
-        const storedMasterPasswordHash = data.masterPasswordHash;
+        const playerDocRef = db.collection("players").doc(currentUser.uid);
+        const playerDoc = await playerDocRef.get();
+        const data = playerDoc.data();
 
         // If no salt or hash, means master password was never set, so prompt for setup
-        // (You might want to redirect them to a specific setup for master password if you have one)
-        if (!userSalt || !storedMasterPasswordHash) {
+        if (!data || !data.salt || !data.masterPasswordHash) {
             showMessageBox(getTranslation("message_box_no_master_password_set_yet"), "info");
             closeModal(masterPasswordPromptModal);
             return;
         }
 
+        const userSalt = data.salt;
+        const storedMasterPasswordHash = data.masterPasswordHash;
+
         const derivedKeyForVerification = await deriveKey(masterPassword, userSalt);
         const derivedMasterPasswordHash = derivedKeyForVerification.toString(CryptoJS.enc.Hex);
 
         if (derivedMasterPasswordHash !== storedMasterPasswordHash) {
-            showMessageBox(getTranslation("message_box_incorrect_master_password"), "error");
+            failedUnlockAttempts++;
+            if (failedUnlockAttempts >= MAX_ATTEMPTS) {
+                unlockLocked = true;
+                showMessageBox(getTranslation("message_box_incorrect_password_wait"), "error"); // Use translation key
+                setTimeout(() => {
+                    unlockLocked = false;
+                    failedUnlockAttempts = 0;
+                    showMessageBox(getTranslation("message_box_try_again"), "info"); // Inform user they can try again
+                }, LOCKOUT_TIME);
+            } else {
+                showMessageBox(getTranslation("message_box_incorrect_master_password"), "error");
+            }
             currentEncryptionKey = null; // Ensure key is null on failed attempt
             return;
         }
 
         currentEncryptionKey = derivedKeyForVerification; // Set the global encryption key for the session
-        // Store the key in sessionStorage for persistence across page loads within the same session
         sessionStorage.setItem('currentEncryptionKeyHex', currentEncryptionKey.toString(CryptoJS.enc.Hex));
-
 
         closeModal(masterPasswordPromptModal);
         masterPasswordUnlockInput.value = '';
+        failedUnlockAttempts = 0; // Reset attempts on success
         showMessageBox(getTranslation("message_box_dashboard_unlocked"), "success", 4000);
         console.log("Dashboard unlocked successfully.");
 
