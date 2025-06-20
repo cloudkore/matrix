@@ -1,31 +1,40 @@
-/* Custom styles for NinjaBase Estimators - Advanced Dark Theme & Responsive */
+/* Custom styles for NinjaBase Estimators - Advanced Dark Theme & Fully Full-Screen Responsive */
+
+/* General body styling - leveraging Bootstrap's font-family but setting dark background */
+html, body { /* Ensure html and body have no default margins/paddings and take full width */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
 
 /* Main Estimator Container */
 .container {
-    /* --- CHANGES FOR RESPONSIVENESS --- */
-    width: 90%; /* Take up 90% of the viewport width on smaller screens */
-    margin: 30px auto; /* Reduced vertical margin for mobile, centered horizontally */
-    padding: 20px; /* Slightly reduced padding for mobile to save space */
+    /* --- CHANGES FOR FULL SCREEN ON ALL DEVICES --- */
+    width: 100%; /* Take up 100% of the viewport width on all screens */
+    margin: 0 auto; /* Remove vertical margin from top/bottom for full screen, centered horizontally */
+    padding: 20px; /* Default internal padding for mobile/small screens */
 
     border: none; /* Removing border for a cleaner look */
-    border-radius: 0.5rem; /* More rounded corners */
+    border-radius: 0; /* Remove border-radius for true full-screen, or keep a small one if preferred */
     background-color: #2b2b2b; /* Dark background for the card-like container */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.2); /* Deeper, more diffused shadow */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth hover effect */
+    box-shadow: none; /* Remove shadow for a flat, full-screen appearance */
+    transition: none; /* Remove transitions as hover effects might not make sense for full screen */
 }
 
-/* Media query for larger screens (e.g., tablets and desktops) */
-@media (min-width: 576px) {
+/* Adjust padding for larger screens to prevent content from stretching too wide */
+@media (min-width: 768px) { /* Adjust breakpoint as needed, 768px is common for tablets */
     .container {
-        max-width: 400px; /* Apply max-width only on screens wider than 576px */
-        margin: 60px auto; /* Restore larger vertical margin for desktops */
-        padding: 30px; /* Restore larger padding for desktops */
+        padding: 40px 10%; /* More generous horizontal padding for larger screens (10% on each side) */
+        border-radius: 0; /* Ensure no radius */
+        box-shadow: none; /* Ensure no shadow */
     }
 }
 
+/* Remove hover effects if no longer desired for full-screen elements */
 .container:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    transform: none; /* No lift effect */
+    box-shadow: none; /* No enhanced shadow */
 }
 
 h2 {
