@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Optional: Load a boot sound (replace 'assets/boot_sound.mp3' with your path)
   // Ensure you have an 'assets' folder with this file or remove this line.
-  const bootSound = new Audio('assets/boot_sound.mp3');
+  const bootSound = new Audio('assets/boot.mp3');
   bootSound.volume = 0.3; // Adjust volume as needed
   bootSound.play().catch(e => console.error("Boot sound playback failed:", e));
 
