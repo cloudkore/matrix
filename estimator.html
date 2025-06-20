@@ -1,79 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NinjaBase</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link to your custom CSS file -->
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Include essentials.js file -->
-    <script src="js/sound.js"></script>
-    <script src="js/essentials.js"></script>
+    <title>NinjaBase Estimators</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/estimator.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
     <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="favicon/android-chrome-512x512.png">
-
-    <style>
-        /* Add your custom styles here */
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #252525;
-            color: #fff;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            color: #252525;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
-
 </head>
 <body>
-    <!-- Placeholder for the navbar -->
     <div id="navbar-placeholder"></div>
 
-<center>
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#yenEstimator" data-toggle="tab">KINS ESTIMATOR</a></li>
+            <li class="active"><a href="#kinsEstimator" data-toggle="tab">KINS ESTIMATOR</a></li>
             <li><a href="#levelEstimator" data-toggle="tab">LEVEL ESTIMATOR</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="yenEstimator">
+            <div class="tab-pane active" id="kinsEstimator">
                 <div class="container">
                     <h2>Kins Estimator</h2>
                     <div class="form-group">
@@ -84,9 +33,11 @@
                         <label for="span">Span (number of days):</label>
                         <input type="number" id="span" placeholder="Enter span in days">
                     </div>
-                    <button onclick="calculateYen()">Calculate</button>
-                    </br>
-                    <div id="yenResult"></div>
+                    <button id="calculateKins" class="btn btn-primary">Calculate</button>
+                    <div class="spinner-container" id="kinsSpinner">
+                        <div class="braille-spinner"></div>
+                    </div>
+                    <div id="kinsResult" class="result-display"></div>
                 </div>
             </div>
             <div class="tab-pane" id="levelEstimator">
@@ -104,93 +55,23 @@
                         <label for="experiencePerHour">Experience per Hour (%):</label>
                         <input type="number" id="experiencePerHour" placeholder="Enter experience per hour (%)">
                     </div>
-                    <button onclick="calculateTimeToNextLevel()">Calculate</button>
-                    </br>
-                    <div id="levelResult"></div>
-                    <div id="countdownTimer"></div>
+                    <button id="calculateLevel" class="btn btn-primary">Calculate</button>
+                    <div class="spinner-container" id="levelSpinner">
+                        <div class="braille-spinner"></div>
+                    </div>
+                    <div id="levelResult" class="result-display"></div>
+                    <div id="countdownTimer" class="countdown-display"></div>
                 </div>
             </div>
         </div>
     </div>
-    </center>
 
-    <!-- Placeholder for the footer -->
     <div id="footer-placeholder"></div>
 
-    <!-- Include Bootstrap JS if needed -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
-    <script>
-        function calculateYen() {
-            var kinsPerHour = parseFloat(document.getElementById('kinsPerHour').value);
-            var span = parseFloat(document.getElementById('span').value);
-            var totalYen = kinsPerHour * 24 * span;
-            var totalKinsPerWeek = kinsPerHour * 24 * 7;
-            var totalKinsPerMonth = kinsPerHour * 24 * 30; // Assuming 30 days in a month
-            var totalKinsPerYear = kinsPerHour * 24 * 365; // Assuming 365 days in a year
-            var result = "Estimated Total Yên: " + totalYen + "<br>" +
-                         "Kins per hour: " + kinsPerHour + "<br>" +
-                         "Kins per week: " + totalKinsPerWeek + "<br>" +
-                         "Kins per month: " + totalKinsPerMonth + "<br>" +
-                         "Kins per year: " + totalKinsPerYear;
-            document.getElementById('yenResult').innerHTML = result;
-        }
-       function calculateTimeToNextLevel() {
-    var currentLevel = parseInt(document.getElementById('currentLevel').value);
-    var currentExperience = parseFloat(document.getElementById('currentExperience').value);
-    var experiencePerHourPercent = parseFloat(document.getElementById('experiencePerHour').value);
-
-    // Calculate experience required for next level
-    var experienceRequiredForNextLevel = (currentLevel + 1) * 1000;
-
-    // Calculate current experience in absolute value
-    var absoluteExperience = currentExperience / 100 * experienceRequiredForNextLevel;
-
-    // Calculate remaining experience needed for next level
-    var remainingExperience = experienceRequiredForNextLevel - absoluteExperience;
-
-    // Calculate actual experience gained per hour
-    var experiencePerHour = experiencePerHourPercent / 100 * experienceRequiredForNextLevel;
-
-    // Calculate time required to reach next level in hours
-    var timeToNextLevelHours = remainingExperience / experiencePerHour;
-
-    // Convert hours to milliseconds
-    var timeToNextLevelMilliseconds = timeToNextLevelHours * 3600 * 1000;
-
-    // Calculate the end time for the countdown timer
-    var endTime = Date.now() + timeToNextLevelMilliseconds;
-
-    // Start the countdown timer
-    updateCountdown(endTime);
-}
-
-function updateCountdown(endTime) {
-    var countdownTimer = document.getElementById('countdownTimer');
-
-    // Update the countdown timer every second
-    var countdownInterval = setInterval(function() {
-        var currentTime = Date.now();
-        var timeRemaining = endTime - currentTime;
-
-        // Check if the countdown is finished
-        if (timeRemaining <= 0) {
-            clearInterval(countdownInterval);
-            countdownTimer.innerText = "Time's up!";
-            return;
-        }
-
-        // Calculate days, hours, minutes, and seconds
-        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-        // Display the countdown timer
-        countdownTimer.innerText = "Next Level: " + days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
-    }, 1000);
-}
-       
-    </script>
+    <script src="js/sound.js"></script>
+    <script src="js/essentials.js"></script>
+    <script src="js/estimator.js"></script>
 </body>
 </html>

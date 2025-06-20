@@ -1,0 +1,155 @@
+/* Main Estimator Container */
+.container {
+    max-width: 400px;
+    margin: 60px auto; /* More vertical margin */
+    padding: 30px; /* Increased padding */
+    border: none; /* Removing border for a cleaner look */
+    border-radius: 0.5rem; /* More rounded corners */
+    background-color: #2b2b2b; /* Dark background for the card-like container */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.2); /* Deeper, more diffused shadow */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth hover effect */
+}
+
+.container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+h2 {
+    color: #ffffff; /* White color for headings */
+    margin-bottom: 1.5rem; /* More space below headings */
+    text-align: center;
+    font-weight: 500; /* Slightly lighter font weight */
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 1.25rem; /* Increased vertical spacing between form groups */
+}
+
+label {
+    display: block;
+    margin-bottom: 0.6rem; /* Slightly more space below labels */
+    font-weight: 600; /* Bolder labels */
+    color: #b0b0b0; /* Softer grey for labels */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+}
+
+/* Input Field Styling */
+input[type="number"] {
+    width: 100%;
+    padding: 0.75rem 1rem; /* More generous padding */
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #e0e0e0; /* Light text for user input */
+    background-color: #3a3a3a; /* Darker input background */
+    border: 1px solid #555555; /* Softer border color */
+    border-radius: 0.35rem; /* Slightly more rounded */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+input[type="number"]:focus {
+    color: #ffffff; /* White text on focus */
+    background-color: #4a4a4a; /* Lighter dark background on focus */
+    border-color: #007bff; /* Standard Bootstrap primary color for focus */
+    outline: none; /* Remove default outline */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(0, 123, 255, 0.4); /* Enhanced focus shadow */
+}
+
+/* Primary Button Styling */
+.btn-primary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Slightly more space between spinner and text */
+    width: 100%;
+    padding: 0.8rem 1.5rem; /* More padding for a bolder button */
+    font-size: 1.1rem; /* Slightly larger font size */
+    font-weight: 600; /* Bolder text */
+    border: none; /* No border for a flat design */
+    border-radius: 0.35rem; /* Consistent rounding */
+    background-color: #007bff; /* Standard Bootstrap primary color */
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4); /* Soft shadow for primary button */
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6); /* Enhanced shadow on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.btn-primary:active {
+    background-color: #004085; /* Even darker on active */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Flatter shadow on active */
+    transform: translateY(0); /* Press down effect */
+}
+
+.btn-primary:disabled {
+    background-color: #6c757d; /* Muted grey for disabled state */
+    border-color: #6c757d;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Result and Countdown Display */
+.result-display,
+.countdown-display {
+    margin-top: 1.5rem; /* More space above results */
+    padding: 1rem 1.5rem; /* Generous padding */
+    border: 1px solid #4a4a4a; /* Subtle border */
+    border-radius: 0.35rem;
+    font-weight: 600;
+    text-align: center;
+    background-color: #3b3b3b; /* Dark background for results */
+    color: #ffffff; /* White text for results */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Inner shadow */
+}
+
+.countdown-display {
+    color: #ffda6a; /* Brighter, soft yellow for countdown */
+    background-color: #4a4220; /* A richer, darker yellow background for contrast */
+    border-color: #927e3d;
+    font-size: 1.1rem; /* Slightly larger font for countdown */
+}
+
+.tab-content {
+    padding: 2rem; /* Generous padding for content */
+    border: none; /* No border, container's shadow handles separation */
+    background-color: #2b2b2b; /* Matches container background */
+    border-radius: 0 0 0.5rem 0.5rem; /* Consistent rounding at bottom */
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.3); /* Inner shadow for content area depth */
+}
+
+/* Braille Spinner Styles for button */
+.braille-spinner-icon {
+    font-size: 1.6rem; /* Slightly larger for impact */
+    line-height: 1;
+    font-weight: 100;
+    color: #ffffff; /* Ensures spinner is bright white on button */
+    display: inline-block;
+    vertical-align: middle; /* Align with text */
+}
+
+.braille-spinner-icon::before {
+    animation: braille .4s linear 0s infinite;
+    content: '⠏';
+}
+
+@keyframes braille {
+    0% { content: '⠏'; }
+    10% { content: '⠹'; }
+    20% { content: '⠼'; }
+    30% { content: '⠶'; }
+    40% { content: '⠦'; }
+    50% { content: '⠤'; }
+    60% { content: '⠇'; }
+    70% { content: '⠋'; }
+    80% { content: '⠙'; }
+    90% { content: '⠩'; }
+    100% { content: '⠏'; }
+}
