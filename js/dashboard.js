@@ -111,7 +111,7 @@ function startSessionTimer() {
         currentEncryptionKey = null;
         sessionStorage.removeItem('currentEncryptionKeyHex');
         showMessageBox(getTranslation("message_box_session_expired_re_enter_master_password"), 'warning'); // Use getTranslation here
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 1 * 60 * 1000); // 5 minutes
 }
 
 document.addEventListener('mousemove', startSessionTimer);
@@ -374,6 +374,23 @@ async function setupDashboard(user) {
         const lastLoginTimestamp = data.lastLogin; // Get existing last login timestamp
 
         console.log(`Debug: hasUsername: ${hasUsername}, hasAvatar: ${hasAvatar}, hasSalt: ${hasSalt}, hasMasterPasswordHash: ${hasMasterPasswordHash}, lastLogin: ${lastLoginTimestamp}`);
+
+        // Try to restore encryption key from session storage
+        const storedKeyHex = sessionStorage.getItem('currentEncryptionKeyHex');
+        if (storedKeyHex) {
+            try {
+                currentEncryptionKey = CryptoJS.enc.Hex.parse(storedKeyHex);
+                console.log("Encryption key restored from sessionStorage.");
+                // OPTIONAL: You might want to extend the session timer here if a key is successfully restored
+                // startSessionTimer();
+            } catch (e) {
+                console.error("Failed to restore encryption key from sessionStorage:", e);
+                sessionStorage.removeItem('currentEncryptionKeyHex'); // Clear invalid key
+                currentEncryptionKey = null;
+            }
+        } else {
+            currentEncryptionKey = null; // Ensure it's null if not found
+        }
 
         // Scenario 1: User needs to complete their profile (username or avatar is missing)
         if (!hasUsername || !hasAvatar) {
