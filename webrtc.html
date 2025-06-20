@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wi-Fi File Transfer</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a better look and feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the top to prevent jumping on content load */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Stack sections on small screens */
+            min-height: 80vh;
+        }
+        .panel {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .panel-left {
+            border-right: 1px solid #e2e8f0; /* Separator for large screens */
+        }
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: monospace;
+        }
+        button {
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row; /* Side-by-side on larger screens */
+            }
+            .panel-left {
+                border-bottom: none; /* Remove bottom border */
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-200 selection:text-blue-900">
+    <div class="container">
+        <h1 class="text-3xl font-extrabold text-gray-800 p-6 pb-0 text-center md:text-left">Wi-Fi File Transfer (WebRTC)</h1>
+        <p class="text-sm text-gray-500 px-6 pb-4 text-center md:text-left">
+            This tool demonstrates direct file transfer between two browsers on the same network using WebRTC.
+            **Important:** For the connection to work, you need to manually copy and paste the "Offer" and "Answer" Session Descriptions (SDP) and "ICE Candidates" between two browser tabs or devices.
+            Think of this as a simplified "signaling" mechanism. In a real-world application, a small server would automate this exchange.
+        </p>
+
+        <div class="flex flex-col md:flex-row flex-grow">
+            <!-- Left Panel: Connection Setup -->
+            <div class="panel panel-left md:w-1/2">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4">1. Connection Setup</h2>
+
+                <div>
+                    <button id="createOfferBtn" class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 font-semibold text-lg">
+                        Create Offer
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">Click this on the **sending** browser to generate a connection offer.</p>
+                </div>
+
+                <div>
+                    <label for="offerSdp" class="block text-sm font-medium text-gray-700">Offer SDP (Copy & Paste this to the other browser's 'Remote Offer')</label>
+                    <textarea id="offerSdp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    <button id="copyOfferSdpBtn" class="mt-2 bg-gray-200 text-gray-800 py-2 px-4 rounded-md text-sm hover:bg-gray-300">Copy Offer SDP</button>
+                </div>
+
+                <div>
+                    <label for="remoteOfferSdp" class="block text-sm font-medium text-gray-700">Remote Offer SDP (Paste offer from other browser here)</label>
+                    <textarea id="remoteOfferSdp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    <button id="createAnswerBtn" class="mt-2 w-full bg-green-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 font-semibold text-lg">
+                        Create Answer
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">Click this on the **receiving** browser after pasting the offer.</p>
+                </div>
+
+                <div>
+                    <label for="answerSdp" class="block text-sm font-medium text-gray-700">Answer SDP (Copy & Paste this to the other browser's 'Remote Answer')</label>
+                    <textarea id="answerSdp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    <button id="copyAnswerSdpBtn" class="mt-2 bg-gray-200 text-gray-800 py-2 px-4 rounded-md text-sm hover:bg-gray-300">Copy Answer SDP</button>
+                </div>
+
+                <div>
+                    <label for="remoteAnswerSdp" class="block text-sm font-medium text-gray-700">Remote Answer SDP (Paste answer from other browser here)</label>
+                    <textarea id="remoteAnswerSdp" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    <button id="setRemoteAnswerBtn" class="mt-2 w-full bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 font-semibold text-lg">
+                        Set Remote Answer
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">Click this on the **sending** browser after pasting the answer.</p>
+                </div>
+
+                <div>
+                    <label for="iceCandidates" class="block text-sm font-medium text-gray-700">ICE Candidates (Copy & Paste all candidates from other browser here)</label>
+                    <textarea id="iceCandidates" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    <button id="addIceCandidateBtn" class="mt-2 w-full bg-purple-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 font-semibold text-lg">
+                        Add ICE Candidates
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">Click this on **both** browsers after copying all generated ICE candidates from the other side.</p>
+                </div>
+            </div>
+
+            <!-- Right Panel: File Transfer -->
+            <div class="panel md:w-1/2">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4">2. File Transfer</h2>
+
+                <div class="mb-4">
+                    <label for="fileInput" class="block text-sm font-medium text-gray-700">Select File to Send:</label>
+                    <input type="file" id="fileInput" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 cursor-pointer"/>
+                </div>
+
+                <div>
+                    <button id="sendFileBtn" class="w-full bg-red-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 font-semibold text-lg" disabled>
+                        Send File (Requires Data Channel Open)
+                    </button>
+                    <div id="transferProgress" class="mt-2 w-full bg-gray-200 rounded-full h-4 overflow-hidden hidden">
+                        <div class="bg-red-500 h-4 rounded-full" style="width: 0%;" id="progressBar"></div>
+                    </div>
+                    <p id="progressText" class="text-sm text-gray-600 mt-1"></p>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-bold text-gray-700 mb-3">Received Files:</h3>
+                    <ul id="receivedFilesList" class="space-y-2">
+                        <li class="text-gray-500">No files received yet.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Log -->
+        <div class="p-6 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">Status Log:</h3>
+            <div id="statusLog" class="bg-gray-100 p-3 rounded-md text-sm text-gray-800 overflow-y-auto h-32">
+                <!-- Log messages will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for WebRTC objects
+        let peerConnection;
+        let dataChannel;
+        let receivedChunks = [];
+        let receivedFileName = '';
+        let receivedFileSize = 0;
+        let receivedBytes = 0;
+
+        // UI elements
+        const createOfferBtn = document.getElementById('createOfferBtn');
+        const offerSdpTextarea = document.getElementById('offerSdp');
+        const remoteOfferSdpTextarea = document.getElementById('remoteOfferSdp');
+        const createAnswerBtn = document.getElementById('createAnswerBtn');
+        const answerSdpTextarea = document.getElementById('answerSdp');
+        const remoteAnswerSdpTextarea = document.getElementById('remoteAnswerSdp');
+        const setRemoteAnswerBtn = document.getElementById('setRemoteAnswerBtn');
+        const iceCandidatesTextarea = document.getElementById('iceCandidates');
+        const addIceCandidateBtn = document.getElementById('addIceCandidateBtn');
+        const fileInput = document.getElementById('fileInput');
+        const sendFileBtn = document.getElementById('sendFileBtn');
+        const receivedFilesList = document.getElementById('receivedFilesList');
+        const statusLog = document.getElementById('statusLog');
+        const progressBarContainer = document.getElementById('transferProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const copyOfferSdpBtn = document.getElementById('copyOfferSdpBtn');
+        const copyAnswerSdpBtn = document.getElementById('copyAnswerSdpBtn');
+
+        // Configuration for RTCPeerConnection (STUN servers help discover public IP addresses)
+        const peerConnectionConfig = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+            ]
+        };
+
+        // Helper function to log messages to the UI
+        function log(message, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('p');
+            logEntry.textContent = `[${time}] ${message}`;
+            if (type === 'error') {
+                logEntry.style.color = 'red';
+            } else if (type === 'success') {
+                logEntry.style.color = 'green';
+            }
+            statusLog.appendChild(logEntry);
+            statusLog.scrollTop = statusLog.scrollHeight; // Auto-scroll to bottom
+        }
+
+        /**
+         * Initializes the RTCPeerConnection object.
+         * Sets up listeners for ICE candidates and data channel creation.
+         */
+        function initializePeerConnection() {
+            log('Initializing RTCPeerConnection...');
+            if (peerConnection) {
+                log('Existing peer connection found, closing it.', 'info');
+                peerConnection.close();
+            }
+            peerConnection = new RTCPeerConnection(peerConnectionConfig);
+
+            // Event listener for when ICE candidates are generated
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    // Collect ICE candidates and display them in the textarea
+                    iceCandidatesTextarea.value += JSON.stringify(event.candidate) + '\n';
+                    log(`Generated ICE candidate: ${event.candidate.candidate}`);
+                } else {
+                    log('All ICE candidates have been generated.', 'success');
+                }
+            };
+
+            // Event listener for when a data channel is received by the other peer (receiver side)
+            peerConnection.ondatachannel = (event) => {
+                log('Data channel received!', 'success');
+                dataChannel = event.channel;
+                setupDataChannelListeners(dataChannel);
+            };
+
+            // Event listener for connection state changes
+            peerConnection.onconnectionstatechange = () => {
+                log(`Connection state changed: ${peerConnection.connectionState}`);
+                if (peerConnection.connectionState === 'connected') {
+                    log('Peer connected successfully!', 'success');
+                    // Enable send file button if data channel is already open or will open soon
+                    if (dataChannel && dataChannel.readyState === 'open') {
+                        sendFileBtn.disabled = false;
+                    }
+                } else {
+                    sendFileBtn.disabled = true;
+                }
+            };
+
+            // Event listener for ICE connection state changes
+            peerConnection.oniceconnectionstatechange = () => {
+                log(`ICE connection state: ${peerConnection.iceConnectionState}`);
+            };
+
+            log('RTCPeerConnection initialized.');
+        }
+
+        /**
+         * Sets up event listeners for the data channel.
+         * Handles opening, closing, errors, and incoming messages.
+         */
+        function setupDataChannelListeners(channel) {
+            channel.onopen = () => {
+                log('Data channel is open and ready!', 'success');
+                sendFileBtn.disabled = false;
+            };
+            channel.onclose = () => {
+                log('Data channel closed.', 'info');
+                sendFileBtn.disabled = true;
+                progressBarContainer.classList.add('hidden'); // Hide progress bar on close
+                progressText.textContent = '';
+            };
+            channel.onerror = (error) => {
+                log(`Data channel error: ${error}`, 'error');
+            };
+            channel.onmessage = handleDataChannelMessage;
+        }
+
+        /**
+         * Creates an SDP offer for the connection initiator (sender).
+         */
+        async function createOffer() {
+            if (!peerConnection) {
+                initializePeerConnection();
+            }
+
+            try {
+                // Create a data channel for sending files
+                dataChannel = peerConnection.createDataChannel('fileTransfer');
+                setupDataChannelListeners(dataChannel);
+
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                offerSdpTextarea.value = JSON.stringify(offer);
+                log('SDP Offer created and set as local description. Copy it to the other browser.');
+            } catch (error) {
+                log(`Error creating offer: ${error}`, 'error');
+            }
+        }
+
+        /**
+         * Creates an SDP answer in response to an offer (receiver).
+         */
+        async function createAnswer() {
+            if (!peerConnection) {
+                initializePeerConnection();
+            }
+
+            const remoteOfferSdp = remoteOfferSdpTextarea.value;
+            if (!remoteOfferSdp) {
+                log('Please paste the Remote Offer SDP first.', 'error');
+                return;
+            }
+
+            try {
+                const offer = JSON.parse(remoteOfferSdp);
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+                log('Remote Offer SDP set.');
+
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                answerSdpTextarea.value = JSON.stringify(answer);
+                log('SDP Answer created and set as local description. Copy it to the other browser.');
+            } catch (error) {
+                log(`Error creating answer: ${error}`, 'error');
+            }
+        }
+
+        /**
+         * Sets the remote answer SDP received from the other peer (sender).
+         */
+        async function setRemoteAnswer() {
+            if (!peerConnection) {
+                log('Please create an offer first.', 'error');
+                return;
+            }
+
+            const remoteAnswerSdp = remoteAnswerSdpTextarea.value;
+            if (!remoteAnswerSdp) {
+                log('Please paste the Remote Answer SDP first.', 'error');
+                return;
+            }
+
+            try {
+                const answer = JSON.parse(remoteAnswerSdp);
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+                log('Remote Answer SDP set.');
+                log('Connection attempt initiated. Now exchange ICE candidates.', 'info');
+            } catch (error) {
+                log(`Error setting remote answer: ${error}`, 'error');
+            }
+        }
+
+        /**
+         * Adds ICE candidates received from the other peer.
+         */
+        async function addIceCandidates() {
+            if (!peerConnection) {
+                log('Please establish an offer/answer exchange first.', 'error');
+                return;
+            }
+
+            const candidatesString = iceCandidatesTextarea.value.trim();
+            if (!candidatesString) {
+                log('Please paste ICE candidates into the textarea.', 'error');
+                return;
+            }
+
+            const candidates = candidatesString.split('\n').filter(line => line.trim() !== '');
+
+            for (const candidateString of candidates) {
+                try {
+                    const candidate = JSON.parse(candidateString);
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+                    log(`Added ICE candidate: ${candidate.candidate}`);
+                } catch (error) {
+                    log(`Error adding ICE candidate: ${error}`, 'error');
+                }
+            }
+            log('All provided ICE candidates added.', 'success');
+        }
+
+        /**
+         * Handles incoming messages on the data channel.
+         * Reconstructs files from chunks.
+         */
+        function handleDataChannelMessage(event) {
+            // Check if the message is a string (metadata) or ArrayBuffer (file chunk)
+            if (typeof event.data === 'string') {
+                try {
+                    const metadata = JSON.parse(event.data);
+                    if (metadata.fileName && metadata.fileSize !== undefined) {
+                        // This is the file metadata
+                        receivedFileName = metadata.fileName;
+                        receivedFileSize = metadata.fileSize;
+                        receivedChunks = [];
+                        receivedBytes = 0;
+                        progressBarContainer.classList.remove('hidden');
+                        progressBar.style.width = '0%';
+                        progressText.textContent = `Receiving: ${receivedFileName} (${(receivedFileSize / (1024 * 1024)).toFixed(2)} MB)`;
+                        log(`Receiving file: ${receivedFileName} (${receivedFileSize} bytes)`);
+                        return; // Exit after processing metadata
+                    }
+                } catch (e) {
+                    // Not a JSON metadata, might be a completion signal or other message
+                    if (event.data === 'FILE_COMPLETE') {
+                        log('File transfer complete!', 'success');
+                        const blob = new Blob(receivedChunks);
+                        const url = URL.createObjectURL(blob);
+
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = receivedFileName;
+                        link.textContent = `Download: ${receivedFileName} (${(receivedFileSize / (1024 * 1024)).toFixed(2)} MB)`;
+                        link.classList.add('text-blue-600', 'hover:underline');
+                        listItem.appendChild(link);
+
+                        if (receivedFilesList.firstElementChild && receivedFilesList.firstElementChild.textContent === 'No files received yet.') {
+                            receivedFilesList.innerHTML = ''; // Clear the initial message
+                        }
+                        receivedFilesList.appendChild(listItem);
+                        log('File successfully received and ready for download.', 'success');
+                        progressBarContainer.classList.add('hidden'); // Hide progress bar
+                        progressText.textContent = '';
+                        return; // Exit after processing completion signal
+                    }
+                    // Handle other string messages if needed
+                    log(`Received message: ${event.data}`);
+                }
+            } else {
+                // This is a file chunk (ArrayBuffer)
+                receivedChunks.push(event.data);
+                receivedBytes += event.data.byteLength;
+
+                const progress = (receivedBytes / receivedFileSize) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Receiving: ${receivedFileName} - ${progress.toFixed(2)}% (${(receivedBytes / (1024 * 1024)).toFixed(2)} / ${(receivedFileSize / (1024 * 1024)).toFixed(2)} MB)`;
+            }
+        }
+
+        /**
+         * Sends the selected file over the data channel.
+         */
+        async function sendFile() {
+            if (!dataChannel || dataChannel.readyState !== 'open') {
+                log('Data channel is not open. Please ensure a connection is established.', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            if (!file) {
+                log('Please select a file to send.', 'error');
+                return;
+            }
+
+            log(`Sending file: ${file.name} (${file.size} bytes)`);
+
+            // Send file metadata first
+            const metadata = {
+                fileName: file.name,
+                fileSize: file.size
+            };
+            dataChannel.send(JSON.stringify(metadata));
+            log('Sent file metadata.');
+
+            const chunkSize = 16 * 1024; // 16 KB chunks
+            let offset = 0;
+            progressBarContainer.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            progressText.textContent = `Sending: ${file.name} - 0%`;
+
+            try {
+                // Read and send file in chunks
+                while (offset < file.size) {
+                    const slice = file.slice(offset, offset + chunkSize);
+                    const buffer = await slice.arrayBuffer(); // Read slice as ArrayBuffer
+                    dataChannel.send(buffer);
+                    offset += buffer.byteLength;
+
+                    const progress = (offset / file.size) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `Sending: ${file.name} - ${progress.toFixed(2)}% (${(offset / (1024 * 1024)).toFixed(2)} / ${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+                }
+                dataChannel.send('FILE_COMPLETE'); // Signal end of file transfer
+                log('File sent successfully!', 'success');
+                progressBarContainer.classList.add('hidden'); // Hide progress bar
+                progressText.textContent = '';
+            } catch (error) {
+                log(`Error sending file: ${error}`, 'error');
+                progressBarContainer.classList.add('hidden');
+                progressText.textContent = `File send failed: ${error.message}`;
+            }
+        }
+
+        // --- Event Listeners ---
+        createOfferBtn.addEventListener('click', createOffer);
+        createAnswerBtn.addEventListener('click', createAnswer);
+        setRemoteAnswerBtn.addEventListener('click', setRemoteAnswer);
+        addIceCandidateBtn.addEventListener('click', addIceCandidates);
+        sendFileBtn.addEventListener('click', sendFile);
+
+        // Copy to clipboard functionality
+        copyOfferSdpBtn.addEventListener('click', () => {
+            offerSdpTextarea.select();
+            document.execCommand('copy');
+            log('Offer SDP copied to clipboard!');
+        });
+
+        copyAnswerSdpBtn.addEventListener('click', () => {
+            answerSdpTextarea.select();
+            document.execCommand('copy');
+            log('Answer SDP copied to clipboard!');
+        });
+
+        // Initial setup on page load
+        window.onload = () => {
+            log('Application loaded. Start by creating an offer or pasting a remote offer.');
+            initializePeerConnection(); // Initialize PC on load
+        };
+
+    </script>
+</body>
+</html>
