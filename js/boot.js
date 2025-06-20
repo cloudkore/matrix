@@ -4,12 +4,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const bootLoaderText = document.getElementById("bootLoaderText"); // Get the new loader text element
   const loadingAnimation = document.getElementById("loadingAnimation"); // Get the new loading animation element
 
-  // Optional: Load a boot sound (replace 'assets/boot_sound.mp3' with your path)
-  // Ensure you have an 'assets' folder with this file or remove this line.
-  const bootSound = new Audio('assets/boot.mp3');
-  bootSound.volume = 0.3; // Adjust volume as needed
-  bootSound.play().catch(e => console.error("Boot sound playback failed:", e));
-
   const messages = [
     "Matrix OS BOOT INITIATED",
     "C-Ninja Corp. 2019",
