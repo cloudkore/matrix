@@ -1,4 +1,4 @@
-/* Custom styles for NinjaBase Estimators - Advanced Dark Theme & Fully Full-Screen Responsive */
+/* Custom styles for NinjaBase Estimators - Advanced Dark Theme & Full-Screen Card */
 
 /* General body styling - leveraging Bootstrap's font-family but setting dark background */
 html, body { /* Ensure html and body have no default margins/paddings and take full width */
@@ -8,33 +8,37 @@ html, body { /* Ensure html and body have no default margins/paddings and take f
     overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Main Estimator Container */
+body {
+    background-color: #1a1a1a; /* Even darker, richer background */
+    color: #e0e0e0; /* Softer light text color */
+    line-height: 1.6; /* Slightly increased line height for readability */
+}
+
+/* Main Estimator Container - Now a full-screen "card" */
 .container {
-    /* --- CHANGES FOR FULL SCREEN ON ALL DEVICES --- */
     width: 100%; /* Take up 100% of the viewport width on all screens */
-    margin: 0 auto; /* Remove vertical margin from top/bottom for full screen, centered horizontally */
+    margin: 0 auto; /* No vertical margin from top/bottom for full screen, centered horizontally */
     padding: 20px; /* Default internal padding for mobile/small screens */
 
-    border: none; /* Removing border for a cleaner look */
-    border-radius: 0; /* Remove border-radius for true full-screen, or keep a small one if preferred */
-    background-color: #2b2b2b; /* Dark background for the card-like container */
-    box-shadow: none; /* Remove shadow for a flat, full-screen appearance */
-    transition: none; /* Remove transitions as hover effects might not make sense for full screen */
+    border: none; /* No border for a cleaner look */
+    border-radius: 0.75rem; /* Reintroducing rounded corners for the "card" effect */
+    background-color: #2b2b2b; /* Dark background for the card area that spans full width */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.2); /* Reintroducing subtle shadow for "card" depth */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Reintroducing transitions for subtle hover effect */
 }
 
 /* Adjust padding for larger screens to prevent content from stretching too wide */
 @media (min-width: 768px) { /* Adjust breakpoint as needed, 768px is common for tablets */
     .container {
-        padding: 40px 10%; /* More generous horizontal padding for larger screens (10% on each side) */
-        border-radius: 0; /* Ensure no radius */
-        box-shadow: none; /* Ensure no shadow */
+        padding: 40px 10%; /* More generous horizontal padding (10% on each side) for larger screens */
+        /* border-radius and box-shadow will be inherited from the base .container rule */
     }
 }
 
-/* Remove hover effects if no longer desired for full-screen elements */
+/* Reintroducing hover effects for the full-width "card" */
 .container:hover {
-    transform: none; /* No lift effect */
-    box-shadow: none; /* No enhanced shadow */
+    transform: translateY(-5px); /* Subtle lift effect on hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
 
 h2 {
