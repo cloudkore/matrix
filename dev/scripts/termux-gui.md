@@ -4,6 +4,9 @@
 
 ```pkg update && pkg install x11-repo && pkg install termux-x11-nightly```
 
+# Install Proot-Distro
+
+```pkg install proot-distro```
 
 # Install Debian Proot-Distro
 
