@@ -1,22 +1,19 @@
 # Run this inside Termux First
 
-pkg update
-pkg install x11-repo
-pkg install termux-x11-nightly
+```pkg update && pkg install x11-repo && pkg install termux-x11-nightly```
 
 
 # Install Debian Proot-Distro
 
-`proot-distro install debian`
+```proot-distro install debian```
 
 # Login Debian
 
-`proot-distro login debian --user root --shared-tmp`
+```proot-distro login debian --user root --shared-tmp```
 
 # Install Core Apps
 
-apt update
-apt install sudo nano firefox-esr
+```apt update && apt install sudo nano firefox-esr```
 
 # Set Password for Root
 
@@ -24,43 +21,38 @@ apt install sudo nano firefox-esr
 
 # Add Groups
 
-groupadd storage
-groupadd wheel
-groupadd video
+```groupadd storage && groupadd wheel && groupadd video```
 
 # Add User
 
-useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user
-passwd user
+```useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user passwd user```
 
 # Give User Sudo
 
-`nano /etc/sudoers`
+```nano /etc/sudoers```
 ### Under root , add 
 
-`user ALL=(ALL:ALL) ALL`
+```user ALL=(ALL:ALL) ALL```
 
 # Login as User
 
-su user
-cd
+```su user```
 
 # Install GUI in Debian
 
-`sudo apt install lxde-core lxpanel dbus-x11`
+```sudo apt install lxde-core lxpanel dbus-x11```
 
 # Setup Timezone
 
-`ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime`
+```ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime```
 
 # Install Locales
 
-`apt install locales fonts-noto-cjk`
+```apt install locales fonts-noto-cjk```
 
 # Config Locale
 
-locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+```locale-gen echo "LANG=en_US.UTF-8" > /etc/locale.conf```
 
 # Exit
 
@@ -68,10 +60,10 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Create Shortcut
 
-##### `mkdir .shortcuts`
-`nano .shortcuts/boot.sh`
+```mkdir .shortcuts```
+```nano .shortcuts/boot.sh```
 
-# Bash script
+# Bash script - Paste this inside boot.sh
 
 ```bash
 #!/bin/bash
@@ -96,7 +88,7 @@ proot-distro login debian --user user --shared-tmp -- bash -c \
 
 # Disable Polkit via CLI
 
-`sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf`
+```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
 
 
 
