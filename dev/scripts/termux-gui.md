@@ -61,6 +61,10 @@ then
 
 ```locale-gen && echo "LANG=en_US.UTF-8" > /etc/locale.conf```
 
+# Disable Polkit
+
+```grep polkit /etc/xdg/lxsession/LXDE/desktop.conf && sudo sed -i 's/^polkit\/command=.*/polkit\/command=/' /etc/xdg/lxsession/LXDE/desktop.conf```
+
 # Exit
 
 # Login Termux
@@ -95,14 +99,6 @@ proot-distro login debian --user user --shared-tmp -- bash -c \
 
 # Make the Bash Script Executable
 ```chmod u+x boot.sh```
-
-# Login Debian Proot-Distro on Termux
-
-```proot-distro login debian```
-
-# Disable Polkit
-
-```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
 
 # Exit
 
