@@ -27,7 +27,7 @@
 
 # Add User
 
-```useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user passwd user```
+```useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user && passwd user```
 
 # Give User Sudo
 
