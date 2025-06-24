@@ -19,7 +19,7 @@
 
 # Set Password for Root
 
-### passwd >> set password for root
+```passwd``` >> Set Password for Root
 
 # Add Groups
 
