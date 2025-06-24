@@ -15,8 +15,8 @@ pkg install termux-x11-nightly
 
 # Install Core Apps
 
-`apt update`
-`apt install sudo nano firefox-esr`
+apt update
+apt install sudo nano firefox-esr
 
 # Set Password for Root
 
@@ -24,14 +24,14 @@ pkg install termux-x11-nightly
 
 # Add Groups
 
-`groupadd storage`
-`groupadd wheel`
-`groupadd video`
+groupadd storage
+groupadd wheel
+groupadd video
 
 # Add User
 
-`useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user`
-`passwd user`
+useradd -m -g users -G wheel,audio,video,storage -s /bin/bash user
+passwd user
 
 # Give User Sudo
 
@@ -42,8 +42,8 @@ pkg install termux-x11-nightly
 
 # Login as User
 
-`su user`
-`cd`
+su user
+cd
 
 # Install GUI in Debian
 
@@ -59,8 +59,8 @@ pkg install termux-x11-nightly
 
 # Config Locale
 
-`locale-gen`
-`echo "LANG=en_US.UTF-8" > /etc/locale.conf`
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Exit
 
@@ -73,14 +73,11 @@ pkg install termux-x11-nightly
 
 # Bash script
 
-`#!/bin/bash
-
+#!/bin/bash
 # Kill termux-wake-lock silently if running
 pkill -f termux-wake-lock 2>/dev/null
-
 # Show toast notification
 termux-toast "Starting X11"
-
 # Start X11 if not running
 if ! pgrep -f "termux-x11 :0" > /dev/null; then
   echo "[+] Starting X11 server..."
@@ -92,11 +89,10 @@ if ! pgrep -f "termux-x11 :0" > /dev/null; then
 else
   echo "[+] X11 already running."
 fi
-
 # Start LXDE in proot-distro
 echo "[+] Starting LXDE..."
 proot-distro login debian --user user --shared-tmp -- bash -c \
-  "export DISPLAY=:0; dbus-launch --exit-with-session startlxde"`
+  "export DISPLAY=:0; dbus-launch --exit-with-session startlxde"
 
 # Disable Polkit via CLI
 
