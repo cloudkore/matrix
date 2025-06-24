@@ -58,6 +58,10 @@ then
 
 ```locale-gen && echo "LANG=en_US.UTF-8" > /etc/locale.conf```
 
+# Disable Polkit
+
+```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
+
 # Exit
 
 # Login Termux
@@ -94,9 +98,4 @@ proot-distro login debian --user user --shared-tmp -- bash -c \
 # Make the Bash Script Executable
 ```chmod u+x boot.sh```
 
-# Disable Polkit via CLI
-
-```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
-
-
-
+# Add Widget via Homescreen of your Phone
