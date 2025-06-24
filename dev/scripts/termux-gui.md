@@ -37,6 +37,8 @@
 # Login as User
 
 ```su user```
+then
+```cd```
 
 # Install GUI in Debian
 
