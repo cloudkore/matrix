@@ -91,6 +91,9 @@ proot-distro login debian --user user --shared-tmp -- bash -c \
   "export DISPLAY=:0; dbus-launch --exit-with-session startlxde"
 ```
 
+# Make the Bash Script Executable
+```chmod u+x boot.sh```
+
 # Disable Polkit via CLI
 
 ```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
