@@ -61,10 +61,6 @@ then
 
 ```locale-gen && echo "LANG=en_US.UTF-8" > /etc/locale.conf```
 
-# Disable Polkit
-
-```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
-
 # Exit
 
 # Login Termux
@@ -80,7 +76,6 @@ then
 ```bash
 #!/bin/bash
 pkill -f termux-wake-lock 2>/dev/null
-termux-toast "Starting X11"
 
 if ! pgrep -f "termux-x11 :0" > /dev/null; then
   echo "[+] Starting X11 server..."
@@ -100,5 +95,15 @@ proot-distro login debian --user user --shared-tmp -- bash -c \
 
 # Make the Bash Script Executable
 ```chmod u+x boot.sh```
+
+# Login Debian Proot-Distro on Termux
+
+```proot-distro login debian```
+
+# Disable Polkit
+
+```sed -i 's/^polkit\/command=.*/polkit\/command=/' ~/.config/lxsession/LXDE/desktop.conf```
+
+# Exit
 
 # Add Widget via Homescreen of your Phone
