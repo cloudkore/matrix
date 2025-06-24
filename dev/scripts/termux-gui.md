@@ -74,11 +74,11 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 # Bash script
 
 #!/bin/bash
-# Kill termux-wake-lock silently if running
+#Kill termux-wake-lock silently if running
 pkill -f termux-wake-lock 2>/dev/null
-# Show toast notification
+#Show toast notification
 termux-toast "Starting X11"
-# Start X11 if not running
+#Start X11 if not running
 if ! pgrep -f "termux-x11 :0" > /dev/null; then
   echo "[+] Starting X11 server..."
   am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
@@ -89,7 +89,7 @@ if ! pgrep -f "termux-x11 :0" > /dev/null; then
 else
   echo "[+] X11 already running."
 fi
-# Start LXDE in proot-distro
+#Start LXDE in proot-distro
 echo "[+] Starting LXDE..."
 proot-distro login debian --user user --shared-tmp -- bash -c \
   "export DISPLAY=:0; dbus-launch --exit-with-session startlxde"
