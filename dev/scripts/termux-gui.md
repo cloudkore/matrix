@@ -1,3 +1,5 @@
+# Download Termux x11 App : https://github.com/termux/termux-x11/releases/tag/nightly
+
 # Run this inside Termux First
 
 ```pkg update && pkg install x11-repo && pkg install termux-x11-nightly```
