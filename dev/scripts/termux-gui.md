@@ -55,7 +55,7 @@ then
 
 # Install Locales
 
-```apt install locales fonts-noto-cjk```
+```sudo apt install locales fonts-noto-cjk```
 
 # Config Locale
 
