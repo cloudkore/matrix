@@ -23,7 +23,6 @@ function formatDifferenceAccurate(startDate, endDate) {
     let s = new Date(startDate.getTime());
     let e = new Date(endDate.getTime());
 
-    // Ensure 's' is always the earlier date for correct calculation
     if (s.getTime() > e.getTime()) {
         [s, e] = [e, s];
     }
@@ -35,7 +34,6 @@ function formatDifferenceAccurate(startDate, endDate) {
     let minutes = e.getMinutes() - s.getMinutes();
     let seconds = e.getSeconds() - s.getSeconds();
 
-    // Adjust negative values for time components
     if (seconds < 0) {
         seconds += 60;
         minutes--;
@@ -48,7 +46,6 @@ function formatDifferenceAccurate(startDate, endDate) {
         hours += 24;
         days--;
     }
-    // Adjust negative values for date components
     if (days < 0) {
         months--;
         const prevMonth = new Date(e.getFullYear(), e.getMonth(), 0);
@@ -85,20 +82,18 @@ function formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate) 
     let s = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
     let e = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-    // Ensure 's' is always the earlier date for correct calculation
     if (s.getTime() > e.getTime()) {
-        [s, e] = [e, s]; // Swap if s is later than e
+        [s, e] = [e, s];
     }
 
     let years = e.getFullYear() - s.getFullYear();
     let months = e.getMonth() - s.getMonth();
     let days = e.getDate() - s.getDate();
 
-    // Adjust negative values for date components
     if (days < 0) {
         months--;
-        const prevMonth = new Date(e.getFullYear(), e.getMonth(), 0); // Last day of previous month
-        days += prevMonth.getDate(); // Add days in previous month
+        const prevMonth = new Date(e.getFullYear(), e.getMonth(), 0);
+        days += prevMonth.getDate();
     }
     if (months < 0) {
         months += 12;
@@ -134,17 +129,15 @@ function calculateDays() {
 
     const originalButtonHTML = calculateBtn.innerHTML;
 
-    // Clear previous results, errors, and hide progress bar
     resultDiv.textContent = '';
     errorDiv.textContent = '';
     
-    // Stop any existing countdown interval
     if (countdownInterval) {
         clearInterval(countdownInterval);
         countdownInterval = null;
     }
-    progressBarContainer.style.display = 'none'; // Hide progress bar by default
-    progressBarInner.style.width = '0%'; // Reset progress bar visual
+    progressBarContainer.style.display = 'none';
+    progressBarInner.style.width = '0%';
 
     if (!startDateInput || !endDateInput) {
         errorDiv.textContent = 'Please select both start and end dates.';
@@ -155,11 +148,10 @@ function calculateDays() {
     calculateBtn.disabled = true;
     calculateBtn.innerHTML = '<span class="braille-spinner-icon"></span> Calculating...';
 
-    // Delay calculation slightly for spinner to show, then run immediately without setTimeout around main logic
     setTimeout(() => {
         const startDate = new Date(startDateInput);
         const endDate = new Date(endDateInput);
-        const now = new Date(); // Current date and time
+        const now = new Date();
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             errorDiv.textContent = 'Invalid date format. Please use a valid date.';
@@ -169,7 +161,6 @@ function calculateDays() {
             return;
         }
 
-        // --- Progress Bar Logic Helper Function ---
         const updateProgressBar = (periodStart, periodEnd, currentTimePoint) => {
             let actualPeriodStart = new Date(periodStart.getTime());
             let actualPeriodEnd = new Date(periodEnd.getTime());
@@ -191,7 +182,7 @@ function calculateDays() {
 
             let displayPercentageText;
             if (progressPercentage > 0 && progressPercentage < 0.01) {
-                displayPercentageText = "< 0.01"; // For extremely small non-zero progress
+                displayPercentageText = "< 0.01";
             } else {
                 displayPercentageText = progressPercentage.toFixed(2);
             }
@@ -203,17 +194,15 @@ function calculateDays() {
 
         const isStartDateToday = isSameDay(startDate, now);
         const isEndDateToday = isSameDay(endDate, now);
-        // Check relative time positions (full date-time comparison)
         const isStartDatePast = startDate.getTime() < now.getTime();
         const isEndDateFuture = endDate.getTime() > now.getTime();
+        const isStartDateFuture = startDate.getTime() > now.getTime();
 
-        // --- Conditional Display Logic ---
         if (isStartDateToday && isEndDateFuture) {
-            // Scenario 1: Start is TODAY, End is FUTURE (Live Countdown + Progress)
+            // Scenario 1: Start is TODAY, End is FUTURE (Live Countdown + Progress Bar)
             resultDiv.innerHTML = 'Time remaining: <span id="countdownDisplay"></span>';
             const countdownDisplayElement = document.getElementById('countdownDisplay');
 
-            // Initial progress bar update
             updateProgressBar(startDate, endDate, now);
 
             countdownInterval = setInterval(() => {
@@ -232,25 +221,29 @@ function calculateDays() {
                 }
             }, 1000);
 
-        } else if (isStartDatePast && isEndDateToday) {
-            // Scenario 2: Start is PAST, End is TODAY (Static Time Lapsed + Progress)
-            resultDiv.textContent = `Time lapsed: ${formatDifferenceAccurate(startDate, now)}`;
-            updateProgressBar(startDate, now, now);
+        } else if (isStartDatePast && isEndDateFuture) {
+            // Scenario 2: Start is PAST, End is FUTURE (Static "Total difference" in months/days + Progress Bar)
+            resultDiv.textContent = `Totality: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
+            updateProgressBar(startDate, endDate, now);
 
         } else {
-            // All other scenarios: Static Months/Days, NO Progress Bar
-            // This covers:
-            // - Start Past, End Future (your 20/06/2025 to 23/07/2025 example)
-            // - Start Future, End Future (your 01/07/2025 to 31/07/2025 example, where 'now' isn't involved)
-            // - Both Start & End in the Past
-            // - Start & End are the Same Date (anywhere in time)
-            resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
-            progressBarContainer.style.display = 'none'; // Ensure progress bar is hidden
+            // All other scenarios: Static text, NO Progress Bar
+            progressBarContainer.style.display = 'none';
 
+            if (isStartDatePast && isEndDateToday) {
+                // Scenario 3: Start is PAST, End is TODAY (Static "Time lapsed" in full detail, no progress bar)
+                resultDiv.textContent = `Time lapsed: ${formatDifferenceAccurate(startDate, now)}`;
+            } else if (isStartDateFuture && isEndDateFuture) {
+                // Scenario 4: Start is FUTURE, End is FUTURE (Static "Total difference" in months/days, no progress bar)
+                resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
+            } else {
+                // Scenario 5: Both Start & End in the Past (Static "Total difference" in months/days, no progress bar)
+                // This also catches invalid periods like startDate > endDate if they don't fit above
+                resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
+            }
         }
 
-        // Reset button state after all logic branches
         calculateBtn.disabled = false;
         calculateBtn.innerHTML = originalButtonHTML;
-    }, 1000); // Small delay for visual feedback before calculation completes
+    }, 500);
 }
