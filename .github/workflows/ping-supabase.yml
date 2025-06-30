@@ -2,14 +2,19 @@ name: Keep Supabase Awake
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
   workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Curl keepalive function with JWT auth
+      - name: Curl keepalive function (Project 1)
         run: |
           curl -s https://pshuqmmkxmwgmvhuaujn.functions.supabase.co/keepalive \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
+
+      - name: Curl keepalive function (Project 2)
+        run: |
+          curl -s https://izyvffrihiuwocphmaaz.functions.supabase.co/keepalive \
+            -H "Authorization: Bearer ${{ secrets.GALLERY_SERVICE_ROLE_KEY }}"
