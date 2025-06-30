@@ -131,6 +131,10 @@ function calculateDays() {
         const endDate = new Date(endDateInput);
         const now = new Date();
 
+        // Fix Option 2: Always zero the time for both input dates
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             errorDiv.textContent = 'Invalid date format. Please use a valid date.';
             resultDiv.textContent = 'Enter two dates to see the difference.';
@@ -139,7 +143,6 @@ function calculateDays() {
             return;
         }
 
-        // NEW: Check for startDate > endDate
         if (startDate.getTime() > endDate.getTime()) {
             errorDiv.textContent = 'Error: Start Date cannot be after End Date.';
             resultDiv.textContent = 'Please correct your date selection.';
@@ -148,10 +151,9 @@ function calculateDays() {
             return;
         }
 
-        // NEW: Check for startDate === endDate
         if (startDate.getTime() === endDate.getTime()) {
             resultDiv.textContent = 'The dates are the same: 0 days.';
-            progressBarContainer.style.display = 'none'; // No progress for same dates
+            progressBarContainer.style.display = 'none';
             calculateBtn.disabled = false;
             calculateBtn.innerHTML = originalButtonHTML;
             return;
@@ -203,7 +205,6 @@ function calculateDays() {
 
             countdownInterval = setInterval(() => {
                 const currentTime = new Date();
-                // Defensive check: ensure element still exists
                 const currentCountdownDisplayElement = document.getElementById('countdownDisplay');
                 if (!currentCountdownDisplayElement) {
                     clearInterval(countdownInterval);
@@ -248,5 +249,5 @@ function calculateDays() {
 
         calculateBtn.disabled = false;
         calculateBtn.innerHTML = originalButtonHTML;
-    }, 1000);
+    }, 1000); // 500ms delay for spinner visibility
 }
