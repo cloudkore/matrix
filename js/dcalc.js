@@ -1,24 +1,11 @@
-// Global variable to store countdown interval ID
 let countdownInterval = null;
 
-/**
- * Helper function to check if two dates fall on the same calendar day (ignoring time).
- * @param {Date} d1 - First date object.
- * @param {Date} d2 - Second date object.
- * @returns {boolean} True if dates are the same day, false otherwise.
- */
 const isSameDay = (d1, d2) => {
     return d1.getFullYear() === d2.getFullYear() &&
            d1.getMonth() === d2.getMonth() &&
            d1.getDate() === d2.getDate();
 };
 
-/**
- * Formats the time difference using calendar-accurate logic (years, months, days, hours, minutes, seconds).
- * @param {Date} startDate - The earlier date.
- * @param {Date} endDate - The later date.
- * @returns {string} Human-readable difference string.
- */
 function formatDifferenceAccurate(startDate, endDate) {
     let s = new Date(startDate.getTime());
     let e = new Date(endDate.getTime());
@@ -72,12 +59,6 @@ function formatDifferenceAccurate(startDate, endDate) {
     return parts[0] + '.';
 }
 
-/**
- * Formats the time difference in calendar-accurate years, months, and days only.
- * @param {Date} startDate - The earlier or later date.
- * @param {Date} endDate - The earlier or later date.
- * @returns {string} Human-readable difference string (years, months, days only).
- */
 function formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate) {
     let s = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
     let e = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
@@ -114,9 +95,6 @@ function formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate) 
 }
 
 
-/**
- * Main date calculation function with live countdown support and refined display logic.
- */
 function calculateDays() {
     const startDateInput = document.getElementById('startDate').value;
     const endDateInput = document.getElementById('endDate').value;
@@ -156,6 +134,24 @@ function calculateDays() {
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             errorDiv.textContent = 'Invalid date format. Please use a valid date.';
             resultDiv.textContent = 'Enter two dates to see the difference.';
+            calculateBtn.disabled = false;
+            calculateBtn.innerHTML = originalButtonHTML;
+            return;
+        }
+
+        // NEW: Check for startDate > endDate
+        if (startDate.getTime() > endDate.getTime()) {
+            errorDiv.textContent = 'Error: Start Date cannot be after End Date.';
+            resultDiv.textContent = 'Please correct your date selection.';
+            calculateBtn.disabled = false;
+            calculateBtn.innerHTML = originalButtonHTML;
+            return;
+        }
+
+        // NEW: Check for startDate === endDate
+        if (startDate.getTime() === endDate.getTime()) {
+            resultDiv.textContent = 'The dates are the same: 0 days.';
+            progressBarContainer.style.display = 'none'; // No progress for same dates
             calculateBtn.disabled = false;
             calculateBtn.innerHTML = originalButtonHTML;
             return;
@@ -207,23 +203,31 @@ function calculateDays() {
 
             countdownInterval = setInterval(() => {
                 const currentTime = new Date();
+                // Defensive check: ensure element still exists
+                const currentCountdownDisplayElement = document.getElementById('countdownDisplay');
+                if (!currentCountdownDisplayElement) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    return;
+                }
+
                 if (endDate.getTime() <= currentTime.getTime()) {
                     clearInterval(countdownInterval);
                     countdownInterval = null;
-                    countdownDisplayElement.textContent = "Time's up! The end date has passed.";
+                    currentCountdownDisplayElement.textContent = "Time's up! The end date has passed.";
                     progressBarInner.style.width = '100%';
                     progressBarLabel.textContent = 'Progress: 100% (Completed)';
                     calculateBtn.disabled = false;
                     calculateBtn.innerHTML = originalButtonHTML;
                 } else {
-                    countdownDisplayElement.textContent = formatDifferenceAccurate(currentTime, endDate);
+                    currentCountdownDisplayElement.textContent = formatDifferenceAccurate(currentTime, endDate);
                     updateProgressBar(startDate, endDate, currentTime);
                 }
             }, 1000);
 
         } else if (isStartDatePast && isEndDateFuture) {
             // Scenario 2: Start is PAST, End is FUTURE (Static "Total difference" in months/days + Progress Bar)
-            resultDiv.textContent = `Totality: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
+            resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
             updateProgressBar(startDate, endDate, now);
 
         } else {
@@ -238,12 +242,11 @@ function calculateDays() {
                 resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
             } else {
                 // Scenario 5: Both Start & End in the Past (Static "Total difference" in months/days, no progress bar)
-                // This also catches invalid periods like startDate > endDate if they don't fit above
                 resultDiv.textContent = `Total difference: ${formatDifferenceAccurateWithoutHoursMinutesSeconds(startDate, endDate)}`;
             }
         }
 
         calculateBtn.disabled = false;
         calculateBtn.innerHTML = originalButtonHTML;
-    }, 500);
+    }, 1000);
 }
