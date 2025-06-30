@@ -302,3 +302,66 @@ body {
         font-size: 1em; /* Even smaller spinner on very small screens */
     }
 }
+
+/* Progress Bar Styles */
+.progress-container {
+    margin-top: 40px;
+    background-color: rgba(30, 35, 50, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #3c445c;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.4);
+    text-align: left; /* Align label to left */
+}
+
+.progress-label {
+    font-size: 1.1em;
+    color: #b0e0e6;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.progress-bar-outer {
+    width: 100%;
+    background-color: #333d52; /* Darker background for the empty part */
+    border-radius: 8px;
+    height: 25px; /* Height of the progress bar */
+    overflow: hidden; /* Ensures inner bar respects border-radius */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+}
+
+.progress-bar-inner {
+    height: 100%;
+    width: 0%; /* Start at 0% and JS will update */
+    background: linear-gradient(90deg, #8fe3f0, #67e8f9); /* Gradient fill */
+    border-radius: 8px;
+    transition: width 0.7s ease-out; /* Smooth transition for width changes */
+    box-shadow: 0 0 10px rgba(103, 232, 249, 0.6); /* Subtle glow on the filled part */
+}
+
+/* Responsive adjustments for progress bar */
+@media (max-width: 768px) {
+    .progress-container {
+        padding: 15px;
+        margin-top: 30px;
+    }
+    .progress-label {
+        font-size: 1em;
+    }
+    .progress-bar-outer {
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-container {
+        padding: 10px;
+        margin-top: 25px;
+    }
+    .progress-label {
+        font-size: 0.9em;
+    }
+    .progress-bar-outer {
+        height: 18px;
+    }
+}
