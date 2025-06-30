@@ -1,0 +1,304 @@
+/* Custom styles for the Days Calculator */
+
+/* Base body styling - removed flexbox centering here to avoid conflicts */
+body {
+    background-color: #202020; /* Even darker, richer background for depth */
+    color: #e0e6f2; /* Soft off-white for general text */
+    font-family: 'Inter', inherit; /* Using Inter for a professional modern look, fallback to sans-serif */
+    margin: 0;
+    padding: 0; /* Ensure no default padding on body */
+    box-sizing: border-box;
+    display: flex; /* Make body a flex container */
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Wrapper for the main content to center the calculator */
+.main-content-wrapper {
+    flex-grow: 1; /* Allows this wrapper to take up available space between navbar/footer */
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    padding: 20px; /* Add some padding around the calculator container */
+    box-sizing: border-box;
+    width: 100%; /* Ensure it takes full width */
+    overflow-y: auto; /* IMPORTANT: Adds vertical scrolling if content overflows */
+    -webkit-overflow-scrolling: touch; /* Improves scrolling performance on iOS */
+}
+
+/* Main container for the calculator */
+.calculator-container {
+    background: linear-gradient(180deg, #1f2738 0%, #1a1e2a 100%); /* Subtle dark gradient background */
+    border: 1px solid #3c445c; /* Refined border color */
+    padding: 40px; /* Reduced padding for a smaller overall size */
+    border-radius: 16px; /* Increased border-radius for a softer, modern look */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.05); /* Deeper, softer shadow with inner highlight */
+    max-width: 500px; /* Reduced max-width for a smaller calculator */
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px); /* Subtle blur effect for depth (modern touch) */
+    -webkit-backdrop-filter: blur(5px); /* For Safari */
+}
+
+/* Heading style */
+.calculator-container h1 {
+    color: #8fe3f0; /* A cool, vibrant cyan for a modern header */
+    margin-bottom: 35px; /* Reduced margin-bottom */
+    text-transform: uppercase;
+    font-size: 30px; /* Reduced font size */
+    letter-spacing: 3px; /* Enhanced letter spacing for a stylized look */
+    text-shadow: 0 0 15px rgba(143, 227, 240, 0.8), 0 0 5px rgba(143, 227, 240, 0.5); /* Intense, layered glow for prominence */
+    animation: pulseGlow 2s infinite alternate; /* Subtle pulsing glow animation */
+}
+
+/* Keyframe for heading glow animation */
+@keyframes pulseGlow {
+    from { text-shadow: 0 0 10px rgba(143, 227, 240, 0.7), 0 0 3px rgba(143, 227, 240, 0.4); }
+    to { text-shadow: 0 0 20px rgba(143, 227, 240, 1), 0 0 8px rgba(143, 227, 240, 0.6); }
+}
+
+/* Form group for labels and inputs */
+.form-group {
+    margin-bottom: 25px; /* Reduced spacing between form elements */
+}
+
+/* Label styles for input fields */
+.form-group label {
+    display: block;
+    margin-bottom: 10px; /* Reduced margin-bottom */
+    font-size: 18px; /* Adjusted font size */
+    text-align: left;
+    color: #b0e0e6; /* Softer cyan for labels, professional and clear */
+    font-weight: 600; /* Medium bold for labels */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Subtle text shadow for clarity */
+}
+
+/* Date input field styles */
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 12px 15px; /* Reduced padding */
+    margin-bottom: 0;
+    border: 1px solid #5a6a8a; /* Slightly darker, refined border */
+    background-color: rgba(30, 35, 50, 0.7); /* Darker, more transparent background for inputs */
+    color: inherit; /* Inherit font color from body */
+    font-family: inherit; /* Inherit font family from body */
+    font-size: 17px; /* Adjusted font size */
+    box-sizing: border-box;
+    border-radius: 8px; /* Slightly more rounded corners for inputs */
+    outline: none; /* Remove default focus outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition for focus */
+    -webkit-appearance: none; /* Remove default date input styling */
+    appearance: none;
+}
+
+/* Style for the calendar picker icon */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.9) brightness(1.2); /* Brighter, clearer calendar icon */
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Focus state for date input fields */
+.form-group input[type="date"]:focus {
+    border-color: #8fe3f0; /* Vibrant cyan border on focus */
+    box-shadow: 0 0 0 4px rgba(143, 227, 240, 0.4); /* Prominent cyan glow on focus */
+    background-color: rgba(30, 35, 50, 0.9); /* More opaque background on focus */
+}
+
+/* Calculate button styles */
+.btn-calculate {
+    display: flex; /* Use flexbox to center content (text + spinner) */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    gap: 8px; /* Space between spinner and text */
+    padding: 14px 35px; /* Reduced padding */
+    margin-top: 30px; /* Reduced margin-top */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+    font-size: 24px; /* Reduced font size */
+    cursor: pointer;
+    background: linear-gradient(145deg, #ef4444 0%, #cc3333 100%); /* Refined red gradient */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 10px; /* More rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.2); /* Elevated, softer shadow with subtle inner shadow */
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transitions */
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px; /* Enhanced letter spacing */
+    position: relative; /* For pseudo-elements */
+    overflow: hidden; /* For ripple effect */
+}
+
+/* Pseudo-element for subtle button highlight/shine effect */
+.btn-calculate::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.15); /* Subtle white shine */
+    transform: skewX(-30deg);
+    transition: left 0.4s ease-in-out;
+}
+
+/* Shine effect on hover */
+.btn-calculate:hover::before {
+    left: 100%;
+}
+
+/* First letter styling for the button */
+.btn-calculate::first-letter {
+    color: #8fe3f0; /* Cyan first letter, matching heading accent */
+    transition: color 0.3s ease;
+}
+
+/* Hover state for the calculate button */
+.btn-calculate:hover {
+    background: linear-gradient(145deg, #dc2626 0%, #a21b1b 100%); /* Darker gradient on hover */
+    transform: translateY(-5px); /* More pronounced lift effect */
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.3); /* Larger shadow on hover */
+}
+
+/* Active/clicked state for the calculate button */
+.btn-calculate:active {
+    transform: translateY(2px); /* Press-down effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Reduced shadow to simulate being pressed */
+    background: linear-gradient(145deg, #a21b1b 0%, #7f1414 100%); /* Even darker gradient when pressed */
+}
+
+/* Result display area */
+.result {
+    margin-top: 45px; /* Reduced margin-top */
+    font-size: 24px; /* Reduced font size */
+    font-weight: bold;
+    color: #67e8f9; /* A light cyan for the final result, professional accent */
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent dark background for depth */
+    padding: 25px; /* Reduced padding */
+    border: 2px solid #67e8f9; /* Matching cyan border */
+    border-radius: 10px; /* Rounded corners */
+    word-break: break-word;
+    box-shadow: inset 0 0 15px rgba(103, 232, 249, 0.4), 0 5px 20px rgba(0, 0, 0, 0.4); /* Inner glow + outer shadow for a display effect */
+    line-height: 1.6; /* Improved readability for multi-line results */
+    text-shadow: 0 0 8px rgba(103, 232, 249, 0.7); /* Subtle text glow */
+    letter-spacing: 1px;
+}
+
+/* Error message display area */
+.error-message {
+    margin-top: 25px; /* Reduced margin-top */
+    color: #ff6b6b; /* Softer, modern red for error messages */
+    font-weight: bold;
+    font-size: 17px; /* Adjusted font size */
+    text-shadow: none; /* Removed text shadow for cleaner look */
+    background-color: rgba(255, 0, 0, 0.1); /* Very subtle red background for errors */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+/* Braille Spinner Icon Styles (for inside button) */
+.braille-spinner-icon {
+    /* The span itself acts as a container, its content will be empty */
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.2em; /* Give it a fixed width for the pseudo-element to render within */
+    height: 1.2em; /* Give it a fixed height */
+    position: relative; /* Needed for absolute positioning of pseudo-element */
+    overflow: hidden; /* Hide anything outside its bounds */
+}
+
+.braille-spinner-icon::before {
+    content: "⠋"; /* Initial Braille character */
+    font-size: 1.2em; /* Size of the braille character */
+    line-height: 1;
+    font-weight: 100;
+    color: #ffffff;
+    position: absolute; /* Position relative to .braille-spinner-icon */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the character */
+    animation: brailleSpin 0.8s linear infinite; /* Apply animation to the pseudo-element */
+}
+
+@keyframes brailleSpin {
+    0% { content: "⠋"; }
+    12.5% { content: "⠙"; }
+    25% { content: "⠚"; }
+    37.5% { content: "⠓"; }
+    50% { content: "⠧"; }
+    62.5% { content: "⠼"; }
+    75% { content: "⠶"; }
+    87.5% { content: "⠦"; }
+    100% { content: "⠋"; } /* Loop back to start */
+}
+
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .calculator-container {
+        padding: 25px; /* Adjusted padding on smaller screens */
+        border-radius: 10px;
+    }
+    .calculator-container h1 {
+        font-size: 24px; /* Adjusted heading size */
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+    }
+    .form-group label,
+    .error-message {
+        font-size: 15px; /* Uniform font size reduction for readability */
+    }
+    .form-group input[type="date"] {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+    .btn-calculate {
+        padding: 12px 25px; /* Smaller padding for button on mobile */
+        font-size: 20px;
+        letter-spacing: 1.5px;
+    }
+    .result {
+        padding: 20px; /* Smaller padding for result on mobile */
+        font-size: 22px;
+    }
+    .braille-spinner-icon {
+        font-size: 1.1em; /* Adjust spinner size relative to smaller button text */
+    }
+}
+
+@media (max-width: 480px) {
+    .calculator-container {
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .calculator-container h1 {
+        font-size: 20px;
+        margin-bottom: 25px;
+        letter-spacing: 1.5px;
+    }
+    .form-group input[type="date"],
+    .result {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    .btn-calculate {
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+    .error-message {
+        font-size: 14px;
+        padding: 8px;
+    }
+    .braille-spinner-icon {
+        font-size: 1em; /* Even smaller spinner on very small screens */
+    }
+}
