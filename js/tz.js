@@ -66,6 +66,45 @@
         }
 
         /**
+         * Returns a sun or moon emoji based on the current hour in a given timezone.
+         * @param {string} timezone - The IANA timezone string.
+         * @returns {string} - Sun or moon emoji.
+         */
+        function getSunMoonIcon(timezone) {
+            const hour = moment().tz(timezone).hour();
+            // Assuming daytime is roughly 6 AM to 6 PM
+            if (hour >= 6 && hour < 18) {
+                return '☀️'; // Sun emoji
+            } else {
+                return '🌙'; // Moon emoji
+            }
+        }
+
+        /**
+         * Formats the UTC offset of a given timezone.
+         * This function is no longer used for display in updateTimezones, but kept for reference if needed elsewhere.
+         * @param {string} timezone - The IANA timezone string.
+         * @returns {string} - Formatted UTC offset (e.g., "+05:30", "-04:00", or empty string if offset is 0).
+         */
+        function formatTimezoneOffset(timezone) {
+            const offsetMinutes = moment().tz(timezone).utcOffset(); // in minutes
+
+            if (offsetMinutes === 0) {
+                return ''; // If offset is 0, return an empty string
+            }
+
+            const sign = offsetMinutes >= 0 ? '+' : '-';
+            const absOffsetMinutes = Math.abs(offsetMinutes);
+            const hours = Math.floor(absOffsetMinutes / 60);
+            const minutes = absOffsetMinutes % 60;
+
+            const formattedHours = String(hours).padStart(2, '0');
+            const formattedMinutes = String(minutes).padStart(2, '0');
+
+            return `${sign}${formattedHours}:${formattedMinutes}`; // Removed "UTC" prefix
+        }
+
+        /**
          * Updates the UTC Live time display.
          */
         function updateUTCLiveTime() {
@@ -106,9 +145,10 @@
                 trackedTimezones.forEach(timezone => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-group-item');
+                    // Incorporate sun/moon icon and ONLY the time, no offset
                     listItem.innerHTML = `
                         <div class="timezone-entry">
-                            <span class="timezone-name">${timezone.replace(/_/g, ' ')}</span>
+                            <span class="timezone-name">${getSunMoonIcon(timezone)} ${timezone.replace(/_/g, ' ')}</span>
                             <span class="timezone-time">${moment().tz(timezone).format('h:mm:ss A')}</span>
                             <button class="remove-btn" data-timezone="${timezone}">X</button>
                         </div>
