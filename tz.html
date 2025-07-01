@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>World Timezones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <!-- Custom CSS for timezone app -->
+    <link href="css/tz.css" rel="stylesheet" media="screen">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Moment.js and Moment-timezone for easier timezone handling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+
+    <!-- Include essentials.js and sound.js -->
+    <script src="js/sound.js"></script>
+    <script src="js/essentials.js"></script>
+
+    <!-- Favicon links -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon/android-chrome-512x512.png">
+</head>
+<body>
+    <!-- Placeholder for the navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1>World Timezones</h1>
+            <p>Stay connected across different time zones.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">UTC Live</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="utc-live-time" class="local-time"></div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add Timezone</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group" style="position: relative;">
+                            <label for="timezone-input">Enter City/Timezone (e.g., "America/New_York", "London") or Country (e.g., "India", "USA"):</label>
+                            <!-- Removed list attribute -->
+                            <input type="text" class="form-control" id="timezone-input" placeholder="e.g., Europe/London or India">
+                            <!-- Custom div for autocomplete suggestions -->
+                            <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                        </div>
+                        <button id="add-timezone-btn" class="btn btn-primary btn-block">Add Timezone</button>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Tracked Timezones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="timezone-list" class="list-group">
+                            <!-- Default Local Time entry - always present -->
+                            <li class="list-group-item" data-default-timezone="true">
+                                <div class="timezone-entry">
+                                    <span class="timezone-name">Local Time</span>
+                                    <span class="timezone-time" id="time-local"></span>
+                                    <!-- Remove button for local time is special, cannot be removed via standard logic -->
+                                    <button class="remove-btn" data-timezone="__LOCAL_TIME_FIXED__">X</button>
+                                </div>
+                            </li>
+                            <!-- Other timezones will be dynamically added here -->
+                        </ul>
+                        <div id="no-timezones-message" class="text-center text-muted" style="display: none;">
+                            No timezones added yet. Add one above!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder for the footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Custom JavaScript for timezone app - IMPORTANT: This should be the LAST script -->
+    <script src="js/tz.js"></script>
+</body>
+</html>
