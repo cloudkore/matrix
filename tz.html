@@ -44,7 +44,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">UTC Live</h3>
+                        <h3 class="panel-title">NSO Server UTC</h3>
                     </div>
                     <div class="panel-body">
                         <div id="utc-live-time" class="local-time"></div>
@@ -66,7 +66,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="form-group" style="position: relative;">
-                                    <label for="timezone-input">Enter City/Timezone (e.g., "America/New_York", "London") or Country (e.g., "India", "USA"):</label>
+                                    <label for="timezone-input">Enter City/Timezone ("America/New_York") or Country ("Japan", "USA"):</label>
                                     <input type="text" class="form-control" id="timezone-input" placeholder="e.g., Europe/London or India">
                                     <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
                                 </div>
@@ -124,7 +124,7 @@
                             <!-- Default Local Time entry - always present -->
                             <li class="list-group-item" data-default-timezone="true">
                                 <div class="timezone-entry">
-                                    <span class="timezone-name">Local Time</span>
+                                    <span class="timezone-name">Your Time</span>
                                     <span class="timezone-time" id="time-local"></span>
                                     <!-- Remove button for local time is special, cannot be removed via standard logic -->
                                     <button class="remove-btn" data-timezone="__LOCAL_TIME_FIXED__">X</button>
