@@ -103,11 +103,12 @@
     color: #4299e1; /* Slightly brighter blue on hover */
 }
 
-.form-group {
+/* Scoped styles for form elements and lists within panel bodies */
+.panel-body .form-group {
     margin-bottom: 20px;
 }
 
-.form-control {
+.panel-body .form-control {
     background-color: #2d3748; /* Dark background for input */
     color: #e2e8f0;
     border: 1px solid #4a5568; /* Slightly lighter border */
@@ -120,18 +121,18 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-control:focus {
+.panel-body .form-control:focus {
     border-color: #63b3ed; /* Accent blue border on focus */
     box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Accent blue glow effect on focus */
     outline: none;
 }
 
-.form-control::placeholder {
+.panel-body .form-control::placeholder {
     color: #a0aec0; /* Muted placeholder text */
     opacity: 1;
 }
 
-.btn-primary {
+.panel-body .btn-primary {
     background-color: #63b3ed; /* Primary accent blue button */
     color: #1a202c; /* Dark text on button for contrast */
     border: none;
@@ -146,21 +147,21 @@
     width: 100%;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
+.panel-body .btn-primary:hover,
+.panel-body .btn-primary:focus {
     background-color: #4299e1; /* Darker blue on hover */
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(99, 179, 237, 0.35);
     outline: none;
 }
 
-.btn-primary::first-letter,
-.btn-primary:hover::first-letter,
-.btn-primary:focus::first-letter {
+.panel-body .btn-primary::first-letter,
+.panel-body .btn-primary:hover::first-letter,
+.panel-body .btn-primary:focus::first-letter {
     color: inherit;
 }
 
-.list-group {
+.panel-body .list-group {
     background-color: #2d3748; /* Dark background for list group */
     border: 1px solid #4a5568; /* Light border */
     border-radius: 8px;
@@ -170,7 +171,7 @@
     overflow-y: auto;
 }
 
-.list-group-item {
+.panel-body .list-group-item {
     background-color: #2d3748; /* Dark background for list items */
     color: #e2e8f0;
     border-bottom: 1px solid #4a5568; /* Subtle separator for items */
@@ -179,16 +180,16 @@
     font-family: inherit;
 }
 
-.list-group-item:last-child {
+.panel-body .list-group-item:last-child {
     border-bottom: none;
 }
 
-.list-group-item:hover {
+.panel-body .list-group-item:hover {
     background-color: #4a5568; /* Slightly lighter dark background on hover */
     color: #fff; /* Brighter text on hover */
 }
 
-.list-group-item .remove-btn {
+.panel-body .list-group-item .remove-btn {
     float: right;
     background-color: #e53e3e; /* Muted red for danger action */
     color: #fff;
@@ -202,11 +203,11 @@
     font-family: inherit;
 }
 
-.list-group-item .remove-btn:hover {
+.panel-body .list-group-item .remove-btn:hover {
     background-color: #c53030; /* Darker red on hover */
 }
 
-.local-time {
+.panel-body .local-time {
     font-size: 2.5em;
     font-weight: 700;
     color: #63b3ed; /* Accent blue for local time */
@@ -217,33 +218,33 @@
     line-height: 1.2;
 }
 
-.timezone-entry {
+.panel-body .timezone-entry {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0;
 }
 
-.timezone-name {
+.panel-body .timezone-name {
     font-weight: 600;
     color: #e2e8f0;
     font-family: inherit;
 }
 
-.timezone-time {
+.panel-body .timezone-time {
     font-family: inherit;
     color: #a0aec0; /* Muted grey for time */
     font-size: 1em;
 }
 
-.text-muted {
+.panel-body .text-muted {
     color: #a0aec0 !important;
     font-size: 0.9em;
     font-family: inherit;
 }
 
 /* Custom Autocomplete Suggestions Styling */
-.autocomplete-suggestions {
+.panel-body .autocomplete-suggestions {
     position: absolute;
     border: 1px solid #4a5568; /* Dark border */
     background-color: #2d3748; /* Dark background */
@@ -256,7 +257,7 @@
     display: none; /* Hidden by default */
 }
 
-.autocomplete-item {
+.panel-body .autocomplete-item {
     padding: 10px 15px;
     cursor: pointer;
     color: #e2e8f0; /* Soft off-white text */
@@ -265,33 +266,33 @@
     border-bottom: 1px solid #4a5568; /* Separator */
 }
 
-.autocomplete-item:last-child {
+.panel-body .autocomplete-item:last-child {
     border-bottom: none;
 }
 
-.autocomplete-item:hover {
+.panel-body .autocomplete-item:hover {
     background-color: #4a5568; /* Lighter dark on hover */
     color: #fff; /* Brighter text on hover */
 }
 
 /* Specific styling for the Time Converter's input group and AM/PM select */
-.input-group {
+.panel-body .input-group {
     display: flex; /* Use flexbox for horizontal alignment */
     width: 100%;
 }
 
-.input-group .form-control {
+.panel-body .input-group .form-control {
     flex-grow: 1; /* Allow the time input to take available space */
     border-radius: 8px 0 0 8px; /* Rounded left corners only */
 }
 
-.input-group-addon {
+.panel-body .input-group-addon {
     padding: 0; /* Remove default padding from Bootstrap's addon */
     border: none; /* Remove default border from Bootstrap's addon */
     background-color: transparent; /* Ensure no background interference */
 }
 
-.input-group-addon select.form-control {
+.panel-body .input-group-addon select.form-control {
     /* Override inline styles and apply consistent theme */
     border-radius: 0 8px 8px 0; /* Rounded right corners only */
     height: 46px; /* Match input height */
@@ -311,11 +312,23 @@
     cursor: pointer;
 }
 
-.input-group-addon select.form-control:focus {
+.panel-body .input-group-addon select.form-control:focus {
     border-color: #63b3ed; /* Accent blue border on focus */
     box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Accent blue glow effect on focus */
     outline: none;
 }
+
+/* New style for country flags */
+.country-flag {
+    width: 24px; /* Adjust size as needed */
+    height: 18px; /* Maintain aspect ratio */
+    vertical-align: middle; /* Align with text */
+    margin-right: 8px; /* Space between flag and text */
+    border: 1px solid #4a5568; /* Subtle border for flags */
+    border-radius: 3px; /* Slightly rounded corners for flags */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -342,15 +355,15 @@
     .local-time {
         font-size: 2em;
     }
-    .form-control,
-    .btn-primary {
+    .panel-body .form-control,
+    .panel-body .btn-primary {
         font-size: 1em;
         padding: 10px 15px;
     }
-    .list-group-item {
+    .panel-body .list-group-item {
         padding: 12px 20px;
     }
-    .list-group-item .remove-btn {
+    .panel-body .list-group-item .remove-btn {
         font-size: 0.8em;
         padding: 5px 10px;
     }
@@ -370,14 +383,14 @@
     .local-time {
         font-size: 1.6em;
     }
-    .timezone-name,
-    .timezone-time {
+    .panel-body .timezone-name,
+    .panel-body .timezone-time {
         font-size: 0.9em;
     }
     .panel-body {
         padding: 15px;
     }
-    .list-group-item {
+    .panel-body .list-group-item {
         padding: 10px 15px;
     }
 }

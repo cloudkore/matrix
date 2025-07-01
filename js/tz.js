@@ -80,28 +80,73 @@
         }
 
         /**
-         * Formats the UTC offset of a given timezone.
-         * This function is no longer used for display in updateTimezones, but kept for reference if needed elsewhere.
-         * @param {string} timezone - The IANA timezone string.
-         * @returns {string} - Formatted UTC offset (e.g., "+05:30", "-04:00", or empty string if offset is 0).
+         * Attempts to get the 2-letter ISO country code for a given IANA timezone.
+         * Falls back to a common country if the timezone is associated with multiple or none.
+         * @param {string} timezone - The IANA timezone string (e.g., "America/New_York").
+         * @returns {string} - The 2-letter (or 6-letter for GB regions) ISO country code in lowercase, or 'unknown' if not found.
          */
-        function formatTimezoneOffset(timezone) {
-            const offsetMinutes = moment().tz(timezone).utcOffset(); // in minutes
-
-            if (offsetMinutes === 0) {
-                return ''; // If offset is 0, return an empty string
+        function getCountryCodeFromTimezone(timezone) {
+            const zone = moment.tz.zone(timezone);
+            if (zone && zone.countries && zone.countries().length > 0) {
+                let countryCode = zone.countries()[0].toLowerCase(); // Get the first country code
+                // Handle specific cases for Great Britain if needed, though 'gb' is standard
+                // If your SVG files are 'gb-eng.svg', 'gb-sct.svg' etc.
+                // you would need a more complex mapping here.
+                // For now, we assume 'gb.svg' for any UK-related timezone.
+                return countryCode;
             }
 
-            const sign = offsetMinutes >= 0 ? '+' : '-';
-            const absOffsetMinutes = Math.abs(offsetMinutes);
-            const hours = Math.floor(absOffsetMinutes / 60);
-            const minutes = absOffsetMinutes % 60;
+            // Fallback for common timezones that might not have direct country mapping via moment-timezone's countries()
+            // This is a simplified mapping and may not be exhaustive or perfectly accurate for all edge cases.
+            const commonTimezoneToCountryMap = {
+                'America/New_York': 'us',
+                'Europe/London': 'gb',
+                'Europe/Berlin': 'de',
+                'Asia/Tokyo': 'jp',
+                'Australia/Sydney': 'au',
+                'Asia/Kolkata': 'in',
+                'America/Los_Angeles': 'us',
+                'Europe/Paris': 'fr',
+                'America/Toronto': 'ca',
+                'Europe/Moscow': 'ru',
+                'Africa/Johannesburg': 'za',
+                'America/Mexico_City': 'mx',
+                'Asia/Shanghai': 'cn',
+                'Pacific/Auckland': 'nz',
+                'America/Sao_Paulo': 'br',
+                'Africa/Cairo': 'eg',
+                'Europe/Madrid': 'es',
+                'Europe/Rome': 'it',
+                'Europe/Amsterdam': 'nl',
+                'Sweden': 'se', // Added for common country name
+                'Norway': 'no', // Added for common country name
+                'Finland': 'fi', // Added for common country name
+                'Greece': 'gr', // Added for common country name
+                'UTC': 'un' // Generic icon for UTC if available, or just no flag
+            };
+            // Check if the timezone itself is in the common map
+            if (commonTimezoneToCountryMap[timezone]) {
+                return commonTimezoneToCountryMap[timezone];
+            }
 
-            const formattedHours = String(hours).padStart(2, '0');
-            const formattedMinutes = String(minutes).padStart(2, '0');
+            // Try to infer from the timezone name if it contains a country name
+            const timezoneParts = timezone.split('/');
+            if (timezoneParts.length > 0) {
+                const region = timezoneParts[0].toLowerCase();
+                // Basic mapping for regions to common country codes
+                const regionToCountryMap = {
+                    'america': 'us', 'europe': 'eu', 'asia': 'cn', 'africa': 'za',
+                    'australia': 'au', 'pacific': 'fj', 'atlantic': 'is', 'indian': 'io'
+                };
+                if (regionToCountryMap[region]) {
+                    return regionToCountryMap[region];
+                }
+            }
 
-            return `${sign}${formattedHours}:${formattedMinutes}`; // Removed "UTC" prefix
+            // If all else fails, return a default or 'unknown'
+            return 'un'; // Using 'un' for unknown, assuming you might have a generic 'un.svg'
         }
+
 
         /**
          * Updates the UTC Live time display.
@@ -144,10 +189,19 @@
                 trackedTimezones.forEach(timezone => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-group-item');
-                    // Incorporate sun/moon icon and ONLY the time, no offset
+
+                    const countryCode = getCountryCodeFromTimezone(timezone);
+                    const flagSrc = `assets/country-svg/${countryCode}.svg`;
+                    const flagAlt = `${timezone.replace(/_/g, ' ')} flag`;
+
+                    // Incorporate sun/moon icon, flag, and ONLY the time, no offset
                     listItem.innerHTML = `
                         <div class="timezone-entry">
-                            <span class="timezone-name">${getSunMoonIcon(timezone)} ${timezone.replace(/_/g, ' ')}</span>
+                            <span class="timezone-name">
+                                ${getSunMoonIcon(timezone)}
+                                <img src="${flagSrc}" alt="${flagAlt}" class="country-flag" onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=N/A';">
+                                ${timezone.replace(/_/g, ' ')}
+                            </span>
                             <span class="timezone-time">${moment().tz(timezone).format('h:mm:ss A')}</span>
                             <button class="remove-btn" data-timezone="${timezone}">X</button>
                         </div>
@@ -198,7 +252,7 @@
 
             // Validate the timezone using moment-timezone
             if (!moment.tz.zone(timezoneToAdd)) {
-                showAlert('Invalid input. Please enter a valid city/timezone (e.g., "America/New_York", "Europe/London") or a recognized country name (e.g., "India", "USA").');
+                showAlert('Invalid input. Please enter a valid city/timezone (e.g., "America/New_York", "Europe/London", "UTC") or a recognized country name (e.g., "India", "USA").');
                 return;
             }
 
@@ -248,6 +302,11 @@
 
             const normalizedInput = inputValue.toLowerCase();
             const matchingCountries = [];
+
+            // Add UTC as a suggestion if input matches
+            if ('utc'.startsWith(normalizedInput)) {
+                matchingCountries.push('UTC');
+            }
 
             for (const countryName in countryToTimezoneMap) {
                 if (countryName.toLowerCase().startsWith(normalizedInput)) {
@@ -330,10 +389,15 @@
             // Attempt to convert country name to IANA timezone for source
             const normalizedSourceInput = sourceTimezone.toLowerCase();
             let foundSourceCountryTimezone = null;
-            for (const country in countryToTimezoneMap) {
-                if (country.toLowerCase() === normalizedSourceInput) {
-                    foundSourceCountryTimezone = countryToTimezoneMap[country];
-                    break;
+            // Check for UTC first
+            if (normalizedSourceInput === 'utc') {
+                foundSourceCountryTimezone = 'UTC';
+            } else {
+                for (const country in countryToTimezoneMap) {
+                    if (country.toLowerCase() === normalizedSourceInput) {
+                        foundSourceCountryTimezone = countryToTimezoneMap[country];
+                        break;
+                    }
                 }
             }
             if (foundSourceCountryTimezone) {
@@ -343,10 +407,15 @@
             // Attempt to convert country name to IANA timezone for target
             const normalizedTargetInput = targetTimezone.toLowerCase();
             let foundTargetCountryTimezone = null;
-            for (const country in countryToTimezoneMap) {
-                if (country.toLowerCase() === normalizedTargetInput) {
-                    foundTargetCountryTimezone = countryToTimezoneMap[country];
-                    break;
+            // Check for UTC first
+            if (normalizedTargetInput === 'utc') {
+                foundTargetCountryTimezone = 'UTC';
+            } else {
+                for (const country in countryToTimezoneMap) {
+                    if (country.toLowerCase() === normalizedTargetInput) {
+                        foundTargetCountryTimezone = countryToTimezoneMap[country];
+                        break;
+                    }
                 }
             }
             if (foundTargetCountryTimezone) {
@@ -356,13 +425,13 @@
 
             // Validate source timezone
             if (!moment.tz.zone(sourceTimezone)) {
-                showAlert('Invalid source timezone. Please enter a valid city/timezone or country.');
+                showAlert('Invalid source timezone. Please enter a valid city/timezone (e.g., "America/New_York", "Europe/London", "UTC") or country.');
                 return;
             }
 
             // Validate target timezone
             if (!moment.tz.zone(targetTimezone)) {
-                showAlert('Invalid target timezone. Please enter a valid city/timezone or country.');
+                showAlert('Invalid target timezone. Please enter a valid city/timezone (e.g., "Asia/Kolkata", "UTC") or country.');
                 return;
             }
 
@@ -394,9 +463,18 @@
             const convertedMoment = sourceMoment.clone().tz(targetTimezone);
             const listItem = document.createElement('li');
             listItem.classList.add('list-group-item');
+
+            const targetCountryCode = getCountryCodeFromTimezone(targetTimezone);
+            const targetFlagSrc = `assets/country-svg/${targetCountryCode}.svg`;
+            const targetFlagAlt = `${targetTimezone.replace(/_/g, ' ')} flag`;
+
             listItem.innerHTML = `
                 <div class="timezone-entry">
-                    <span class="timezone-name">${getSunMoonIcon(targetTimezone)} ${targetTimezone.replace(/_/g, ' ')}</span>
+                    <span class="timezone-name">
+                        ${getSunMoonIcon(targetTimezone)}
+                        <img src="${targetFlagSrc}" alt="${targetFlagAlt}" class="country-flag" onerror="this.onerror=null;this.src='https://placehold.co/24x18/cccccc/000000?text=N/A';">
+                        ${targetTimezone.replace(/_/g, ' ')}
+                    </span>
                     <span class="timezone-time">${convertedMoment.format('h:mm:ss A')}</span>
                 </div>
             `;
