@@ -16,7 +16,6 @@
                 }
                 countryToTimezoneMap = await response.json();
                 console.log('Country-to-timezone map loaded successfully.');
-                // No longer calling populateCountryDatalist() as we're using custom autocomplete
             } catch (error) {
                 console.error('Failed to load country-to-timezone map:', error);
                 showAlert('Failed to load country data. Please try refreshing the page.');
@@ -230,18 +229,20 @@
             // localStorage.setItem('trackedTimezones', JSON.stringify(trackedTimezones));
         }
 
-        // --- Autocomplete Logic ---
+        // --- Autocomplete Logic for Add Timezone Tab ---
         const timezoneInput = document.getElementById('timezone-input');
         const autocompleteSuggestionsDiv = document.getElementById('autocomplete-suggestions');
 
         /**
-         * Shows autocomplete suggestions based on user input.
+         * Shows autocomplete suggestions based on user input for the Add Timezone tab.
          * @param {string} inputValue - The current value of the input field.
+         * @param {HTMLElement} suggestionsContainer - The div to display suggestions in.
+         * @param {HTMLElement} inputField - The input field associated with the suggestions.
          */
-        function showAutocompleteSuggestions(inputValue) {
-            autocompleteSuggestionsDiv.innerHTML = ''; // Clear previous suggestions
+        function showAutocompleteSuggestions(inputValue, suggestionsContainer, inputField) {
+            suggestionsContainer.innerHTML = ''; // Clear previous suggestions
             if (!inputValue) {
-                autocompleteSuggestionsDiv.style.display = 'none';
+                suggestionsContainer.style.display = 'none';
                 return;
             }
 
@@ -260,37 +261,35 @@
                     const suggestionItem = document.createElement('div');
                     suggestionItem.classList.add('autocomplete-item');
                     suggestionItem.textContent = countryName;
-                    // Changed 'click' to 'mousedown' to handle timing with blur event
                     suggestionItem.addEventListener('mousedown', (event) => {
                         event.preventDefault(); // Prevent blur from firing before value is set
-                        timezoneInput.value = countryName;
-                        hideAutocompleteSuggestions();
-                        timezoneInput.focus(); // Keep focus on input after selection
+                        inputField.value = countryName;
+                        suggestionsContainer.style.display = 'none'; // Hide suggestions
+                        inputField.focus(); // Keep focus on input after selection
                     });
-                    autocompleteSuggestionsDiv.appendChild(suggestionItem);
+                    suggestionsContainer.appendChild(suggestionItem);
                 });
-                autocompleteSuggestionsDiv.style.display = 'block';
+                suggestionsContainer.style.display = 'block';
             } else {
-                autocompleteSuggestionsDiv.style.display = 'none';
+                suggestionsContainer.style.display = 'none';
             }
         }
 
         /**
-         * Hides the autocomplete suggestions.
+         * Hides the autocomplete suggestions for a given container.
+         * @param {HTMLElement} suggestionsContainer - The div containing suggestions.
          */
-        function hideAutocompleteSuggestions() {
-            // No longer need a timeout if using mousedown and preventDefault
-            autocompleteSuggestionsDiv.style.display = 'none';
+        function hideAutocompleteSuggestions(suggestionsContainer) {
+            suggestionsContainer.style.display = 'none';
         }
 
-        // Event listener for input changes to trigger autocomplete
+        // Event listener for input changes to trigger autocomplete on Add Timezone tab
         timezoneInput.addEventListener('input', (event) => {
-            showAutocompleteSuggestions(event.target.value);
+            showAutocompleteSuggestions(event.target.value, autocompleteSuggestionsDiv, timezoneInput);
         });
 
-        // Event listener to hide suggestions when input loses focus
-        // Ensure this doesn't interfere with mousedown on suggestions
-        timezoneInput.addEventListener('blur', hideAutocompleteSuggestions);
+        // Event listener to hide suggestions when input loses focus on Add Timezone tab
+        timezoneInput.addEventListener('blur', () => hideAutocompleteSuggestions(autocompleteSuggestionsDiv));
 
         // Event listener for adding a timezone
         document.getElementById('add-timezone-btn').addEventListener('click', function() {
@@ -298,9 +297,139 @@
             if (newTimezone) {
                 addTimezone(newTimezone);
                 timezoneInput.value = ''; // Clear input
-                hideAutocompleteSuggestions(); // Hide suggestions after adding
+                hideAutocompleteSuggestions(autocompleteSuggestionsDiv); // Hide suggestions after adding
             }
         });
+
+        // --- Time Converter Logic ---
+        const sourceTimeInput = document.getElementById('source-time-input');
+        const ampmSelect = document.getElementById('ampm-select'); // Get reference to new AM/PM select
+        const sourceTimezoneInput = document.getElementById('source-timezone-input');
+        const targetTimezoneInput = document.getElementById('target-timezone-input'); // New target timezone input
+        const convertTimeBtn = document.getElementById('convert-time-btn');
+        const convertedTimesList = document.getElementById('converted-times-list');
+        const converterAutocompleteSuggestionsDiv = document.getElementById('converter-autocomplete-suggestions');
+        const targetAutocompleteSuggestionsDiv = document.getElementById('target-autocomplete-suggestions'); // New target autocomplete div
+
+        /**
+         * Converts the source time from one timezone to a specific target timezone.
+         */
+        function convertTime() {
+            convertedTimesList.innerHTML = ''; // Clear previous converted times
+
+            const sourceTime24hr = sourceTimeInput.value; // e.g., "14:30" or "02:30" (from input type="time")
+            const ampm = ampmSelect.value; // "AM" or "PM"
+            let sourceTimezone = sourceTimezoneInput.value.trim();
+            let targetTimezone = targetTimezoneInput.value.trim(); // Get target timezone input
+
+            if (!sourceTime24hr || !sourceTimezone || !targetTimezone) {
+                showAlert('Please enter source time, source timezone, and target timezone.');
+                return;
+            }
+
+            // Attempt to convert country name to IANA timezone for source
+            const normalizedSourceInput = sourceTimezone.toLowerCase();
+            let foundSourceCountryTimezone = null;
+            for (const country in countryToTimezoneMap) {
+                if (country.toLowerCase() === normalizedSourceInput) {
+                    foundSourceCountryTimezone = countryToTimezoneMap[country];
+                    break;
+                }
+            }
+            if (foundSourceCountryTimezone) {
+                sourceTimezone = foundSourceCountryTimezone;
+            }
+
+            // Attempt to convert country name to IANA timezone for target
+            const normalizedTargetInput = targetTimezone.toLowerCase();
+            let foundTargetCountryTimezone = null;
+            for (const country in countryToTimezoneMap) {
+                if (country.toLowerCase() === normalizedTargetInput) {
+                    foundTargetCountryTimezone = countryToTimezoneMap[country];
+                    break;
+                }
+            }
+            if (foundTargetCountryTimezone) {
+                targetTimezone = foundTargetCountryTimezone;
+            }
+
+
+            // Validate source timezone
+            if (!moment.tz.zone(sourceTimezone)) {
+                showAlert('Invalid source timezone. Please enter a valid city/timezone or country.');
+                return;
+            }
+
+            // Validate target timezone
+            if (!moment.tz.zone(targetTimezone)) {
+                showAlert('Invalid target timezone. Please enter a valid city/timezone or country.');
+                return;
+            }
+
+            // Parse hours and minutes from the 24-hour time input
+            const [hoursStr, minutesStr] = sourceTime24hr.split(':');
+            let hours = parseInt(hoursStr, 10);
+            const minutes = parseInt(minutesStr, 10);
+
+            // Adjust hours based on AM/PM selection
+            if (ampm === 'PM' && hours < 12) {
+                hours += 12;
+            } else if (ampm === 'AM' && hours === 12) { // 12 AM (midnight) should be 00 hours
+                hours = 0;
+            }
+
+            // Reconstruct the 24-hour time string
+            const adjustedTimeString = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+            // Create a moment object for the source time in the source timezone
+            const today = moment().format('YYYY-MM-DD');
+            const sourceMoment = moment.tz(`${today} ${adjustedTimeString}`, 'YYYY-MM-DD HH:mm', sourceTimezone);
+
+            if (!sourceMoment.isValid()) {
+                showAlert('Invalid source time or timezone combination. Please ensure the time is valid (e.g., 02:30).');
+                return;
+            }
+
+            // Perform conversion to the single target timezone
+            const convertedMoment = sourceMoment.clone().tz(targetTimezone);
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item');
+            listItem.innerHTML = `
+                <div class="timezone-entry">
+                    <span class="timezone-name">${getSunMoonIcon(targetTimezone)} ${targetTimezone.replace(/_/g, ' ')}</span>
+                    <span class="timezone-time">${convertedMoment.format('h:mm:ss A')}</span>
+                </div>
+            `;
+            convertedTimesList.appendChild(listItem);
+        }
+
+        // Event listener for input changes to trigger autocomplete on Source Timezone tab
+        sourceTimezoneInput.addEventListener('input', (event) => {
+            showAutocompleteSuggestions(event.target.value, converterAutocompleteSuggestionsDiv, sourceTimezoneInput);
+        });
+
+        // Event listener to hide suggestions when input loses focus on Source Timezone tab
+        sourceTimezoneInput.addEventListener('blur', () => hideAutocompleteSuggestions(converterAutocompleteSuggestionsDiv));
+
+        // Event listener for input changes to trigger autocomplete on Target Timezone tab
+        targetTimezoneInput.addEventListener('input', (event) => {
+            showAutocompleteSuggestions(event.target.value, targetAutocompleteSuggestionsDiv, targetTimezoneInput);
+        });
+
+        // Event listener to hide suggestions when input loses focus on Target Timezone tab
+        targetTimezoneInput.addEventListener('blur', () => hideAutocompleteSuggestions(targetAutocompleteSuggestionsDiv));
+
+        // Event listener for the Convert Time button
+        convertTimeBtn.addEventListener('click', convertTime);
+
+        // Handle tab switching to hide autocomplete suggestions
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // Hide autocomplete suggestions when tabs are switched
+            hideAutocompleteSuggestions(autocompleteSuggestionsDiv);
+            hideAutocompleteSuggestions(converterAutocompleteSuggestionsDiv);
+            hideAutocompleteSuggestions(targetAutocompleteSuggestionsDiv); // Hide target suggestions too
+        });
+
 
         // Initial load and continuous updates
         window.onload = function() {

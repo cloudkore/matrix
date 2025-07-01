@@ -31,6 +31,40 @@
     font-family: inherit;
 }
 
+/* Tab Content Styling */
+.tab-content {
+    background-color: #2d3748; /* Match panel background */
+    border: 1px solid #4a5568; /* Add border to mimic panel */
+    border-top: none; /* Remove top border as it's handled by tabs */
+    border-radius: 0 0 12px 12px; /* Rounded bottom corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+    padding: 0; /* Remove padding here, handled by panel-body */
+    margin-bottom: 30px; /* Space below tab content */
+}
+
+.tab-pane .panel-default {
+    /* Remove redundant panel styling inside tab-pane to avoid double borders/shadows */
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 0; /* Remove margin to prevent extra space */
+    border-radius: 0; /* Remove border radius */
+}
+
+.tab-pane .panel-default .panel-heading {
+    /* Style heading within the tab-pane's panel */
+    background-color: #4a5568; /* Slightly darker grey heading background */
+    border-radius: 0; /* Remove border radius */
+    border-bottom: 1px solid #2d3748; /* Darker separator line */
+}
+
+.tab-pane .panel-default .panel-body {
+    /* Style body within the tab-pane's panel */
+    background-color: #2d3748; /* Dark background for body content */
+    border-radius: 0 0 12px 12px; /* Apply rounded corners only to the bottom of the body */
+}
+
+
 .panel-default {
     background-color: #2d3748; /* Dark background for panels */
     border: none;
@@ -208,6 +242,81 @@
     font-family: inherit;
 }
 
+/* Custom Autocomplete Suggestions Styling */
+.autocomplete-suggestions {
+    position: absolute;
+    border: 1px solid #4a5568; /* Dark border */
+    background-color: #2d3748; /* Dark background */
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 999; /* Ensure it appears above other content */
+    width: 100%;
+    border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+}
+
+.autocomplete-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #e2e8f0; /* Soft off-white text */
+    font-family: inherit;
+    font-size: 0.95em;
+    border-bottom: 1px solid #4a5568; /* Separator */
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background-color: #4a5568; /* Lighter dark on hover */
+    color: #fff; /* Brighter text on hover */
+}
+
+/* Specific styling for the Time Converter's input group and AM/PM select */
+.input-group {
+    display: flex; /* Use flexbox for horizontal alignment */
+    width: 100%;
+}
+
+.input-group .form-control {
+    flex-grow: 1; /* Allow the time input to take available space */
+    border-radius: 8px 0 0 8px; /* Rounded left corners only */
+}
+
+.input-group-addon {
+    padding: 0; /* Remove default padding from Bootstrap's addon */
+    border: none; /* Remove default border from Bootstrap's addon */
+    background-color: transparent; /* Ensure no background interference */
+}
+
+.input-group-addon select.form-control {
+    /* Override inline styles and apply consistent theme */
+    border-radius: 0 8px 8px 0; /* Rounded right corners only */
+    height: 46px; /* Match input height */
+    background-color: #2d3748; /* Dark background */
+    color: #e2e8f0; /* Light text */
+    border: 1px solid #4a5568; /* Consistent border */
+    border-left: none; /* Remove left border to merge with input */
+    padding: 12px 18px; /* Consistent padding */
+    font-size: 1.05em; /* Consistent font size */
+    -webkit-appearance: none; /* Remove default arrow on Chrome/Safari */
+    -moz-appearance: none; /* Remove default arrow on Firefox */
+    appearance: none; /* Remove default arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23e2e8f0%22%20d%3D%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E'); /* Custom SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 8px 10px;
+    cursor: pointer;
+}
+
+.input-group-addon select.form-control:focus {
+    border-color: #63b3ed; /* Accent blue border on focus */
+    box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Accent blue glow effect on focus */
+    outline: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .jumbotron {
@@ -244,6 +353,10 @@
     .list-group-item .remove-btn {
         font-size: 0.8em;
         padding: 5px 10px;
+    }
+    .nav-tabs > li > a {
+        padding: 8px 15px;
+        font-size: 0.9em;
     }
 }
 

@@ -14,6 +14,9 @@
     <!-- Moment.js and Moment-timezone for easier timezone handling -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <!-- Include Bootstrap JS for tabs functionality -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 
     <!-- Include essentials.js and sound.js -->
     <script src="js/sound.js"></script>
@@ -48,19 +51,67 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Add Timezone</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group" style="position: relative;">
-                            <label for="timezone-input">Enter City/Timezone (e.g., "America/New_York", "London") or Country (e.g., "India", "USA"):</label>
-                            <!-- Removed list attribute -->
-                            <input type="text" class="form-control" id="timezone-input" placeholder="e.g., Europe/London or India">
-                            <!-- Custom div for autocomplete suggestions -->
-                            <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                <!-- Tab Navigation for Add Timezone and Time Converter -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#add-timezone-tab" aria-controls="add-timezone-tab" role="tab" data-toggle="tab">Add Timezone</a></li>
+                    <li role="presentation"><a href="#time-converter-tab" aria-controls="time-converter-tab" role="tab" data-toggle="tab">Time Converter</a></li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="add-timezone-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Add Timezone</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group" style="position: relative;">
+                                    <label for="timezone-input">Enter City/Timezone (e.g., "America/New_York", "London") or Country (e.g., "India", "USA"):</label>
+                                    <input type="text" class="form-control" id="timezone-input" placeholder="e.g., Europe/London or India">
+                                    <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                                </div>
+                                <button id="add-timezone-btn" class="btn btn-primary btn-block">Add Timezone</button>
+                            </div>
                         </div>
-                        <button id="add-timezone-btn" class="btn btn-primary btn-block">Add Timezone</button>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="time-converter-tab">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Convert Time</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="source-time-input">Source Time:</label>
+                                    <div class="input-group">
+                                        <input type="time" class="form-control" id="source-time-input" value="12:00">
+                                        <span class="input-group-addon" style="padding: 0; border: none;">
+                                            <select class="form-control" id="ampm-select" style="border-radius: 0 8px 8px 0; height: 46px; background-color: #2d3748; color: #e2e8f0; border-left: 1px solid #4a5568;">
+                                                <option value="AM">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="position: relative;">
+                                    <label for="source-timezone-input">Source Timezone:</label>
+                                    <input type="text" class="form-control" id="source-timezone-input" placeholder="e.g., America/New_York or USA">
+                                    <div id="converter-autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                                </div>
+                                <div class="form-group" style="position: relative;">
+                                    <label for="target-timezone-input">Target Country/Timezone:</label>
+                                    <input type="text" class="form-control" id="target-timezone-input" placeholder="e.g., India or Asia/Kolkata">
+                                    <div id="target-autocomplete-suggestions" class="autocomplete-suggestions"></div>
+                                </div>
+                                <button id="convert-time-btn" class="btn btn-primary btn-block">Convert Time</button>
+                                <hr>
+                                <h4>Converted Time:</h4>
+                                <ul id="converted-times-list" class="list-group">
+                                    <!-- Converted time will be displayed here -->
+                                    <li class="list-group-item text-center text-muted">Enter time, source, and target to convert.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -93,8 +144,6 @@
     <!-- Placeholder for the footer -->
     <div id="footer-placeholder"></div>
 
-    <!-- Include Bootstrap JS -->
-    <script src="js/bootstrap.min.js"></script>
     <!-- Custom JavaScript for timezone app - IMPORTANT: This should be the LAST script -->
     <script src="js/tz.js"></script>
 </body>
