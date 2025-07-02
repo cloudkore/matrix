@@ -64,7 +64,6 @@
     border-radius: 0 0 12px 12px; /* Apply rounded corners only to the bottom of the body */
 }
 
-
 .panel-default {
     background-color: #2d3748; /* Dark background for panels */
     border: none;
@@ -132,9 +131,82 @@
     opacity: 1;
 }
 
+/* Specific styling for the Hour/Minute input fields */
+.panel-body .input-group #source-time-hour-input,
+.panel-body .input-group #source-time-minute-input {
+    width: 70px;
+    text-align: center;
+    font-size: 1.05em;
+    height: 46px;
+    padding: 12px 18px;
+    box-sizing: border-box;
+    font-family: inherit;
+    border: 1px solid #4a5568;
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+/* Hour input - rounded left corners, no right border for seamless join */
+.panel-body .input-group #source-time-hour-input {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+/* Colon separator */
+/* Ensure your colon <span> has class="time-separator" */
+.panel-body .input-group-addon.time-separator {
+    padding: 0 5px;
+    border: none;
+    background-color: #2d3748;
+    color: #e2e8f0;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #4a5568;
+    border-bottom: 1px solid #4a5568;
+    height: 46px;
+    box-sizing: border-box;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+/* Minute input - no border radius, no left or right border */
+.panel-body .input-group #source-time-minute-input {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+}
+
+/* AM/PM select - rounded right corners, no left border */
+.panel-body .input-group #ampm-select {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+    background-color: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+    height: 46px;
+    padding: 12px 18px;
+    font-size: 1.05em;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+}
+
+/* Remove default select arrow on IE */
+.panel-body .input-group #ampm-select::-ms-expand {
+    display: none;
+}
+
 .panel-body .btn-primary {
-    background-color: #63b3ed; /* Primary accent blue button */
-    color: #1a202c; /* Dark text on button for contrast */
+    background-color: #63b3ed;
+    color: #1a202c;
     border: none;
     border-radius: 8px;
     padding: 12px 25px;
@@ -142,14 +214,14 @@
     font-size: 1.15em;
     font-weight: 600;
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    box-shadow: 0 5px 15px rgba(99, 179, 237, 0.25); /* Enhanced blue shadow */
+    box-shadow: 0 5px 15px rgba(99, 179, 237, 0.25);
     font-family: inherit;
     width: 100%;
 }
 
 .panel-body .btn-primary:hover,
 .panel-body .btn-primary:focus {
-    background-color: #4299e1; /* Darker blue on hover */
+    background-color: #4299e1;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(99, 179, 237, 0.35);
     outline: none;
@@ -162,8 +234,8 @@
 }
 
 .panel-body .list-group {
-    background-color: #2d3748; /* Dark background for list group */
-    border: 1px solid #4a5568; /* Light border */
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
     border-radius: 8px;
     box-shadow: none;
     margin-bottom: 0;
@@ -172,9 +244,9 @@
 }
 
 .panel-body .list-group-item {
-    background-color: #2d3748; /* Dark background for list items */
+    background-color: #2d3748;
     color: #e2e8f0;
-    border-bottom: 1px solid #4a5568; /* Subtle separator for items */
+    border-bottom: 1px solid #4a5568;
     padding: 15px 25px;
     transition: background-color 0.2s ease;
     font-family: inherit;
@@ -185,13 +257,13 @@
 }
 
 .panel-body .list-group-item:hover {
-    background-color: #4a5568; /* Slightly lighter dark background on hover */
-    color: #fff; /* Brighter text on hover */
+    background-color: #4a5568;
+    color: #fff;
 }
 
 .panel-body .list-group-item .remove-btn {
     float: right;
-    background-color: #e53e3e; /* Muted red for danger action */
+    background-color: #e53e3e;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -204,13 +276,13 @@
 }
 
 .panel-body .list-group-item .remove-btn:hover {
-    background-color: #c53030; /* Darker red on hover */
+    background-color: #c53030;
 }
 
 .panel-body .local-time {
     font-size: 2.5em;
     font-weight: 700;
-    color: #63b3ed; /* Accent blue for local time */
+    color: #63b3ed;
     text-align: center;
     margin-bottom: 20px;
     letter-spacing: 0.02em;
@@ -233,7 +305,7 @@
 
 .panel-body .timezone-time {
     font-family: inherit;
-    color: #a0aec0; /* Muted grey for time */
+    color: #a0aec0;
     font-size: 1em;
 }
 
@@ -243,27 +315,27 @@
     font-family: inherit;
 }
 
-/* Custom Autocomplete Suggestions Styling */
+/* Autocomplete Suggestions Styling */
 .panel-body .autocomplete-suggestions {
     position: absolute;
-    border: 1px solid #4a5568; /* Dark border */
-    background-color: #2d3748; /* Dark background */
+    border: 1px solid #4a5568;
+    background-color: #2d3748;
     max-height: 200px;
     overflow-y: auto;
-    z-index: 999; /* Ensure it appears above other content */
+    z-index: 999;
     width: 100%;
-    border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+    border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .panel-body .autocomplete-item {
     padding: 10px 15px;
     cursor: pointer;
-    color: #e2e8f0; /* Soft off-white text */
+    color: #e2e8f0;
     font-family: inherit;
     font-size: 0.95em;
-    border-bottom: 1px solid #4a5568; /* Separator */
+    border-bottom: 1px solid #4a5568;
 }
 
 .panel-body .autocomplete-item:last-child {
@@ -271,41 +343,36 @@
 }
 
 .panel-body .autocomplete-item:hover {
-    background-color: #4a5568; /* Lighter dark on hover */
-    color: #fff; /* Brighter text on hover */
+    background-color: #4a5568;
+    color: #fff;
 }
 
-/* Specific styling for the Time Converter's input group and AM/PM select */
+/* Input group base */
 .panel-body .input-group {
-    display: flex; /* Use flexbox for horizontal alignment */
+    display: flex;
     width: 100%;
-}
-
-.panel-body .input-group .form-control {
-    flex-grow: 1; /* Allow the time input to take available space */
-    border-radius: 8px 0 0 8px; /* Rounded left corners only */
+    align-items: stretch;
 }
 
 .panel-body .input-group-addon {
-    padding: 0; /* Remove default padding from Bootstrap's addon */
-    border: none; /* Remove default border from Bootstrap's addon */
-    background-color: transparent; /* Ensure no background interference */
+    padding: 0;
+    border: none;
+    background-color: transparent;
 }
 
 .panel-body .input-group-addon select.form-control {
-    /* Override inline styles and apply consistent theme */
-    border-radius: 0 8px 8px 0; /* Rounded right corners only */
-    height: 46px; /* Match input height */
-    background-color: #2d3748; /* Dark background */
-    color: #e2e8f0; /* Light text */
-    border: 1px solid #4a5568; /* Consistent border */
-    border-left: none; /* Remove left border to merge with input */
-    padding: 12px 18px; /* Consistent padding */
-    font-size: 1.05em; /* Consistent font size */
-    -webkit-appearance: none; /* Remove default arrow on Chrome/Safari */
-    -moz-appearance: none; /* Remove default arrow on Firefox */
-    appearance: none; /* Remove default arrow */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23e2e8f0%22%20d%3D%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E'); /* Custom SVG arrow */
+    border-radius: 0 8px 8px 0;
+    height: 46px;
+    background-color: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+    border-left: none;
+    padding: 12px 18px;
+    font-size: 1.05em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23e2e8f0%22%20d%3D%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 8px 10px;
@@ -313,22 +380,21 @@
 }
 
 .panel-body .input-group-addon select.form-control:focus {
-    border-color: #63b3ed; /* Accent blue border on focus */
-    box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Accent blue glow effect on focus */
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25);
     outline: none;
 }
 
-/* New style for country flags */
+/* Country flags */
 .country-flag {
-    width: 24px; /* Adjust size as needed */
-    height: 18px; /* Maintain aspect ratio */
-    vertical-align: middle; /* Align with text */
-    margin-right: 8px; /* Space between flag and text */
-    border: 1px solid #4a5568; /* Subtle border for flags */
-    border-radius: 3px; /* Slightly rounded corners for flags */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 24px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid #4a5568;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

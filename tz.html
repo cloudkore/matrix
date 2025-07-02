@@ -81,18 +81,20 @@
                                 <h3 class="panel-title">Convert Time</h3>
                             </div>
                             <div class="panel-body">
+
                                 <div class="form-group">
-                                    <label for="source-time-input">Source Time:</label>
+                                    <label for="source-time-hour-input">Source Time:</label>
                                     <div class="input-group">
-                                        <input type="time" class="form-control" id="source-time-input" value="12:00">
-                                        <span class="input-group-addon" style="padding: 0; border: none;">
-                                            <select class="form-control" id="ampm-select" style="border-radius: 0 8px 8px 0; height: 46px; background-color: #2d3748; color: #e2e8f0; border-left: 1px solid #4a5568;">
-                                                <option value="AM">AM</option>
-                                                <option value="PM">PM</option>
-                                            </select>
-                                        </span>
+                                        <input type="number" class="form-control" id="source-time-hour-input" value="12" min="1" max="12" placeholder="HH" style="width: 70px; text-align: center; border-radius: 8px 0 0 8px;">
+                                        <span class="input-group-addon time-separator" style="padding: 0 5px; border: none; background-color: transparent; color: #e2e8f0; font-size: 1.5em; display: flex; align-items: center;">:</span>
+                                        <input type="number" class="form-control" id="source-time-minute-input" value="00" min="0" max="59" placeholder="MM" style="width: 70px; text-align: center; border-radius: 0;">
+                                        <select class="form-control" id="ampm-select" style="border-radius: 0 8px 8px 0; height: 46px; background-color: #2d3748; color: #e2e8f0; border-left: none; flex-grow: 1;">
+                                            <option value="AM">AM</option>
+                                            <option value="PM">PM</option>
+                                        </select>
                                     </div>
                                 </div>
+
                                 <div class="form-group" style="position: relative;">
                                     <label for="source-timezone-input">Source Timezone:</label>
                                     <input type="text" class="form-control" id="source-timezone-input" placeholder="e.g., America/New_York or USA">
