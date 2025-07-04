@@ -322,3 +322,74 @@ body {
   from, to { border-right-color: transparent; }
   50% { border-right-color: #c0c0c0; }
 }
+
+.dialogue-box {
+  display: flex;
+  /* Vertically center avatar and content */
+  align-items: center; /* This centers items vertically */
+  background-color: rgba(15, 15, 15, 0.85);
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 15px 20px;
+  max-width: 600px;
+  box-shadow: 0 0 15px rgba(214, 15, 42, 0.7);
+  font-family: 'IBM Plex Mono', inherit;
+  color: #c0c0c0;
+  margin: 20px auto;
+  user-select: none;
+}
+
+.dialogue-box .avatar {
+  flex-shrink: 0;
+  width: 80px;   /* bigger container */
+  height: 80px;  /* bigger container */
+  margin-right: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;           
+  align-items: center;      
+  justify-content: center;  
+}
+
+.dialogue-box .avatar img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover; /* fills container, might crop */
+  display: block;
+}
+
+.dialogue-content {
+  /* Let the text take full height of avatar and center vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: 96px; /* match avatar height */
+}
+
+#dialogue-text {
+  font-size: 1.1em;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0; /* Remove default margins */
+  position: relative;
+  padding-right: 15px; /* Give some room so the blinking cursor does not overlap text */
+  min-height: 1.2em; /* Ensure at least one line high */
+}
+
+#dialogue-text::after {
+  content: '|';
+  animation: blink-caret 1s step-start infinite;
+  margin-left: 3px;
+  opacity: 0.75;
+  position: absolute;
+  right: 5px; /* Keep cursor right aligned, but inside padding */
+  top: 0;
+  font-weight: bold;
+}
+
+@keyframes blink-caret {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}

@@ -6,51 +6,59 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="css/home.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="js/sound.js"></script>
-    <script src="js/essentials.js"></script>
-    <script src="js/ut.js"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
     <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="favicon/android-chrome-512x512.png">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/essentials.js"></script>
+    <script src="js/ut.js"></script>
+</head>
 <body>
 
     <div id="bootScreen">
         <div id="bootLog"></div>
-
         <div id="bootLoaderArea">
             <span id="bootLoaderText">Initializing modules</span><span id="loadingAnimation"></span>
         </div>
-        </div>
+    </div>
 
+    <div id="navbar-placeholder"></div>
 
-<div id="navbar-placeholder"></div>
+    <center>
+        <iframe id="fullScreenPenEffect" src="pen_effect.html" frameborder="0" scrolling="no"></iframe>
+    </center>
+    <br>
+    <center>
+        <section class="card-section">
+            <div class="card inception-card">
+                <img src="data/Pictures/matrix.png" alt="Matrix Image" class="card-image">
+            </div>
+        </section>
+        <br>
+        <section class="card-section">
+            <div id="ut" class="card uptime-card">
+                <p>System Uptime: Loading...</p>
+            </div>
+        </section>
+    </center>
 
-<center>
-<iframe id="fullScreenPenEffect" src="pen_effect.html" frameborder="0" scrolling="no"></iframe>
-            </center>
-</br>
-            <center>
-            <section class="card-section">
-                <div class="card inception-card">
-                     <img src="data/Pictures/matrix.png" alt="Matrix Image" class="card-image">
-                </div>
-            </section>
-</br>
-<section class="card-section">
-                <div id="ut" class="card uptime-card">
-                    <p>System Uptime: Loading...</p>
-                    </div>
-            </section>
-             </center>
+<div id="rpg-dialogue-box" class="dialogue-box">
+  <div class="avatar">
+    <img src="avatars/Votinhkk113.gif" alt="Character Avatar" />
+  </div>
+  <div class="dialogue-content">
+    <p id="dialogue-text"></p>
+  </div>
+</div>
 
     <div id="footer-placeholder"></div>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="js/boot.js"></script>
-</head>
 </body>
 </html>

@@ -125,3 +125,40 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }, 80); // Interval speed
 });
+
+const dialogueTexts = [
+  "Welcome to the Matrix world.",
+  "Your mission is to find the code keys.",
+  "Beware of agents lurking in the shadows.",
+  "Use your skills wisely and survive.",
+  "Good luck, Neo."
+];
+
+const dialogueTextElem = document.getElementById("dialogue-text");
+
+let dialogueIndex = 0;
+let charIndex = 0;
+const typingSpeed = 50; // ms per character
+const pauseBetweenLines = 1500; // ms pause after full text is displayed
+
+function typeDialogue() {
+  if (charIndex < dialogueTexts[dialogueIndex].length) {
+    dialogueTextElem.textContent += dialogueTexts[dialogueIndex].charAt(charIndex);
+    charIndex++;
+    setTimeout(typeDialogue, typingSpeed);
+  } else {
+    // Line finished, pause then go to next line
+    setTimeout(() => {
+      dialogueIndex++;
+      if (dialogueIndex >= dialogueTexts.length) {
+        dialogueIndex = 0; // loop back to first dialogue, or stop here if you want.
+      }
+      charIndex = 0;
+      dialogueTextElem.textContent = "";
+      typeDialogue();
+    }, pauseBetweenLines);
+  }
+}
+
+// Start typing on page load or after your content is ready
+typeDialogue();
