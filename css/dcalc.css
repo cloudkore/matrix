@@ -1,101 +1,101 @@
 /* Custom styles for the Days Calculator */
 
-/* Base body styling - removed flexbox centering here to avoid conflicts */
+/* Base body styling */
 body {
-    background-color: #202020; /* Even darker, richer background for depth */
-    color: #e0e6f2; /* Soft off-white for general text */
-    font-family: 'Inter', inherit; /* Using Inter for a professional modern look, fallback to sans-serif */
+    background-color: #1B1B2F; /* Dark indigo background */
+    color: #CCCCCC; /* Soft grey text */
+    font-family: 'Inter', inherit;
     margin: 0;
-    padding: 0; /* Ensure no default padding on body */
+    padding: 0;
     box-sizing: border-box;
-    display: flex; /* Make body a flex container */
-    flex-direction: column; /* Stack children vertically */
-    min-height: 100vh; /* Ensure body takes full viewport height */
-    overflow-x: hidden; /* Prevent horizontal scroll */
-}
-
-/* Wrapper for the main content to center the calculator */
-.main-content-wrapper {
-    flex-grow: 1; /* Allows this wrapper to take up available space between navbar/footer */
     display: flex;
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    padding: 20px; /* Add some padding around the calculator container */
-    box-sizing: border-box;
-    width: 100%; /* Ensure it takes full width */
-    overflow-y: auto; /* IMPORTANT: Adds vertical scrolling if content overflows */
-    -webkit-overflow-scrolling: touch; /* Improves scrolling performance on iOS */
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* Main container for the calculator */
+/* Wrapper for main content */
+.main-content-wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Main calculator container */
 .calculator-container {
-    background: linear-gradient(180deg, #1f2738 0%, #1a1e2a 100%); /* Subtle dark gradient background */
-    border: 1px solid #3c445c; /* Refined border color */
-    padding: 40px; /* Reduced padding for a smaller overall size */
-    border-radius: 16px; /* Increased border-radius for a softer, modern look */
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.05); /* Deeper, softer shadow with inner highlight */
-    max-width: 500px; /* Reduced max-width for a smaller calculator */
+    background: linear-gradient(180deg, #2F2A50 0%, #201F3D 100%); /* Subtle dark gradient */
+    border: 1px solid #5E4B8B; /* Soft purple border */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(15, 12, 38, 0.8), inset 0 0 15px rgba(212, 192, 247, 0.1);
+    max-width: 500px;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-    backdrop-filter: blur(5px); /* Subtle blur effect for depth (modern touch) */
-    -webkit-backdrop-filter: blur(5px); /* For Safari */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 /* Heading style */
 .calculator-container h1 {
-    color: #8fe3f0; /* A cool, vibrant cyan for a modern header */
-    margin-bottom: 35px; /* Reduced margin-bottom */
+    color: #8A2BE2; /* Blue-violet primary */
+    margin-bottom: 35px;
     text-transform: uppercase;
-    font-size: 30px; /* Reduced font size */
-    letter-spacing: 3px; /* Enhanced letter spacing for a stylized look */
-    text-shadow: 0 0 15px rgba(143, 227, 240, 0.8), 0 0 5px rgba(143, 227, 240, 0.5); /* Intense, layered glow for prominence */
-    animation: pulseGlow 2s infinite alternate; /* Subtle pulsing glow animation */
+    font-size: 30px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.8), 0 0 5px rgba(138, 43, 226, 0.5);
+    animation: pulseGlow 2s infinite alternate;
 }
 
-/* Keyframe for heading glow animation */
+/* Glow animation keyframes */
 @keyframes pulseGlow {
-    from { text-shadow: 0 0 10px rgba(143, 227, 240, 0.7), 0 0 3px rgba(143, 227, 240, 0.4); }
-    to { text-shadow: 0 0 20px rgba(143, 227, 240, 1), 0 0 8px rgba(143, 227, 240, 0.6); }
+    from { text-shadow: 0 0 10px rgba(138, 43, 226, 0.7), 0 0 3px rgba(138, 43, 226, 0.4); }
+    to { text-shadow: 0 0 20px rgba(138, 43, 226, 1), 0 0 8px rgba(138, 43, 226, 0.6); }
 }
 
-/* Form group for labels and inputs */
+/* Form group */
 .form-group {
-    margin-bottom: 25px; /* Reduced spacing between form elements */
+    margin-bottom: 25px;
 }
 
-/* Label styles for input fields */
+/* Labels */
 .form-group label {
     display: block;
-    margin-bottom: 10px; /* Reduced margin-bottom */
-    font-size: 18px; /* Adjusted font size */
+    margin-bottom: 10px;
+    font-size: 18px;
     text-align: left;
-    color: #b0e0e6; /* Softer cyan for labels, professional and clear */
-    font-weight: 600; /* Medium bold for labels */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Subtle text shadow for clarity */
+    color: #D4C0F7; /* Light lavender label */
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-/* Date input field styles */
+/* Date input */
 .form-group input[type="date"] {
     width: 100%;
-    padding: 12px 15px; /* Reduced padding */
+    padding: 12px 15px;
     margin-bottom: 0;
-    border: 1px solid #5a6a8a; /* Slightly darker, refined border */
-    background-color: rgba(30, 35, 50, 0.7); /* Darker, more transparent background for inputs */
-    color: inherit; /* Inherit font color from body */
-    font-family: inherit; /* Inherit font family from body */
-    font-size: 17px; /* Adjusted font size */
+    border: 1px solid #7E6FC0; /* Medium purple border */
+    background-color: rgba(45, 38, 74, 0.7); /* Semi-transparent dark purple background */
+    color: #ECECFB; /* Light lavender text */
+    font-family: inherit;
+    font-size: 17px;
     box-sizing: border-box;
-    border-radius: 8px; /* Slightly more rounded corners for inputs */
-    outline: none; /* Remove default focus outline */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition for focus */
-    -webkit-appearance: none; /* Remove default date input styling */
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    -webkit-appearance: none;
     appearance: none;
 }
 
-/* Style for the calendar picker icon */
+/* Calendar icon */
 .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.9) brightness(1.2); /* Brighter, clearer calendar icon */
+    filter: invert(0.8) brightness(1.2);
     cursor: pointer;
     opacity: 0.8;
     transition: opacity 0.3s ease;
@@ -105,39 +105,39 @@ body {
     opacity: 1;
 }
 
-/* Focus state for date input fields */
+/* Focus state */
 .form-group input[type="date"]:focus {
-    border-color: #8fe3f0; /* Vibrant cyan border on focus */
-    box-shadow: 0 0 0 4px rgba(143, 227, 240, 0.4); /* Prominent cyan glow on focus */
-    background-color: rgba(30, 35, 50, 0.9); /* More opaque background on focus */
+    border-color: #8A2BE2;
+    box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.4);
+    background-color: rgba(45, 38, 74, 0.9);
 }
 
-/* Calculate button styles */
+/* Calculate button */
 .btn-calculate {
-    display: flex; /* Use flexbox to center content (text + spinner) */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    gap: 8px; /* Space between spinner and text */
-    padding: 14px 35px; /* Reduced padding */
-    margin-top: 30px; /* Reduced margin-top */
-    margin-left: auto; /* Center horizontally */
-    margin-right: auto; /* Center horizontally */
-    font-size: 24px; /* Reduced font size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 35px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 24px;
     cursor: pointer;
-    background: linear-gradient(145deg, #ef4444 0%, #cc3333 100%); /* Refined red gradient */
-    color: #fff; /* White text */
+    background: linear-gradient(145deg, #8A2BE2 0%, #5E4B8B 100%);
+    color: #FFFFFF;
     border: none;
-    border-radius: 10px; /* More rounded corners */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.2); /* Elevated, softer shadow with subtle inner shadow */
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transitions */
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(15, 12, 38, 0.7), inset 0 -3px 5px rgba(15, 12, 38, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     text-transform: uppercase;
     font-weight: bold;
-    letter-spacing: 2px; /* Enhanced letter spacing */
-    position: relative; /* For pseudo-elements */
-    overflow: hidden; /* For ripple effect */
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Pseudo-element for subtle button highlight/shine effect */
+/* Shine effect */
 .btn-calculate::before {
     content: '';
     position: absolute;
@@ -145,88 +145,84 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.15); /* Subtle white shine */
+    background: rgba(255, 255, 255, 0.15);
     transform: skewX(-30deg);
     transition: left 0.4s ease-in-out;
 }
 
-/* Shine effect on hover */
 .btn-calculate:hover::before {
     left: 100%;
 }
 
-/* First letter styling for the button */
+/* First letter styling */
 .btn-calculate::first-letter {
-    color: #8fe3f0; /* Cyan first letter, matching heading accent */
+    color: #D4C0F7;
     transition: color 0.3s ease;
 }
 
-/* Hover state for the calculate button */
+/* Hover & active states */
 .btn-calculate:hover {
-    background: linear-gradient(145deg, #dc2626 0%, #a21b1b 100%); /* Darker gradient on hover */
-    transform: translateY(-5px); /* More pronounced lift effect */
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.3); /* Larger shadow on hover */
+    background: linear-gradient(145deg, #5E4B8B 0%, #3C3061 100%);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(15, 12, 38, 0.8), inset 0 -3px 5px rgba(15, 12, 38, 0.5);
 }
 
-/* Active/clicked state for the calculate button */
 .btn-calculate:active {
-    transform: translateY(2px); /* Press-down effect */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Reduced shadow to simulate being pressed */
-    background: linear-gradient(145deg, #a21b1b 0%, #7f1414 100%); /* Even darker gradient when pressed */
+    transform: translateY(2px);
+    box-shadow: 0 4px 10px rgba(15, 12, 38, 0.4), inset 0 2px 5px rgba(15, 12, 38, 0.3);
+    background: linear-gradient(145deg, #3C3061 0%, #2B2447 100%);
 }
 
-/* Result display area */
+/* Result display */
 .result {
-    margin-top: 45px; /* Reduced margin-top */
-    font-size: 24px; /* Reduced font size */
+    margin-top: 45px;
+    font-size: 24px;
     font-weight: bold;
-    color: #67e8f9; /* A light cyan for the final result, professional accent */
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent dark background for depth */
-    padding: 25px; /* Reduced padding */
-    border: 2px solid #67e8f9; /* Matching cyan border */
-    border-radius: 10px; /* Rounded corners */
+    color: #D4C0F7;
+    background-color: rgba(34, 29, 63, 0.6);
+    padding: 25px;
+    border: 2px solid #D4C0F7;
+    border-radius: 10px;
     word-break: break-word;
-    box-shadow: inset 0 0 15px rgba(103, 232, 249, 0.4), 0 5px 20px rgba(0, 0, 0, 0.4); /* Inner glow + outer shadow for a display effect */
-    line-height: 1.6; /* Improved readability for multi-line results */
-    text-shadow: 0 0 8px rgba(103, 232, 249, 0.7); /* Subtle text glow */
+    box-shadow: inset 0 0 15px rgba(212, 192, 247, 0.4), 0 5px 20px rgba(15, 12, 38, 0.5);
+    line-height: 1.6;
+    text-shadow: 0 0 8px rgba(212, 192, 247, 0.7);
     letter-spacing: 1px;
 }
 
-/* Error message display area */
+/* Error message */
 .error-message {
-    margin-top: 25px; /* Reduced margin-top */
-    color: #ff6b6b; /* Softer, modern red for error messages */
+    margin-top: 25px;
+    color: #D280E8; /* Softer purple-pink for errors */
     font-weight: bold;
-    font-size: 17px; /* Adjusted font size */
-    text-shadow: none; /* Removed text shadow for cleaner look */
-    background-color: rgba(255, 0, 0, 0.1); /* Very subtle red background for errors */
+    font-size: 17px;
+    background-color: rgba(210, 192, 247, 0.1);
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(210, 192, 247, 0.3);
 }
 
-/* Braille Spinner Icon Styles (for inside button) */
+/* Braille spinner icon */
 .braille-spinner-icon {
-    /* The span itself acts as a container, its content will be empty */
     display: inline-block;
     vertical-align: middle;
-    width: 1.2em; /* Give it a fixed width for the pseudo-element to render within */
-    height: 1.2em; /* Give it a fixed height */
-    position: relative; /* Needed for absolute positioning of pseudo-element */
-    overflow: hidden; /* Hide anything outside its bounds */
+    width: 1.2em;
+    height: 1.2em;
+    position: relative;
+    overflow: hidden;
 }
 
 .braille-spinner-icon::before {
-    content: "⠋"; /* Initial Braille character */
-    font-size: 1.2em; /* Size of the braille character */
+    content: "⠋";
+    font-size: 1.2em;
     line-height: 1;
     font-weight: 100;
-    color: #ffffff;
-    position: absolute; /* Position relative to .braille-spinner-icon */
+    color: #FFFFFF;
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Center the character */
-    animation: brailleSpin 0.8s linear infinite; /* Apply animation to the pseudo-element */
+    transform: translate(-50%, -50%);
+    animation: brailleSpin 0.8s linear infinite;
 }
 
 @keyframes brailleSpin {
@@ -238,40 +234,39 @@ body {
     62.5% { content: "⠼"; }
     75% { content: "⠶"; }
     87.5% { content: "⠦"; }
-    100% { content: "⠋"; } /* Loop back to start */
+    100% { content: "⠋"; }
 }
 
-
-/* Responsive adjustments for smaller screens */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .calculator-container {
-        padding: 25px; /* Adjusted padding on smaller screens */
+        padding: 25px;
         border-radius: 10px;
     }
     .calculator-container h1 {
-        font-size: 24px; /* Adjusted heading size */
+        font-size: 24px;
         margin-bottom: 30px;
         letter-spacing: 2px;
     }
     .form-group label,
     .error-message {
-        font-size: 15px; /* Uniform font size reduction for readability */
+        font-size: 15px;
     }
     .form-group input[type="date"] {
         font-size: 16px;
         padding: 10px 12px;
     }
     .btn-calculate {
-        padding: 12px 25px; /* Smaller padding for button on mobile */
+        padding: 12px 25px;
         font-size: 20px;
         letter-spacing: 1.5px;
     }
     .result {
-        padding: 20px; /* Smaller padding for result on mobile */
+        padding: 20px;
         font-size: 22px;
     }
     .braille-spinner-icon {
-        font-size: 1.1em; /* Adjust spinner size relative to smaller button text */
+        font-size: 1.1em;
     }
 }
 
@@ -299,47 +294,47 @@ body {
         padding: 8px;
     }
     .braille-spinner-icon {
-        font-size: 1em; /* Even smaller spinner on very small screens */
+        font-size: 1em;
     }
 }
 
-/* Progress Bar Styles */
+/* Progress Bar styles */
 .progress-container {
     margin-top: 40px;
-    background-color: rgba(30, 35, 50, 0.7);
+    background-color: rgba(45, 38, 74, 0.7);
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #3c445c;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.4);
-    text-align: left; /* Align label to left */
+    border: 1px solid #5E4B8B;
+    box-shadow: inset 0 0 10px rgba(15, 12, 38, 0.65), 0 5px 15px rgba(15, 12, 38, 0.5);
+    text-align: left;
 }
 
 .progress-label {
     font-size: 1.1em;
-    color: #b0e0e6;
+    color: #D4C0F7;
     margin-bottom: 10px;
     font-weight: 600;
 }
 
 .progress-bar-outer {
     width: 100%;
-    background-color: #333d52; /* Darker background for the empty part */
+    background-color: #2A254B;
     border-radius: 8px;
-    height: 25px; /* Height of the progress bar */
-    overflow: hidden; /* Ensures inner bar respects border-radius */
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+    height: 25px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .progress-bar-inner {
     height: 100%;
-    width: 0%; /* Start at 0% and JS will update */
-    background: linear-gradient(90deg, #8fe3f0, #67e8f9); /* Gradient fill */
+    width: 0%;
+    background: linear-gradient(90deg, #8A2BE2, #D4C0F7);
     border-radius: 8px;
-    transition: width 0.7s ease-out; /* Smooth transition for width changes */
-    box-shadow: 0 0 10px rgba(103, 232, 249, 0.6); /* Subtle glow on the filled part */
+    transition: width 0.7s ease-out;
+    box-shadow: 0 0 10px rgba(212, 192, 247, 0.7);
 }
 
-/* Responsive adjustments for progress bar */
+/* Responsive progress bar */
 @media (max-width: 768px) {
     .progress-container {
         padding: 15px;

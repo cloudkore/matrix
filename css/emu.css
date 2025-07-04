@@ -2,6 +2,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #1B1B2F; /* Dark indigo background */
+  color: #CCCCCC; /* Soft grey text */
 }
 
 .container {
@@ -11,19 +13,22 @@ body {
 
 #footer-placeholder {
   height: 40px;
+  background-color: #1B1B2F; /* Consistent footer bg */
 }
 
+/* Black frame -> dark indigo bg, lavender text */
 .black-frame {
-  background-color: #000;
-  color: #fff;
+  background-color: #1B1B2F;
+  color: #D4C0F7;
   padding: 15px;
   border-radius: 12px;
 }
 
+/* Emulator card - dark indigo bg, soft borders */
 .emulator-card {
-  background-color: #111;
-  color: #fff;
-  border: 1px solid #555;
+  background-color: #2F2A50; /* Dark purple */
+  color: #E0E0E0;
+  border: 1px solid #5E4B8B; /* Soft purple border */
   border-radius: 10px;
   padding: 15px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -31,9 +36,10 @@ body {
 
 .emulator-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 10px red;
+  box-shadow: 0 0 10px #8A2BE2; /* blue-violet glow on hover */
 }
 
+/* Info section */
 .emulator-info {
   display: flex;
   align-items: center;
@@ -49,42 +55,45 @@ body {
 .emulator-title {
   font-weight: bold;
   font-size: 16px;
+  color: #D4C0F7; /* Lavender for title */
 }
 
 .emulator-version {
   font-size: 13px;
-  color: #ccc;
+  color: #B0A9D8; /* Soft muted purple */
 }
 
+/* Download button */
 .btn-download {
   display: inline-block;
-  background-color: #00ffcc;
-  color: #000;
+  background-color: #8A2BE2; /* Blue-violet */
+  color: #FFFFFF;
   padding: 5px 15px;
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .btn-download:hover {
-  background-color: #00e6b8;
-  color: #000;
+  background-color: #5E4B8B; /* Darker purple on hover */
+  color: #FFFFFF;
 }
 
-./* Add this to emu.css */
+./* Braille spinner */
 .braille-spinner {
   font-family: monospace;
   font-size: 20px;
-  color: black;
-  display: inline-block; /* Keep it inline */
+  color: #1B1B2F; /* dark indigo spinner */
+  display: inline-block;
   white-space: pre;
   margin-left: 10px;
-  visibility: hidden; /* Hide by default */
-  width: 20px; /* Give it a fixed width to prevent shifting */
-  text-align: left; /* Align spinner characters */
+  visibility: hidden;
+  width: 20px;
+  text-align: left;
 }
 
-/* When active, make it visible */
+/* Spinner visible when loading */
 .btn-download.loading .braille-spinner {
-    visibility: visible;
+  visibility: visible;
 }

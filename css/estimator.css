@@ -1,88 +1,85 @@
-/* Custom styles for NinjaBase Estimators - Advanced Dark Theme & Fully Full-Screen Responsive */
+/* Custom styles for NinjaBase Estimators - Dark Purple, Lavender & Grey Theme */
 
-/* General body styling - leveraging Bootstrap's font-family but setting dark background */
-html, body { /* Ensure html and body have no default margins/paddings and take full width */
+/* General body styling */
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
 }
 
 body {
-    background-color: #1a1a1a; /* Even darker, richer background */
-    color: #e0e0e0; /* Softer light text color */
+    background-color: #1B1B2F; /* Dark Indigo background */
+    color: #CCCCCC; /* Soft Grey text */
 }
 
 /* Main Estimator Container */
 .container {
-    /* --- CHANGES FOR FULL SCREEN ON ALL DEVICES --- */
-    width: 100%; /* Take up 100% of the viewport width on all screens */
-    margin: 0 auto; /* Remove vertical margin from top/bottom for full screen, centered horizontally */
-    padding: 20px; /* Default internal padding for mobile/small screens */
-
-    border: none; /* Removing border for a cleaner look */
-    border-radius: 0; /* Remove border-radius for true full-screen, or keep a small one if preferred */
-    background-color: #2b2b2b; /* Dark background for the card-like container */
-    box-shadow: none; /* Remove shadow for a flat, full-screen appearance */
-    transition: none; /* Remove transitions as hover effects might not make sense for full screen */
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: none;
+    border-radius: 0;
+    background-color: #2F2A50; /* Dark Purple container background */
+    box-shadow: none;
+    transition: none;
 }
 
-/* Adjust padding for larger screens to prevent content from stretching too wide */
-@media (min-width: 768px) { /* Adjust breakpoint as needed, 768px is common for tablets */
+@media (min-width: 768px) {
     .container {
-        padding: 40px 10%; /* More generous horizontal padding for larger screens (10% on each side) */
-        border-radius: 0; /* Ensure no radius */
-        box-shadow: none; /* Ensure no shadow */
+        padding: 40px 10%;
+        border-radius: 0;
+        box-shadow: none;
     }
 }
 
-/* Remove hover effects if no longer desired for full-screen elements */
 .container:hover {
-    transform: none; /* No lift effect */
-    box-shadow: none; /* No enhanced shadow */
+    transform: none;
+    box-shadow: none;
 }
 
 h2 {
-    color: #ffffff; /* White color for headings */
-    margin-bottom: 1.5rem; /* More space below headings */
+    color: #D4C0F7; /* Lavender Headings */
+    margin-bottom: 1.5rem;
     text-align: center;
-    font-weight: 500; /* Slightly lighter font weight */
+    font-weight: 500;
 }
 
 /* Form Group Styling */
 .form-group {
-    margin-bottom: 1.25rem; /* Increased vertical spacing between form groups */
+    margin-bottom: 1.25rem;
 }
 
 label {
     display: block;
-    margin-bottom: 0.6rem; /* Slightly more space below labels */
-    font-weight: 600; /* Bolder labels */
-    color: #b0b0b0; /* Softer grey for labels */
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    color: #B4A9D9; /* Lighter lavender for labels */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 /* Input Field Styling */
 input[type="number"],
 input[type="text"] {
     width: 100%;
-    padding: 0.75rem 1rem; /* More generous padding */
+    padding: 0.75rem 1rem;
     font-size: 1rem;
     line-height: 1.5;
-    color: #e0e0e0; /* Light text for user input */
-    background-color: #3a3a3a; /* Darker input background */
-    border: 1px solid #555555; /* Softer border color */
-    border-radius: 0.35rem; /* Slightly more rounded */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+    color: #ECECFB; /* Very light lavender text */
+    background-color: #3B3658; /* Medium dark purple background */
+    border: 1px solid #5E4B8B; /* Soft purple border */
+    border-radius: 0.35rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-input[type="number"]:focus {
-    color: #ffffff; /* White text on focus */
-    background-color: #4a4a4a; /* Lighter dark background on focus */
-    border-color: #007bff; /* Standard Bootstrap primary color for focus */
-    outline: none; /* Remove default outline */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 0.25rem rgba(0, 123, 255, 0.4); /* Enhanced focus shadow */
+input[type="number"]:focus,
+input[type="text"]:focus {
+    color: #FFFFFF;
+    background-color: #4C4580; /* Slightly lighter purple on focus */
+    border-color: #8A2BE2; /* Blue-violet focus border */
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6), 0 0 0 0.25rem rgba(138, 43, 226, 0.4); /* Focus glow */
 }
 
 /* Primary Button Styling */
@@ -90,35 +87,35 @@ input[type="number"]:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Slightly more space between spinner and text */
+    gap: 10px;
     width: 100%;
-    padding: 0.8rem 1.5rem; /* More padding for a bolder button */
-    font-size: 1.1rem; /* Slightly larger font size */
-    font-weight: 600; /* Bolder text */
-    border: none; /* No border for a flat design */
-    border-radius: 0.35rem; /* Consistent rounding */
-    background-color: #007bff; /* Standard Bootstrap primary color */
-    color: #ffffff;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.35rem;
+    background-color: #8A2BE2; /* Blue-violet background */
+    color: #FFFFFF;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4); /* Soft shadow for primary button */
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.5);
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6); /* Enhanced shadow on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+    background-color: #5E4B8B; /* Darker purple on hover */
+    box-shadow: 0 6px 20px rgba(94, 75, 139, 0.7);
+    transform: translateY(-2px);
 }
 
 .btn-primary:active {
-    background-color: #004085; /* Even darker on active */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Flatter shadow on active */
-    transform: translateY(0); /* Press down effect */
+    background-color: #3C3061; /* Even darker purple on active */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    transform: translateY(0);
 }
 
 .btn-primary:disabled {
-    background-color: #6c757d; /* Muted grey for disabled state */
-    border-color: #6c757d;
+    background-color: #6B638F; /* Muted lavender */
+    border-color: #6B638F;
     cursor: not-allowed;
     box-shadow: none;
     opacity: 0.7;
@@ -127,44 +124,44 @@ input[type="number"]:focus {
 /* Result and Countdown Display */
 .result-display,
 .countdown-display {
-    margin-top: 1.5rem; /* More space above results */
-    padding: 1rem 1.5rem; /* Generous padding */
-    border: 1px solid #4a4a4a; /* Subtle border */
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid #5E4B8B;
     border-radius: 0.35rem;
     font-weight: 600;
     text-align: center;
-    background-color: #3b3b3b; /* Dark background for results */
-    color: #ffffff; /* White text for results */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Inner shadow */
+    background-color: #3B3658;
+    color: #FFFFFF;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .countdown-display {
-    color: #ffda6a; /* Brighter, soft yellow for countdown */
-    background-color: #4a4220; /* A richer, darker yellow background for contrast */
-    border-color: #927e3d;
-    font-size: 1.1rem; /* Slightly larger font for countdown */
+    color: #D4C0F7; /* Lavender countdown text */
+    background-color: #2A2563; /* Dark purple background */
+    border-color: #463D8A;
+    font-size: 1.1rem;
 }
 
 .tab-content {
-    padding: 2rem; /* Generous padding for content */
-    border: none; /* No border, container's shadow handles separation */
-    background-color: #2b2b2b; /* Matches container background */
-    border-radius: 0.5rem; /* Consistent rounding to all corners */
-    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.3); /* Inner shadow for content area depth */
+    padding: 2rem;
+    border: none;
+    background-color: #2F2A50;
+    border-radius: 0.5rem;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 /* Braille Spinner Styles for button */
 .braille-spinner-icon {
-    font-size: 1.6rem; /* Slightly larger for impact */
+    font-size: 1.6rem;
     line-height: 1;
     font-weight: 100;
-    color: #ffffff; /* Ensures spinner is bright white on button */
+    color: #FFFFFF;
     display: inline-block;
-    vertical-align: middle; /* Align with text */
+    vertical-align: middle;
 }
 
 .braille-spinner-icon::before {
-    animation: braille .4s linear 0s infinite;
+    animation: braille 0.4s linear 0s infinite;
     content: '⠏';
 }
 
