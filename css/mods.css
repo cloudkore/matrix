@@ -2,70 +2,86 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #1B1B2F; /* Dark indigo background */
-  color: #CCCCCC; /* Soft grey text */
+  background-color: #121212; /* Very dark background */
+  color: #E0E0E0; /* Light grey text */
 }
 
 .container {
   flex: 1;
   padding-top: 20px;
   padding-bottom: 50px;
+  background-color: #2E2E2E; /* Primary grey container */
 }
 
 #footer-placeholder {
   height: 40px;
-  background-color: #1B1B2F; /* Match dark background */
+  background-color: #121212; /* Match dark background */
 }
 
-/* Danger label */
+/* Danger label - Red accent */
 .label-danger {
-  background-color: #8A2BE2; /* Blue-violet replacing red */
+  background-color: #E57373; /* Medium red */
   padding: 10px 0;
   font-size: 1.5em;
   margin-bottom: 20px;
   border-radius: 8px;
+  color: #FFF0F0; /* very light red tinted text */
+}
+
+/* Success label - Green accent */
+.label-success {
+  background-color: #81C784; /* Medium green */
+  padding: 10px 0;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  color: #EDF7ED; /* very light green tinted text */
 }
 
 /* Search bar styling */
 .well {
-  background-color: #2F2A50; /* Dark purple well background */
-  border: 1px solid #5E4B8B; /* Soft purple border */
+  background-color: #4A4A4A; /* Secondary grey background */
+  border: 1px solid #2E2E2E; /* Primary grey border */
   border-radius: 8px;
   padding: 15px;
   margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(15, 12, 38, 0.4); /* Soft dark shadow */
+  box-shadow: 0 4px 8px rgba(15, 12, 15, 0.6); /* subtle dark shadow */
 }
 
 .form-control {
-  background-color: #3B3658; /* Medium dark purple */
-  color: #ECECFB; /* Light lavender text */
-  border: 1px solid #5E4B8B; /* Medium purple border */
+  background-color: #2E2E2E; /* Primary grey */
+  color: #E0E0E0; /* Light text */
+  border: 1px solid #4A4A4A; /* Secondary grey border */
   border-radius: 5px;
 }
 
 .form-control::placeholder {
-  color: #A499C5; /* Muted lavender placeholder */
+  color: #A0A0A0; /* Muted grey placeholder */
 }
 
 /* Alert Info styling */
 .alert-info {
-  background-color: #3C3061; /* Dark purple tinted background */
-  border: 1px solid #695E9C; /* Soft lavender border */
-  color: #B4A9E2; /* Light lavender text */
+  background-color: #2E2E2E; /* Primary grey */
+  border: 1px solid #4A4A4A; /* Secondary grey border */
+  color: #B4B4B4; /* lighter grey text */
   border-radius: 8px;
   margin-top: 20px;
   padding: 15px;
-  box-shadow: 0 4px 8px rgba(15, 12, 38, 0.4);
+  box-shadow: 0 4px 8px rgba(15, 12, 15, 0.5);
 }
 
 .alert-heading {
-  color: #FFFFFF; /* White heading */
+  color: #E0E0E0; /* Light grey heading */
   margin-bottom: 10px;
 }
 
 .alert-info a {
-  color: #8A2BE2; /* Vibrant blue-violet link */
+  color: #E57373; /* Red accent link */
   font-weight: bold;
+}
+
+.alert-info a:hover {
+  color: #B71C1C; /* Dark red on hover */
 }
 
 /* MOD File List styling */
@@ -79,34 +95,34 @@ body {
 }
 
 .mod-item {
-  background-color: #2F2A50; /* Dark purple card */
-  border: 1px solid #5E4B8B; /* Soft purple border */
+  background-color: #2E2E2E; /* Primary grey card */
+  border: 1px solid #4A4A4A; /* Secondary grey border */
   border-radius: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 5px rgba(15, 12, 38, 0.3);
+  box-shadow: 0 2px 5px rgba(15, 12, 15, 0.3);
 }
 
 .mod-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(138, 43, 226, 0.5); /* Soft blue-violet glow */
+  box-shadow: 0 8px 16px rgba(229, 115, 115, 0.5); /* Soft red glow */
 }
 
 .mod-item a {
   display: block;
-  color: #B4A9E2; /* Light lavender for links */
+  color: #E0E0E0; /* Light text */
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1em;
   word-wrap: break-word;
   outline: none;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   padding: 15px;
   border-radius: 8px;
 }
 
 .mod-item a:hover {
   text-decoration: underline;
-  color: #8A2BE2; /* Blue-violet on hover */
+  color: #E57373; /* Red accent on hover */
 }
 
 /* Loading state styling */
@@ -116,14 +132,14 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 1.2em;
-  color: #8A2BE2; /* Blue-violet loading text */
+  color: #E57373; /* Red accent loading text */
 }
 
 /* Spinner styling */
 .braille-spinner {
   font-family: monospace;
   font-size: 20px;
-  color: #8A2BE2; /* Spinner in blue-violet */
+  color: #E57373; /* Spinner in red */
   display: inline-block;
   white-space: pre;
   margin-left: 10px;
@@ -144,12 +160,24 @@ body {
 
 /* Downloading state styling */
 .mod-item a.downloading {
-  background-color: #1B1B2F; /* Solid dark indigo */
+  background-color: #121212; /* Solid very dark */
   box-shadow: none;
 }
 
 /* Active click feedback */
 .mod-item a:active {
-  background-color: #1B1B2F;
+  background-color: #121212;
   box-shadow: none;
+}
+
+/* Success state for links, e.g. after download success */
+.mod-item a.success {
+  background-color: #81C784; /* green accent background */
+  color: #121212; /* dark text for contrast */
+  box-shadow: 0 0 8px #2E7D32; /* subtle green glow */
+}
+
+.mod-item a.success:hover {
+  background-color: #2E7D32; /* dark green hover */
+  color: #E0E0E0; /* light text */
 }
