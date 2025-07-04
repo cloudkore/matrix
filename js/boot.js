@@ -127,7 +127,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const dialogueTexts = [
-  "Welcome to the Matrix world.",
+  "Welcome to Matrix™",
   "Your mission is to find the code keys.",
   "Beware of agents lurking in the shadows.",
   "Use your skills wisely and survive.",

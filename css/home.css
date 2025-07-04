@@ -341,7 +341,7 @@ body {
 
 .dialogue-box .avatar {
   flex-shrink: 0;
-  width: 80px;   /* bigger container */
+  width: 50px;   /* bigger container */
   height: 80px;  /* bigger container */
   margin-right: 20px;
   border-radius: 10px;
@@ -352,8 +352,8 @@ body {
 }
 
 .dialogue-box .avatar img {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   object-fit: cover; /* fills container, might crop */
   display: block;
 }
@@ -383,10 +383,9 @@ body {
   animation: blink-caret 1s step-start infinite;
   margin-left: 3px;
   opacity: 0.75;
-  position: absolute;
-  right: 5px; /* Keep cursor right aligned, but inside padding */
-  top: 0;
   font-weight: bold;
+  display: inline-block;
+  /* Remove absolute positioning */
 }
 
 @keyframes blink-caret {
