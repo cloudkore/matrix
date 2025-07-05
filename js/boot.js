@@ -143,20 +143,17 @@ const typingSpeed = 50; // ms per character
 const pauseBetweenLines = 1500; // ms pause after full text is displayed
 
 // --- Time injection helper ---
-// Replace this function with a fixed Date for testing time injection.
-// By default returns current time.
 let injectedTime = null;
 function getNow() {
   return injectedTime ? new Date(injectedTime) : new Date();
 }
-// To inject time externally: 
+// To inject time externally:
 // window.injectTimeForDialogues = function(dateOrISOString) { injectedTime = new Date(dateOrISOString); }
 
 //////////////////////////////////////////////////////////
-// Utility functions (worked with injected time)
+// Utility functions
 
 function getUTCDateAt(hour, minute, dayOffset = 0, baseDate = null) {
-  // baseDate param allows rolling dates for weekdays, default today (in UTC)
   const now = baseDate ? new Date(baseDate) : getNow();
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + dayOffset, hour, minute, 0));
 }
@@ -168,12 +165,10 @@ function addDays(date, days) {
 }
 
 function getNextWeeklyUTCDate(targetDay, hour, minute, baseDate = null) {
-  // Returns next occurrence of a weekly event, on targetDay (0=Sun..6=Sat) at hour:min UTC, >= baseDate
   const now = baseDate ? new Date(baseDate) : getNow();
   const todayDay = now.getUTCDay();
   const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, minute, 0));
   let daysToAdd = (targetDay + 7 - todayDay) % 7;
-  // If today is target day, check time:
   if (daysToAdd === 0 && todayUTC <= now) {
     daysToAdd = 7;
   }
@@ -201,7 +196,6 @@ function formatTimeDiff(diffMs) {
   if (minutes > 0) parts.push(minutes + (minutes === 1 ? " minute" : " minutes"));
   if (seconds > 0) parts.push(seconds + (seconds === 1 ? " second" : " seconds"));
 
-  // Return up to 3 largest parts combined
   return parts.slice(0, 3).join(", ") || "0 seconds";
 }
 
@@ -222,7 +216,7 @@ function getMaintenanceDialogue() {
 }
 
 //////////////////////////////////////////////////////////
-// Seven Beasts challenge (Tue/Thu/Sat), two windows with gate open/start/end times
+// Seven Beasts challenge (Tue/Thu/Sat)
 const sevenBeastsDays = [2, 4, 6]; // Tuesday, Thursday, Saturday
 
 const sevenBeastsWindowsTemplate = [
@@ -230,13 +224,10 @@ const sevenBeastsWindowsTemplate = [
   { openH: 21, openM: 0, startH: 21, startM: 30, endH: 22, endM: 30 },
 ];
 
-// Returns all upcoming Seven Beasts sessions in next 7 days from now,
-// each session contains full open/start/end Dates in UTC.
 function getUpcomingSevenBeastsSessions() {
   const now = getNow();
   let sessions = [];
 
-  // Consider 7 days window (today + next 6)
   for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
     let dayCandidate = (now.getUTCDay() + dayOffset) % 7;
     if (!sevenBeastsDays.includes(dayCandidate)) continue;
@@ -251,22 +242,20 @@ function getUpcomingSevenBeastsSessions() {
     });
   }
 
-  // Sort ascending by open time
   sessions.sort((a, b) => a.open - b.open);
   return sessions;
 }
 
-// Returns the next relevant Seven Beasts message based on current time.
 function getSevenBeastsDialogues() {
   const now = getNow();
   const sessions = getUpcomingSevenBeastsSessions();
 
   for (const session of sessions) {
     if (now < session.open) {
-      // Gate not yet open
       let untilOpen = session.open - now;
+      let color = untilOpen <= 30 * 60 * 1000 ? "yellow" : null;
       return {
-        willOpen: `Seven Beasts gate will open in ${formatTimeDiff(untilOpen)}.`,
+        willOpen: { text: `Seven Beasts gate will open in ${formatTimeDiff(untilOpen)}.`, color },
         hasOpened: null,
       };
     }
@@ -274,99 +263,69 @@ function getSevenBeastsDialogues() {
       let remainGate = session.start - now;
       return {
         willOpen: null,
-        hasOpened: `Seven Beasts gate has opened for ${formatTimeDiff(remainGate)} — enter now!`,
+        hasOpened: { text: `Seven Beasts gate has opened for ${formatTimeDiff(remainGate)} — enter now!`, color: "green" },
       };
     }
     if (now >= session.start && now < session.end) {
       let remainLive = session.end - now;
       return {
         willOpen: null,
-        hasOpened: `Seven Beasts challenge is live for ${formatTimeDiff(remainLive)} — gates closed!`,
+        hasOpened: { text: `Seven Beasts challenge is live for ${formatTimeDiff(remainLive)} — gates closed!`, color: "red" },
       };
     }
   }
 
-  // If no upcoming session found (very rare, means beyond 7 days?), show next expected
-  // Try to get next session beyond 7 days:
   let nextSessionDay = getNextWeeklyUTCDate(sevenBeastsDays[0], sevenBeastsWindowsTemplate[0].openH, sevenBeastsWindowsTemplate[0].openM, now);
   let diff = nextSessionDay - now;
   return {
-    willOpen: `Seven Beasts challenge is not scheduled soon. Next gate will open in ${formatTimeDiff(diff)}.`,
+    willOpen: { text: `Seven Beasts challenge is not scheduled soon. Next gate will open in ${formatTimeDiff(diff)}.`, color: null },
     hasOpened: null,
   };
 }
 
 //////////////////////////////////////////////////////////
-// Yin-Yang Battlefield windows per level group (daily event)
+// Yin-Yang Battlefield windows per level group
+
 const yinYangWindows = [
-  {
-    levelRange: "Lv30-59",
-    openH: 17,
-    openM: 0,
-    startH: 17,
-    startM: 30,
-    endH: 18,
-    endM: 30,
-  },
-  {
-    levelRange: "Lv60-89",
-    openH: 19,
-    openM: 0,
-    startH: 19,
-    startM: 30,
-    endH: 20,
-    endM: 30,
-  },
-  {
-    levelRange: "Lv90-130",
-    openH: 21,
-    openM: 0,
-    startH: 21,
-    startM: 30,
-    endH: 22,
-    endM: 30,
-  },
+  { levelRange: "Lv30-59", openH: 17, openM: 0, startH: 17, startM: 30, endH: 18, endM: 30 },
+  { levelRange: "Lv60-89", openH: 19, openM: 0, startH: 19, startM: 30, endH: 20, endM: 30 },
+  { levelRange: "Lv90-130", openH: 21, openM: 0, startH: 21, startM: 30, endH: 22, endM: 30 },
 ];
 
-// Returns the Yin-Yang dialogues for all level groups for current time.
 function getYinYangDialogues() {
   const now = getNow();
   let dialogues = [];
 
   yinYangWindows.forEach(win => {
-    // Compute today's open/start/end time in UTC
     let openToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), win.openH, win.openM, 0));
     let startToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), win.startH, win.startM, 0));
     let endToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), win.endH, win.endM, 0));
 
     if (now < openToday) {
-      // Before gate open today
       let untilOpen = openToday - now;
+      let color = untilOpen <= 30 * 60 * 1000 ? "yellow" : null;
       dialogues.push({
-        willOpen: `Yin-Yang Battlefield ${win.levelRange} will open in ${formatTimeDiff(untilOpen)}.`,
+        willOpen: { text: `Yin-Yang Battlefield ${win.levelRange} will open in ${formatTimeDiff(untilOpen)}.`, color },
         hasOpened: null,
       });
     } else if (now >= openToday && now < startToday) {
-      // Gate open now
       let remainGate = startToday - now;
       dialogues.push({
         willOpen: null,
-        hasOpened: `Yin-Yang Battlefield ${win.levelRange} is now open for ${formatTimeDiff(remainGate)} — enter now!`,
+        hasOpened: { text: `Yin-Yang Battlefield ${win.levelRange} is now open for ${formatTimeDiff(remainGate)} — enter now!`, color: "green" }
       });
     } else if (now >= startToday && now < endToday) {
-      // Live phase
       let remainLive = endToday - now;
       dialogues.push({
         willOpen: null,
-        hasOpened: `Yin-Yang Battlefield ${win.levelRange} is live for ${formatTimeDiff(remainLive)} — door closed!`,
+        hasOpened: { text: `Yin-Yang Battlefield ${win.levelRange} is live for ${formatTimeDiff(remainLive)} — door closed!`, color: "red" }
       });
     } else {
-      // Event ended for today, schedule for next day open phase
       let openTomorrow = new Date(openToday);
       openTomorrow.setUTCDate(openTomorrow.getUTCDate() + 1);
       let untilOpenTomorrow = openTomorrow - now;
       dialogues.push({
-        willOpen: `Yin-Yang Battlefield ${win.levelRange} will open in ${formatTimeDiff(untilOpenTomorrow)}.`,
+        willOpen: { text: `Yin-Yang Battlefield ${win.levelRange} will open in ${formatTimeDiff(untilOpenTomorrow)}.`, color: null },
         hasOpened: null,
       });
     }
@@ -376,13 +335,13 @@ function getYinYangDialogues() {
 }
 
 //////////////////////////////////////////////////////////
-// Compose dialogue list, combining server and event dialogues + the static ones.
+// Compose dialogue list with color info
 
 function updateDialogueTexts() {
   const dialogues = [];
 
-  dialogues.push(getServerResetDialogue());
-  dialogues.push(getMaintenanceDialogue());
+  dialogues.push({ text: getServerResetDialogue(), color: null });
+  dialogues.push({ text: getMaintenanceDialogue(), color: null });
 
   const sevenBeasts = getSevenBeastsDialogues();
   if (sevenBeasts.willOpen) dialogues.push(sevenBeasts.willOpen);
@@ -394,10 +353,14 @@ function updateDialogueTexts() {
     if (obj.hasOpened) dialogues.push(obj.hasOpened);
   });
 
-  return [...dialogues, ...dialogueTextsStatic];
+  dialogueTextsStatic.forEach(txt => dialogues.push({ text: txt, color: null }));
+
+  return dialogues;
 }
 
-// Main typing effect loop variables
+//////////////////////////////////////////////////////////
+// Typing effect with dynamic color
+
 let dialogueTexts = updateDialogueTexts();
 
 function typeDialogue() {
@@ -406,31 +369,35 @@ function typeDialogue() {
     dialogueTexts = updateDialogueTexts();
   }
 
-  if (charIndex < dialogueTexts[dialogueIndex].length) {
-    dialogueTextElem.textContent += dialogueTexts[dialogueIndex].charAt(charIndex);
+  // Set color only at the start of each dialogue line
+  if (charIndex === 0) {
+    let color = dialogueTexts[dialogueIndex].color;
+    dialogueTextElem.style.color = color || "";
+    dialogueTextElem.textContent = "";
+  }
+
+  if (charIndex < dialogueTexts[dialogueIndex].text.length) {
+    dialogueTextElem.textContent += dialogueTexts[dialogueIndex].text.charAt(charIndex);
     charIndex++;
     setTimeout(typeDialogue, typingSpeed);
   } else {
     setTimeout(() => {
       charIndex = 0;
       dialogueIndex++;
-      dialogueTextElem.textContent = "";
       typeDialogue();
     }, pauseBetweenLines);
   }
 }
 
-// To allow time injection externally, exposing global method:
+// Expose for time injection testing
 window.injectTimeForDialogues = function(dateOrISOString) {
-  injectedTime = new Date(dateOrISOString);
-  // Immediately refresh dialogueTexts to reflect injected time
+  injectedTime = dateOrISOString ? new Date(dateOrISOString) : null;
   dialogueTexts = updateDialogueTexts();
   dialogueIndex = 0;
   charIndex = 0;
   dialogueTextElem.textContent = "";
-  // Restart typing effect loop safely
   typeDialogue();
 };
 
-// Start the typing effect the first time for live time
+// Start typing effect live
 typeDialogue();
