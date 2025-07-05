@@ -2,8 +2,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #1B1B2F; /* Dark indigo background */
-  color: #CCCCCC; /* Soft grey text */
+  background-color: #000000; /* true black background */
+  color: #666666; /* dark grey text for some contrast */
 }
 
 .container {
@@ -13,22 +13,22 @@ body {
 
 #footer-placeholder {
   height: 40px;
-  background-color: #1B1B2F; /* Consistent footer bg */
+  background-color: #000000; /* true black footer */
 }
 
-/* Black frame -> dark indigo bg, lavender text */
+/* Black frame -> pure black bg, muted lavender text */
 .black-frame {
-  background-color: #1B1B2F;
-  color: #D4C0F7;
+  background-color: #000000;
+  color: #6E5FA0;  /* desaturated, muted lavender */
   padding: 15px;
   border-radius: 12px;
 }
 
-/* Emulator card - dark indigo bg, soft borders */
+/* Emulator card - almost black bg, very subtle borders */
 .emulator-card {
-  background-color: #2F2A50; /* Dark purple */
-  color: #E0E0E0;
-  border: 1px solid #5E4B8B; /* Soft purple border */
+  background-color: #0D0A17; /* very dark purple-black */
+  color: #999999;
+  border: 1px solid #382F59; /* very dark muted purple border */
   border-radius: 10px;
   padding: 15px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -36,7 +36,7 @@ body {
 
 .emulator-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 10px #8A2BE2; /* blue-violet glow on hover */
+  box-shadow: 0 0 12px #523D97; /* subtle dark violet glow on hover */
 }
 
 /* Info section */
@@ -55,19 +55,19 @@ body {
 .emulator-title {
   font-weight: bold;
   font-size: 16px;
-  color: #D4C0F7; /* Lavender for title */
+  color: #ffffff; /* muted lavender */
 }
 
 .emulator-version {
   font-size: 13px;
-  color: #B0A9D8; /* Soft muted purple */
+  color: #7f6db1; /* darker muted purple */
 }
 
 /* Download button */
 .btn-download {
   display: inline-block;
-  background-color: #8A2BE2; /* Blue-violet */
-  color: #FFFFFF;
+  background-color: #4B3F6B; /* muted dark purple */
+  color: #CCCCCC;
   padding: 5px 15px;
   border-radius: 5px;
   text-decoration: none;
@@ -76,15 +76,15 @@ body {
 }
 
 .btn-download:hover {
-  background-color: #5E4B8B; /* Darker purple on hover */
-  color: #FFFFFF;
+  background-color: #2A2042; /* almost black purple */
+  color: #CCCCCC;
 }
 
 ./* Braille spinner */
 .braille-spinner {
   font-family: monospace;
   font-size: 20px;
-  color: #1B1B2F; /* dark indigo spinner */
+  color: #000000; /* black spinner - will be invisible on black bg */
   display: inline-block;
   white-space: pre;
   margin-left: 10px;
@@ -96,4 +96,5 @@ body {
 /* Spinner visible when loading */
 .btn-download.loading .braille-spinner {
   visibility: visible;
+  color: #ffffff;  /* show spinner in muted lavender so visible on black */
 }
