@@ -1100,15 +1100,43 @@ async function listFiles() {
                     }
 
                     const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = originalFileName; // Use the original file name for download
-                    document.body.appendChild(a);
-                    a.click(); // Programmatically click the link
-                    window.URL.revokeObjectURL(url); // Clean up the object URL
-                    showMessageBox(getTranslation("message_box_download_started"), "success", 2000);
+
+                    // --- START MODIFICATION HERE ---
+                    // Check if Android interface is available
+                    if (typeof Android !== 'undefined' && Android.onBlobDataReceived) {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            const base64DataWithPrefix = reader.result; // e.g., "data:image/png;base64,..."
+                            // Extract just the Base64 part after the comma
+                            const pureBase64 = base64DataWithPrefix.split(',')[1];
+                            const mimeType = blob.type || 'application/octet-stream'; // Get the actual MIME type of the blob
+
+                            // Call the Android function with the Base64 data, MIME type, and original filename
+                            Android.onBlobDataReceived(pureBase64, mimeType, originalFileName);
+                            showMessageBox(getTranslation("message_box_download_started"), "success", 2000);
+                            console.log("File data sent to Android via JavaScript interface for download.");
+                        };
+                        reader.onerror = function(event) {
+                            console.error("FileReader error during blob conversion:", event.target.error);
+                            showMessageBox(getTranslation("message_box_failed_to_download_file") + " (JS read error)", "error");
+                            if (typeof Android !== 'undefined' && Android.onBlobError) {
+                                Android.onBlobError("FileReader error during blob conversion: " + event.target.error.message);
+                            }
+                        };
+                        reader.readAsDataURL(blob); // Convert blob to Data URL (Base64)
+                    } else {
+                        // Fallback for regular browsers (or if Android interface isn't hooked up)
+                        console.warn("Android interface not available. Falling back to default browser download.");
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = originalFileName; // Use the original file name for download
+                        document.body.appendChild(a);
+                        a.click(); // Programmatically click the link
+                        window.URL.revokeObjectURL(url); // Clean up the object URL
+                        showMessageBox(getTranslation("message_box_download_started"), "success", 2000);
+                    }
 
                 } catch (error) {
                     console.error("Error during download:", error);
