@@ -1,4 +1,4 @@
-/* Custom styles for NinjaBase Estimators - Dark Black & Muted Lavender Theme */
+/* Custom styles for NinjaBase Estimators - Matrix Dark & Red Theme */
 
 /* General body styling */
 html, body {
@@ -10,7 +10,7 @@ html, body {
 
 body {
     background-color: #000000; /* True black background */
-    color: #666666; /* Muted grey text */
+    color: #b33c3c; /* Muted dark red text */
 }
 
 /* Main Estimator Container */
@@ -20,7 +20,7 @@ body {
     padding: 20px;
     border: none;
     border-radius: 0;
-    background-color: #130F2A; /* Very dark purple-black container background */
+    background-color: #1a0a0a; /* Very dark red-black container background */
     box-shadow: none;
     transition: none;
 }
@@ -39,7 +39,7 @@ body {
 }
 
 h2 {
-    color: #6E5FA0; /* Muted lavender headings */
+    color: #b33c3c; /* Muted dark red headings */
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: 500;
@@ -54,7 +54,7 @@ label {
     display: block;
     margin-bottom: 0.6rem;
     font-weight: 600;
-    color: #8A7FCC; /* A bit lighter muted lavender for labels */
+    color: #c94b4b; /* Slightly lighter muted red for labels */
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
 }
 
@@ -65,9 +65,9 @@ input[type="text"] {
     padding: 0.75rem 1rem;
     font-size: 1rem;
     line-height: 1.5;
-    color: #D8D7E9; /* Light muted lavender text */
-    background-color: #2A264D; /* Very dark muted purple background */
-    border: 1px solid #423A6E; /* Dark muted purple border */
+    color: #ffb3b3; /* Light muted red text */
+    background-color: #330000; /* Very dark red background */
+    border: 1px solid #660000; /* Dark red border */
     border-radius: 0.35rem;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
@@ -75,11 +75,11 @@ input[type="text"] {
 
 input[type="number"]:focus,
 input[type="text"]:focus {
-    color: #FFFFFF;
-    background-color: #3B3477; /* Slightly lighter purple on focus */
-    border-color: #6E5FA0; /* Muted lavender focus border */
+    color: #fff;
+    background-color: #660000; /* Slightly lighter red on focus */
+    border-color: #b33c3c; /* Muted red focus border */
     outline: none;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 0 0.25rem rgba(110, 95, 160, 0.5); /* Focus glow */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 0 0.25rem rgba(179, 60, 60, 0.6); /* Focus red glow */
 }
 
 /* Primary Button Styling */
@@ -94,28 +94,28 @@ input[type="text"]:focus {
     font-weight: 600;
     border: none;
     border-radius: 0.35rem;
-    background-color: #6E5FA0; /* Muted lavender background */
-    color: #ECECFB;
+    background-color: #b33c3c; /* Muted red background */
+    color: #f9e6e6;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(110, 95, 160, 0.5);
+    box-shadow: 0 4px 15px rgba(179, 60, 60, 0.5);
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .btn-primary:hover {
-    background-color: #423A6E; /* Darker muted purple on hover */
-    box-shadow: 0 6px 20px rgba(66, 58, 110, 0.7);
+    background-color: #660000; /* Darker red on hover */
+    box-shadow: 0 6px 20px rgba(102, 0, 0, 0.7);
     transform: translateY(-2px);
 }
 
 .btn-primary:active {
-    background-color: #2A2547; /* Even darker purple on active */
+    background-color: #330000; /* Even darker red on active */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     transform: translateY(0);
 }
 
 .btn-primary:disabled {
-    background-color: #554F75; /* Muted dusky lavender */
-    border-color: #554F75;
+    background-color: #4c3030; /* Muted dusky red */
+    border-color: #4c3030;
     cursor: not-allowed;
     box-shadow: none;
     opacity: 0.7;
@@ -126,26 +126,26 @@ input[type="text"]:focus {
 .countdown-display {
     margin-top: 1.5rem;
     padding: 1rem 1.5rem;
-    border: 1px solid #423A6E;
+    border: 1px solid #660000;
     border-radius: 0.35rem;
     font-weight: 600;
     text-align: center;
-    background-color: #2A264D;
-    color: #ECECFB;
+    background-color: #330000;
+    color: #f9e6e6;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .countdown-display {
-    color: #6E5FA0; /* Muted lavender countdown text */
-    background-color: #1F1B38; /* Darker purple background */
-    border-color: #3B3477;
+    color: #b33c3c; /* Muted red countdown text */
+    background-color: #220000;
+    border-color: #660000;
     font-size: 1.1rem;
 }
 
 .tab-content {
     padding: 2rem;
     border: none;
-    background-color: #130F2A;
+    background-color: #1a0a0a;
     border-radius: 0.5rem;
     box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.6);
 }
@@ -155,7 +155,7 @@ input[type="text"]:focus {
     font-size: 1.6rem;
     line-height: 1;
     font-weight: 100;
-    color: #D8D7E9; /* Light muted lavender for spinner on dark background */
+    color: #ffb3b3; /* Light muted red for spinner */
     display: inline-block;
     vertical-align: middle;
 }

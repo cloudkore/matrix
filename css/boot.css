@@ -4,7 +4,11 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: mix(#3f3251, #002025, 70%);
+
+  /* Changed purple/teal mix to dark and deep red mix */
+  /* Old: background: mix(#3f3251, #002025, 70%); */
+  background: mix(#330000, #000000, 75%); /* Deep dark red + black mix */
+
   overflow: hidden;
   z-index: 9999;
 }
@@ -39,7 +43,8 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+  /* Kept white highlight, but can add red tint via rgba */
+  box-shadow: inset 0 0 0 1px rgba(255, 100, 100, 0.6); /* subtle red glow */
   margin-left: -60px;
   margin-top: -60px;
   animation: fade 1.2s infinite ease-in-out;
@@ -51,8 +56,6 @@
   100% { opacity: 1;}
 }
 
-/* Add your other loader styles similarly */
-
 .loader-line-mask {
   position: absolute;
   left: 50%;
@@ -63,6 +66,8 @@
   margin-top: -60px;
   overflow: hidden;
   transform-origin: 60px 60px;
+
+  /* Changed webkit-mask to maintain fade with new colors */
   -webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,1), rgba(0,0,0,0));
   animation: rotate 1.2s infinite linear;
 }
@@ -71,7 +76,9 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
+
+  /* Changed inset glow to red tint */
+  box-shadow: inset 0 0 0 1px rgba(255, 50, 50, 0.7);
 }
 
 @keyframes rotate {
@@ -86,12 +93,15 @@
   top: -51%;
   width: 202%;
   height: 202%;
+
+  /* Change scale remains the same */
   transform: scale3d(.5, .5, 1);
 }
 
 #particles-background {
-  background: mix(#3f3251, #002025, 70%);
-  background-image: linear-gradient(45deg, #3f3251 2%, #002025 100%);
+  /* Changed from violet/teal gradient to dark red gradients */
+  background: mix(#330000, #000000, 75%);
+  background-image: linear-gradient(45deg, #330000 2%, #000000 100%);
 }
 
 #bootScreen.fade-out {

@@ -3,14 +3,15 @@
     margin: 0 auto;
     padding: 0 15px 80px 15px;
     position: relative;
+    background-color: #1a0a0a; /* Very dark red-black container bg */
 }
 
 .jumbotron {
-    background-color: #120F22; /* Very dark purple-black background */
-    color: #6E5FA0; /* Muted lavender text */
+    background-color: #220000; /* Very dark red-black background */
+    color: #b33c3c; /* Muted dark red text */
     border: none;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(15, 12, 38, 0.7); /* Slightly deeper shadow */
+    box-shadow: 0 8px 25px rgba(75, 0, 0, 0.7); /* Deep red shadow */
     padding: 40px;
     margin-bottom: 50px;
     text-align: center;
@@ -19,7 +20,7 @@
 .jumbotron h1 {
     font-size: 3em;
     font-weight: 700;
-    color: #6E5FA0; /* Muted lavender accent */
+    color: #b33c3c; /* Muted dark red accent */
     margin-bottom: 15px;
     font-family: inherit;
     letter-spacing: -0.02em;
@@ -27,17 +28,17 @@
 
 .jumbotron p {
     font-size: 1.2em;
-    color: #958CB5; /* Soft muted lavender-grey */
+    color: #b76c6c; /* Soft muted reddish-grey */
     font-family: inherit;
 }
 
 /* Tab Content Styling */
 .tab-content {
-    background-color: #120F22; /* Very dark purple-black panel */
-    border: 1px solid #423A6E; /* Dark muted purple border */
+    background-color: #220000; /* Very dark red-black panel */
+    border: 1px solid #660000; /* Dark red border */
     border-top: none;
     border-radius: 0 0 12px 12px;
-    box-shadow: 0 4px 15px rgba(15, 12, 38, 0.4);
+    box-shadow: 0 4px 15px rgba(75, 0, 0, 0.4);
     padding: 0;
     margin-bottom: 30px;
 }
@@ -51,31 +52,31 @@
 }
 
 .tab-pane .panel-default .panel-heading {
-    background-color: #423A6E; /* Dark muted purple */
+    background-color: #660000; /* Dark red */
     border-radius: 0;
-    border-bottom: 1px solid #120F22;
-    color: #6E5FA0;
+    border-bottom: 1px solid #220000;
+    color: #b33c3c;
 }
 
 .tab-pane .panel-default .panel-body {
-    background-color: #120F22;
+    background-color: #220000;
     border-radius: 0 0 12px 12px;
 }
 
 /* Panels */
 .panel-default {
-    background-color: #120F22;
+    background-color: #220000;
     border: none;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(15, 12, 38, 0.4);
+    box-shadow: 0 4px 15px rgba(75, 0, 0, 0.4);
     margin-bottom: 30px;
     overflow: hidden;
 }
 
 .panel-default > .panel-heading {
-    background-color: #423A6E;
-    color: #6E5FA0;
-    border-bottom: 1px solid #120F22;
+    background-color: #660000;
+    color: #b33c3c;
+    border-bottom: 1px solid #220000;
     padding: 18px 25px;
     font-size: 1.3em;
     font-weight: 600;
@@ -83,14 +84,14 @@
 }
 
 .panel-body {
-    background-color: #120F22;
-    color: #6E5FA0;
+    background-color: #220000;
+    color: #b33c3c;
     padding: 25px;
     font-family: inherit;
 }
 
 .panel-body a {
-    color: #6E5FA0;
+    color: #b33c3c;
     text-decoration: none;
     transition: color 0.2s ease;
     font-family: inherit;
@@ -98,7 +99,7 @@
 
 .panel-body a:hover {
     text-decoration: underline;
-    color: #5A4E8B; /* Slightly deeper muted purple */
+    color: #7f1a1a; /* Darker muted red */
 }
 
 .panel-body .form-group {
@@ -106,9 +107,9 @@
 }
 
 .panel-body .form-control {
-    background-color: #120F22;
-    color: #6E5FA0;
-    border: 1px solid #423A6E;
+    background-color: #220000;
+    color: #b33c3c;
+    border: 1px solid #660000;
     border-radius: 8px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
     padding: 12px 18px;
@@ -119,13 +120,13 @@
 }
 
 .panel-body .form-control:focus {
-    border-color: #6E5FA0;
-    box-shadow: 0 0 0 0.2rem rgba(110, 95, 160, 0.25);
+    border-color: #b33c3c;
+    box-shadow: 0 0 0 0.2rem rgba(179, 60, 60, 0.25);
     outline: none;
 }
 
 .panel-body .form-control::placeholder {
-    color: #958CB5;
+    color: #b76c6c;
     opacity: 1;
 }
 
@@ -138,9 +139,9 @@
     padding: 12px 18px;
     box-sizing: border-box;
     font-family: inherit;
-    border: 1px solid #423A6E;
-    background-color: #120F22;
-    color: #6E5FA0;
+    border: 1px solid #660000;
+    background-color: #220000;
+    color: #b33c3c;
 }
 
 .panel-body .input-group #source-time-hour-input {
@@ -151,13 +152,13 @@
 .panel-body .input-group-addon.time-separator {
     padding: 0 5px;
     border: none;
-    background-color: #120F22;
-    color: #6E5FA0;
+    background-color: #220000;
+    color: #b33c3c;
     font-size: 1.5em;
     display: flex;
     align-items: center;
-    border-top: 1px solid #423A6E;
-    border-bottom: 1px solid #423A6E;
+    border-top: 1px solid #660000;
+    border-bottom: 1px solid #660000;
     height: 46px;
     box-sizing: border-box;
     border-left: none;
@@ -174,9 +175,9 @@
 .panel-body .input-group #ampm-select {
     border-radius: 0 8px 8px 0;
     border-left: none;
-    background-color: #120F22;
-    color: #6E5FA0;
-    border: 1px solid #423A6E;
+    background-color: #220000;
+    color: #b33c3c;
+    border: 1px solid #660000;
     height: 46px;
     padding: 12px 18px;
     font-size: 1.05em;
@@ -196,8 +197,8 @@
 }
 
 .panel-body .btn-primary {
-    background-color: #6E5FA0; /* Muted lavender */
-    color: #120F22;
+    background-color: #b33c3c; /* Muted red */
+    color: #220000;
     border: none;
     border-radius: 8px;
     padding: 12px 25px;
@@ -205,16 +206,16 @@
     font-size: 1.15em;
     font-weight: 600;
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    box-shadow: 0 5px 15px rgba(110, 95, 160, 0.25);
+    box-shadow: 0 5px 15px rgba(179, 60, 60, 0.25);
     font-family: inherit;
     width: 100%;
 }
 
 .panel-body .btn-primary:hover,
 .panel-body .btn-primary:focus {
-    background-color: #5A4E8B; /* Darker muted purple */
+    background-color: #7f1a1a; /* Darker muted red */
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(90, 78, 139, 0.35);
+    box-shadow: 0 8px 20px rgba(127, 26, 26, 0.35);
     outline: none;
 }
 
@@ -225,8 +226,8 @@
 }
 
 .panel-body .list-group {
-    background-color: #120F22;
-    border: 1px solid #423A6E;
+    background-color: #220000;
+    border: 1px solid #660000;
     border-radius: 8px;
     box-shadow: none;
     margin-bottom: 0;
@@ -235,9 +236,9 @@
 }
 
 .panel-body .list-group-item {
-    background-color: #120F22;
-    color: #6E5FA0;
-    border-bottom: 1px solid #423A6E;
+    background-color: #220000;
+    color: #b33c3c;
+    border-bottom: 1px solid #660000;
     padding: 15px 25px;
     transition: background-color 0.2s ease;
     font-family: inherit;
@@ -248,14 +249,14 @@
 }
 
 .panel-body .list-group-item:hover {
-    background-color: #423A6E;
+    background-color: #660000;
     color: #FFFFFF;
 }
 
 .panel-body .list-group-item .remove-btn {
     float: right;
-    background-color: #6E5FA0;
-    color: #120F22;
+    background-color: #b33c3c;
+    color: #220000;
     border: none;
     border-radius: 5px;
     padding: 6px 12px;
@@ -267,13 +268,13 @@
 }
 
 .panel-body .list-group-item .remove-btn:hover {
-    background-color: #5A4E8B;
+    background-color: #ffffff;
 }
 
 .panel-body .local-time {
     font-size: 2.5em;
     font-weight: 700;
-    color: #6E5FA0;
+    color: #ffffff;
     text-align: center;
     margin-bottom: 20px;
     letter-spacing: 0.02em;
@@ -290,18 +291,18 @@
 
 .panel-body .timezone-name {
     font-weight: 600;
-    color: #6E5FA0;
+    color: #b33c3c;
     font-family: inherit;
 }
 
 .panel-body .timezone-time {
     font-family: inherit;
-    color: #958CB5;
+    color: #b76c6c;
     font-size: 1em;
 }
 
 .panel-body .text-muted {
-    color: #958CB5 !important;
+    color: #b76c6c !important;
     font-size: 0.9em;
     font-family: inherit;
 }
@@ -309,24 +310,24 @@
 /* Autocomplete Suggestions Styling */
 .panel-body .autocomplete-suggestions {
     position: absolute;
-    border: 1px solid #423A6E;
-    background-color: #120F22;
+    border: 1px solid #660000;
+    background-color: #220000;
     max-height: 200px;
     overflow-y: auto;
     z-index: 999;
     width: 100%;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 10px rgba(15, 12, 38, 0.4);
+    box-shadow: 0 4px 10px rgba(75, 0, 0, 0.4);
     display: none;
 }
 
 .panel-body .autocomplete-item {
     padding: 10px 15px;
     cursor: pointer;
-    color: #6E5FA0;
+    color: #ffffff;
     font-family: inherit;
     font-size: 0.95em;
-    border-bottom: 1px solid #423A6E;
+    border-bottom: 1px solid #660000;
 }
 
 .panel-body .autocomplete-item:last-child {
@@ -334,7 +335,7 @@
 }
 
 .panel-body .autocomplete-item:hover {
-    background-color: #423A6E;
+    background-color: #660000;
     color: #FFFFFF;
 }
 
@@ -354,16 +355,16 @@
 .panel-body .input-group-addon select.form-control {
     border-radius: 0 8px 8px 0;
     height: 46px;
-    background-color: #120F22;
-    color: #6E5FA0;
-    border: 1px solid #423A6E;
+    background-color: #220000;
+    color: #b33c3c;
+    border: 1px solid #660000;
     border-left: none;
     padding: 12px 18px;
     font-size: 1.05em;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%204%205%22%3E%3Cpath%20fill=%22%236E5FA0%22%20d=%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22/%3E%3C/svg%3E');
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%204%205%22%3E%3Cpath%20fill=%22%23b33c3c%22%20d=%22M2%200L0%202h4L2%200zM2%205L0%203h4L2%205z%22/%3E%3C/svg%3E');
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 8px 10px;
@@ -371,8 +372,8 @@
 }
 
 .panel-body .input-group-addon select.form-control:focus {
-    border-color: #6E5FA0;
-    box-shadow: 0 0 0 0.2rem rgba(110, 95, 160, 0.25);
+    border-color: #b33c3c;
+    box-shadow: 0 0 0 0.2rem rgba(179, 60, 60, 0.25);
     outline: none;
 }
 
@@ -382,7 +383,7 @@
     height: 18px;
     vertical-align: middle;
     margin-right: 8px;
-    border: 1px solid #423A6E;
+    border: 1px solid #660000;
     border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
@@ -450,4 +451,11 @@
     .panel-body .list-group-item {
         padding: 10px 15px;
     }
+}
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+    color: #ffffff;
 }

@@ -2,8 +2,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #000000; /* true black background */
-  color: #666666; /* dark grey text for some contrast */
+  background-color: #000000; /* True black background */
+  color: #b33c3c; /* muted dark red text for contrast */
 }
 
 .container {
@@ -13,22 +13,22 @@ body {
 
 #footer-placeholder {
   height: 40px;
-  background-color: #000000; /* true black footer */
+  background-color: #000000; /* True black footer */
 }
 
-/* Black frame -> pure black bg, muted lavender text */
+/* Black frame -> pure black bg, muted red text */
 .black-frame {
   background-color: #000000;
-  color: #6E5FA0;  /* desaturated, muted lavender */
+  color: #b33c3c;  /* muted dark red */
   padding: 15px;
   border-radius: 12px;
 }
 
-/* Emulator card - almost black bg, very subtle borders */
+/* Emulator card - nearly black bg, subtle dark red borders */
 .emulator-card {
-  background-color: #0D0A17; /* very dark purple-black */
-  color: #999999;
-  border: 1px solid #382F59; /* very dark muted purple border */
+  background-color: #1a0a0a; /* very dark red-black */
+  color: #cc4c4c;
+  border: 1px solid #660000; /* dark red border */
   border-radius: 10px;
   padding: 15px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -36,7 +36,7 @@ body {
 
 .emulator-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 12px #523D97; /* subtle dark violet glow on hover */
+  box-shadow: 0 0 12px #a83333; /* subtle glowing red on hover */
 }
 
 /* Info section */
@@ -50,41 +50,44 @@ body {
   width: 40px;
   height: 40px;
   margin-right: 10px;
+  filter: drop-shadow(0 0 2px #b33c3c); /* slight red glow shadow */
 }
 
 .emulator-title {
   font-weight: bold;
   font-size: 16px;
-  color: #ffffff; /* muted lavender */
+  color: #ffffff; /* bright red for title */
 }
 
 .emulator-version {
   font-size: 13px;
-  color: #7f6db1; /* darker muted purple */
+  color: #a83333; /* darker red */
 }
 
 /* Download button */
 .btn-download {
   display: inline-block;
-  background-color: #4B3F6B; /* muted dark purple */
-  color: #CCCCCC;
+  background-color: #660000; /* dark red */
+  color: #ffb3b3; /* pale red */
   padding: 5px 15px;
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  box-shadow: 0 0 5px #660000;
 }
 
 .btn-download:hover {
-  background-color: #2A2042; /* almost black purple */
-  color: #CCCCCC;
+  background-color: #330000; /* almost black red */
+  color: #ffb3b3;
+  box-shadow: 0 0 10px #aa2222;
 }
 
 ./* Braille spinner */
 .braille-spinner {
   font-family: monospace;
   font-size: 20px;
-  color: #000000; /* black spinner - will be invisible on black bg */
+  color: #000000; /* black - invisible on black bg */
   display: inline-block;
   white-space: pre;
   margin-left: 10px;
@@ -96,5 +99,5 @@ body {
 /* Spinner visible when loading */
 .btn-download.loading .braille-spinner {
   visibility: visible;
-  color: #ffffff;  /* show spinner in muted lavender so visible on black */
+  color: #ffffff;  /* bright red/pink so visible on black */
 }

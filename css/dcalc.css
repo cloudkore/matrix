@@ -1,7 +1,7 @@
 /* Base body styling */
 body {
     background-color: #000000; /* true black background */
-    color: #666666; /* muted grey text */
+    color: #b33c3c; /* muted dark red text */
     font-family: 'Inter', inherit;
     margin: 0;
     padding: 0;
@@ -27,11 +27,11 @@ body {
 
 /* Main calculator container */
 .calculator-container {
-    background: linear-gradient(180deg, #120F22 0%, #0B0A16 100%); /* very dark purple-black gradient */
-    border: 1px solid #423A6E; /* darker muted purple border */
+    background: linear-gradient(180deg, #220000 0%, #1a0000 100%); /* very dark red-black gradient */
+    border: 1px solid #660000; /* darker muted red border */
     padding: 40px;
     border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(8, 6, 19, 0.8), inset 0 0 15px rgba(110, 95, 160, 0.1);
+    box-shadow: 0 15px 40px rgba(40, 10, 10, 0.8), inset 0 0 15px rgba(179, 60, 60, 0.1);
     max-width: 500px;
     width: 100%;
     text-align: center;
@@ -42,19 +42,29 @@ body {
 
 /* Heading style */
 .calculator-container h1 {
-    color: #6E5FA0; /* muted lavender */
+    color: #b33c3c; /* muted dark red */
     margin-bottom: 35px;
     text-transform: uppercase;
     font-size: 30px;
     letter-spacing: 3px;
-    text-shadow: 0 0 15px rgba(110, 95, 160, 0.8), 0 0 5px rgba(110, 95, 160, 0.5);
+    text-shadow:
+        0 0 15px rgba(179, 60, 60, 0.8),
+        0 0 5px rgba(179, 60, 60, 0.5);
     animation: pulseGlow 2s infinite alternate;
 }
 
 /* Glow animation keyframes */
 @keyframes pulseGlow {
-    from { text-shadow: 0 0 10px rgba(110, 95, 160, 0.7), 0 0 3px rgba(110, 95, 160, 0.4); }
-    to { text-shadow: 0 0 20px rgba(110, 95, 160, 1), 0 0 8px rgba(110, 95, 160, 0.6); }
+    from {
+        text-shadow:
+            0 0 10px rgba(179, 60, 60, 0.7),
+            0 0 3px rgba(179, 60, 60, 0.4);
+    }
+    to {
+        text-shadow:
+            0 0 20px rgba(179, 60, 60, 1),
+            0 0 8px rgba(179, 60, 60, 0.6);
+    }
 }
 
 /* Form group */
@@ -68,7 +78,7 @@ body {
     margin-bottom: 10px;
     font-size: 18px;
     text-align: left;
-    color: #6E5FA0; /* muted lavender label */
+    color: #c94b4b; /* muted red label */
     font-weight: 600;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
@@ -78,9 +88,9 @@ body {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 0;
-    border: 1px solid #584B8F; /* darker muted purple border */
-    background-color: rgba(20, 17, 42, 0.7); /* very dark transparent background */
-    color: #CFCFE8; /* light muted lavender text */
+    border: 1px solid #7a1a1a; /* darker muted red border */
+    background-color: rgba(35, 10, 10, 0.7); /* very dark transparent red background */
+    color: #e6baba; /* light muted red text */
     font-family: inherit;
     font-size: 17px;
     box-sizing: border-box;
@@ -105,9 +115,9 @@ body {
 
 /* Focus state */
 .form-group input[type="date"]:focus {
-    border-color: #6E5FA0;
-    box-shadow: 0 0 0 4px rgba(110, 95, 160, 0.4);
-    background-color: rgba(20, 17, 42, 0.9);
+    border-color: #b33c3c;
+    box-shadow: 0 0 0 4px rgba(179, 60, 60, 0.4);
+    background-color: rgba(35, 10, 10, 0.9);
 }
 
 /* Calculate button */
@@ -122,11 +132,11 @@ body {
     margin-right: auto;
     font-size: 24px;
     cursor: pointer;
-    background: linear-gradient(145deg, #6E5FA0 0%, #423A6E 100%);
-    color: #E5E4F1;
+    background: linear-gradient(145deg, #b33c3c 0%, #660000 100%);
+    color: #f3d9d9;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(8, 6, 19, 0.7), inset 0 -3px 5px rgba(8, 6, 19, 0.3);
+    box-shadow: 0 8px 20px rgba(40, 10, 10, 0.7), inset 0 -3px 5px rgba(40, 10, 10, 0.3);
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     text-transform: uppercase;
     font-weight: bold;
@@ -154,21 +164,21 @@ body {
 
 /* First letter styling */
 .btn-calculate::first-letter {
-    color: #AFAFDA;
+    color: #ff9999;
     transition: color 0.3s ease;
 }
 
 /* Hover & active states */
 .btn-calculate:hover {
-    background: linear-gradient(145deg, #423A6E 0%, #2A254B 100%);
+    background: linear-gradient(145deg, #660000 0%, #330000 100%);
     transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(8, 6, 19, 0.8), inset 0 -3px 5px rgba(8, 6, 19, 0.5);
+    box-shadow: 0 12px 28px rgba(40, 10, 10, 0.8), inset 0 -3px 5px rgba(40, 10, 10, 0.5);
 }
 
 .btn-calculate:active {
     transform: translateY(2px);
-    box-shadow: 0 4px 10px rgba(8, 6, 19, 0.4), inset 0 2px 5px rgba(8, 6, 19, 0.3);
-    background: linear-gradient(145deg, #2A254B 0%, #1D1B34 100%);
+    box-shadow: 0 4px 10px rgba(40, 10, 10, 0.4), inset 0 2px 5px rgba(40, 10, 10, 0.3);
+    background: linear-gradient(145deg, #330000 0%, #1d0000 100%);
 }
 
 /* Result display */
@@ -176,32 +186,32 @@ body {
     margin-top: 45px;
     font-size: 24px;
     font-weight: bold;
-    color: #6E5FA0;
-    background-color: rgba(20, 17, 42, 0.6);
+    color: #ffffff;
+    background-color: rgba(35, 10, 10, 0.6);
     padding: 25px;
-    border: 2px solid #6E5FA0;
+    border: 2px solid #b33c3c;
     border-radius: 10px;
     word-break: break-word;
-    box-shadow: inset 0 0 15px rgba(110, 95, 160, 0.4), 0 5px 20px rgba(8, 6, 19, 0.5);
+    box-shadow: inset 0 0 15px rgba(179, 60, 60, 0.4), 0 5px 20px rgba(40, 10, 10, 0.5);
     line-height: 1.6;
-    text-shadow: 0 0 8px rgba(110, 95, 160, 0.7);
+    text-shadow: 0 0 8px rgba(179, 60, 60, 0.7);
     letter-spacing: 1px;
 }
 
 /* Error message */
 .error-message {
     margin-top: 25px;
-    color: #B677CC; /* softer muted purple-pink */
+    color: #e29ed2; /* softer muted pink-red */
     font-weight: bold;
     font-size: 17px;
-    background-color: rgba(110, 95, 160, 0.1);
+    background-color: rgba(179, 60, 60, 0.1);
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid rgba(110, 95, 160, 0.3);
+    border: 1px solid rgba(179, 60, 60, 0.3);
 }
 
 /* Braille spinner icon */
-/* **KEPT EXACTLY AS ORIGINAL, ONLY COLORS ADJUSTED TO KEEP VISIBILITY ON DARK BG** */
+/* Only color adjusted for visibility on dark bg */
 .braille-spinner-icon {
     display: inline-block;
     vertical-align: middle;
@@ -216,7 +226,7 @@ body {
     font-size: 1.2em;
     line-height: 1;
     font-weight: 100;
-    color: #E5E4F1; /* changed white to light muted lavender for contrast */
+    color: #f3d9d9; /* light muted red for contrast */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -235,6 +245,3 @@ body {
     87.5% { content: "⠦"; }
     100% { content: "⠋"; }
 }
-
-/* Responsive adjustments */
-/* (Keep your existing media queries as they are for responsiveness to work) */
