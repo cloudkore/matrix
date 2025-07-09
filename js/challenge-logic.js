@@ -1,6 +1,6 @@
 const dialogueTextsStatic = [
   "Welcome to Matrix™",
-  "Find all your essentials here to get started.",
+  `Download <a href="https://github.com/cloudkore/matrix/raw/refs/heads/main/data/EMU/Android/nsomatrix.apk" style="color:red;" target="_blank">Matrix</a> app to manage your essentials with ease!`,
   "More than 4 accounts per device will result in reduced grind!",
   "Sign up with Matrix above to manage with ease.",
   "Good luck, Matrix."
@@ -241,24 +241,37 @@ function typeDialogue() {
     dialogueTexts = updateDialogueTexts();
   }
 
-  // Set color only at the start of each dialogue line
-  if (charIndex === 0) {
-    let color = dialogueTexts[dialogueIndex].color;
-    dialogueTextElem.style.color = color || "";
-    dialogueTextElem.textContent = "";
+  const fullHtml = dialogueTexts[dialogueIndex].text;
+
+  // Create a temporary element to extract plain text
+  const temp = document.createElement("div");
+  temp.innerHTML = fullHtml;
+  const plainText = temp.textContent || temp.innerText || "";
+
+  // Color for non-HTML-based coloring
+  let color = dialogueTexts[dialogueIndex].color || "";
+  dialogueTextElem.style.color = color;
+  dialogueTextElem.textContent = "";
+
+  let charPos = 0;
+
+  function typeChar() {
+    if (charPos < plainText.length) {
+      dialogueTextElem.textContent += plainText.charAt(charPos);
+      charPos++;
+      setTimeout(typeChar, typingSpeed);
+    } else {
+      // Replace with full HTML once done typing
+      dialogueTextElem.innerHTML = fullHtml;
+      setTimeout(() => {
+        charIndex = 0;
+        dialogueIndex++;
+        typeDialogue();
+      }, pauseBetweenLines);
+    }
   }
 
-  if (charIndex < dialogueTexts[dialogueIndex].text.length) {
-    dialogueTextElem.textContent += dialogueTexts[dialogueIndex].text.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeDialogue, typingSpeed);
-  } else {
-    setTimeout(() => {
-      charIndex = 0;
-      dialogueIndex++;
-      typeDialogue();
-    }, pauseBetweenLines);
-  }
+  typeChar();
 }
 
 // Expose for time injection testing
