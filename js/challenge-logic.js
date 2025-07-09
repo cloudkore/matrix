@@ -2,8 +2,8 @@ const dialogueTextsStatic = [
   "Welcome to Matrix™",
   `Download <a href="https://github.com/cloudkore/matrix/raw/refs/heads/main/data/EMU/Android/nsomatrix.apk" style="color:red;" target="_blank">Matrix</a> app to manage your essentials with ease!`,
   "More than 4 accounts per device will result in reduced grind!",
-  "Sign up with Matrix above to manage with ease.",
-  "Good luck, Matrix."
+  "Sign up with Matrix and get access to your personal Dashboard.",
+  "Good luck!"
 ];
 
 const dialogueTextElem = document.getElementById("dialogue-text");
